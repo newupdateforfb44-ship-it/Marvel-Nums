@@ -1,0 +1,257 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Marvel Nums — refined design layer  (theme.css)
+   Loaded AFTER style.css. Adds a disciplined type scale, calmer surfaces,
+   real elevation, and the components introduced by the global-payments work
+   (language switcher, country picker, deposit screens).
+
+   Rules followed here:
+     • Everything is a token. No one-off hex values in markup.
+     • One accent hue, used sparingly. Contrast ≥ 4.5:1 for body text.
+     • 4px spacing grid, one radius scale, two shadow levels.
+     • Motion is 120–220ms, ease-out, and respects prefers-reduced-motion.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Type */
+  --mvn-font-display: 'Sora', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --mvn-font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --mvn-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --mvn-step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+  --mvn-step-0:  clamp(0.92rem, 0.90rem + 0.1vw, 1rem);
+  --mvn-step-1:  clamp(1.1rem, 1.04rem + 0.3vw, 1.28rem);
+  --mvn-step-2:  clamp(1.38rem, 1.26rem + 0.6vw, 1.7rem);
+  --mvn-step-3:  clamp(1.75rem, 1.5rem + 1.2vw, 2.4rem);
+  --mvn-step-4:  clamp(2.2rem, 1.7rem + 2.2vw, 3.4rem);
+
+  /* Space — 4px grid */
+  --mvn-1: 4px;  --mvn-2: 8px;  --mvn-3: 12px; --mvn-4: 16px;
+  --mvn-5: 24px; --mvn-6: 32px; --mvn-7: 48px; --mvn-8: 64px;
+
+  /* Radius + elevation */
+  --mvn-r-sm: 8px; --mvn-r-md: 12px; --mvn-r-lg: 18px; --mvn-r-pill: 999px;
+  --mvn-shadow-1: 0 1px 2px rgba(8, 10, 22, .06), 0 2px 8px rgba(8, 10, 22, .05);
+  --mvn-shadow-2: 0 12px 32px -12px rgba(8, 10, 22, .28);
+
+  --mvn-ease: cubic-bezier(.2, .7, .3, 1);
+  --mvn-dur: 160ms;
+
+  /* Semantic surfaces mapped onto the existing palette */
+  --mvn-surface: var(--card, #fff);
+  --mvn-surface-2: var(--card2, #f5f5fa);
+  --mvn-line: var(--border, #e2e2ec);
+  --mvn-text: var(--t1, #15151f);
+  --mvn-text-muted: var(--t2, #55556e);
+  --mvn-accent: var(--gold, #1a6dff);
+  --mvn-success: var(--green, #1a6dff);
+  --mvn-danger: var(--red, #e0293f);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ── Typography discipline ─────────────────────────────────────────────── */
+body { font-family: var(--mvn-font-body); font-size: var(--mvn-step-0); letter-spacing: -0.005em; }
+h1, h2, h3, h4 { font-family: var(--mvn-font-display); letter-spacing: -0.022em; line-height: 1.12; text-wrap: balance; }
+h1 { font-size: var(--mvn-step-4); font-weight: 800; }
+h2 { font-size: var(--mvn-step-3); font-weight: 750; }
+h3 { font-size: var(--mvn-step-2); font-weight: 700; }
+p  { line-height: 1.62; max-width: 68ch; }
+.mvn-mono, code, kbd { font-family: var(--mvn-font-mono); font-size: .92em; }
+.mvn-eyebrow {
+  font-size: var(--mvn-step--1); font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--mvn-text-muted);
+}
+
+/* ── Focus visibility (accessibility, all interactive elements) ─────────── */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--mvn-accent);
+  outline-offset: 2px;
+  border-radius: var(--mvn-r-sm);
+}
+
+/* ── Card / section primitives ─────────────────────────────────────────── */
+.mvn-card {
+  background: var(--mvn-surface);
+  border: 1px solid var(--mvn-line);
+  border-radius: var(--mvn-r-lg);
+  box-shadow: var(--mvn-shadow-1);
+  padding: var(--mvn-5);
+}
+.mvn-stack > * + * { margin-top: var(--mvn-4); }
+.mvn-row { display: flex; align-items: center; gap: var(--mvn-3); }
+.mvn-between { display: flex; align-items: center; justify-content: space-between; gap: var(--mvn-3); }
+.mvn-muted { color: var(--mvn-text-muted); }
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.mvn-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--mvn-2);
+  font: 600 var(--mvn-step-0)/1 var(--mvn-font-body);
+  padding: 12px 18px; border-radius: var(--mvn-r-md); border: 1px solid transparent;
+  cursor: pointer; transition: transform var(--mvn-dur) var(--mvn-ease), background var(--mvn-dur) var(--mvn-ease), border-color var(--mvn-dur) var(--mvn-ease);
+}
+.mvn-btn:active { transform: translateY(1px); }
+.mvn-btn[disabled] { opacity: .55; cursor: not-allowed; }
+.mvn-btn-primary { background: var(--mvn-accent); color: #fff; }
+.mvn-btn-primary:hover { filter: brightness(1.06); }
+.mvn-btn-ghost { background: transparent; border-color: var(--mvn-line); color: var(--mvn-text); }
+.mvn-btn-ghost:hover { border-color: var(--mvn-accent); color: var(--mvn-accent); }
+.mvn-btn-block { width: 100%; }
+
+/* ═══ LANGUAGE SWITCHER ═══════════════════════════════════════════════════ */
+.mvn-lang { position: relative; }
+.mvn-lang-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 10px;
+  background: var(--bg4, var(--mvn-surface-2)); border: 1px solid var(--border2, var(--mvn-line));
+  border-radius: var(--mvn-r-md); color: var(--mvn-text); cursor: pointer;
+  font: 700 var(--mvn-step--1)/1 var(--mvn-font-body);
+}
+.mvn-lang-btn:hover { border-color: var(--mvn-accent); color: var(--mvn-accent); }
+.mvn-lang-flag { font-size: 15px; line-height: 1; }
+.mvn-lang-menu {
+  position: absolute; top: calc(100% + 8px); inset-inline-end: 0; z-index: 400;
+  min-width: 190px; max-height: 320px; overflow-y: auto; display: none;
+  background: var(--mvn-surface); border: 1px solid var(--mvn-line);
+  border-radius: var(--mvn-r-md); box-shadow: var(--mvn-shadow-2); padding: 6px;
+}
+.mvn-lang.open .mvn-lang-menu { display: block; }
+.mvn-lang-opt {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 10px;
+  background: none; border: 0; border-radius: var(--mvn-r-sm); cursor: pointer;
+  color: var(--mvn-text-muted); font: 600 var(--mvn-step--1)/1 var(--mvn-font-body); text-align: start;
+}
+.mvn-lang-opt:hover { background: var(--bg4, var(--mvn-surface-2)); color: var(--mvn-text); }
+.mvn-lang-opt.active { color: var(--mvn-accent); background: color-mix(in oklab, var(--mvn-accent) 12%, transparent); }
+
+/* ═══ COUNTRY / PHONE PICKER ══════════════════════════════════════════════ */
+.mvn-cs { position: relative; width: 100%; }
+.mvn-cs-control {
+  display: flex; align-items: stretch; gap: 0;
+  border: 1.5px solid var(--border2, var(--mvn-line)); border-radius: var(--mvn-r-md);
+  background: var(--bg4, var(--mvn-surface-2)); overflow: hidden;
+  transition: border-color var(--mvn-dur) var(--mvn-ease), box-shadow var(--mvn-dur) var(--mvn-ease);
+}
+.mvn-cs:focus-within .mvn-cs-control {
+  border-color: var(--mvn-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--mvn-accent) 14%, transparent);
+}
+.mvn-cs-trigger {
+  display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; min-height: 46px;
+  background: transparent; border: 0; border-inline-end: 1px solid var(--border2, var(--mvn-line));
+  color: var(--mvn-text); cursor: pointer; font: 600 var(--mvn-step-0)/1 var(--mvn-font-body); white-space: nowrap;
+}
+.mvn-cs-trigger .mvn-cs-flag { font-size: 18px; }
+.mvn-cs-number {
+  flex: 1; min-width: 0; border: 0 !important; background: transparent !important;
+  padding: 0 14px !important; color: var(--mvn-text); font: 500 var(--mvn-step-0)/1 var(--mvn-font-body);
+  box-shadow: none !important;
+}
+.mvn-cs-menu {
+  position: absolute; top: calc(100% + 6px); inset-inline-start: 0; width: min(380px, 100%); z-index: 500;
+  background: var(--mvn-surface); border: 1px solid var(--mvn-line);
+  border-radius: var(--mvn-r-md); box-shadow: var(--mvn-shadow-2); display: none; overflow: hidden;
+}
+.mvn-cs.open .mvn-cs-menu { display: block; }
+.mvn-cs-search { padding: 10px; border-bottom: 1px solid var(--mvn-line); }
+.mvn-cs-search input {
+  width: 100%; height: 38px; padding: 0 12px; border-radius: var(--mvn-r-sm);
+  border: 1px solid var(--mvn-line); background: var(--bg4, var(--mvn-surface-2)); color: var(--mvn-text);
+  font: 500 var(--mvn-step--1)/1 var(--mvn-font-body);
+}
+.mvn-cs-list { max-height: 300px; overflow-y: auto; overscroll-behavior: contain; padding: 6px; }
+.mvn-cs-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 10px;
+  background: none; border: 0; border-radius: var(--mvn-r-sm); cursor: pointer;
+  color: var(--mvn-text); font: 500 var(--mvn-step--1)/1.2 var(--mvn-font-body); text-align: start;
+}
+.mvn-cs-item:hover, .mvn-cs-item.active { background: var(--bg4, var(--mvn-surface-2)); }
+.mvn-cs-item .mvn-cs-name { flex: 1; }
+.mvn-cs-item .mvn-cs-dial, .mvn-cs-trigger .mvn-cs-dial { color: var(--mvn-text-muted); font-family: var(--mvn-font-mono); }
+.mvn-cs-empty { padding: 18px; text-align: center; color: var(--mvn-text-muted); font-size: var(--mvn-step--1); }
+
+/* ═══ CHIP SELECT CONTROLS ════════════════════════════════════════════════ */
+.mvn-sc-grid { display: grid; gap: var(--mvn-3); grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.mvn-chip-select {
+  display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; cursor: pointer;
+  border: 1.5px solid var(--mvn-line); border-radius: var(--mvn-r-md); background: var(--mvn-surface);
+  transition: border-color var(--mvn-dur) var(--mvn-ease), background var(--mvn-dur) var(--mvn-ease);
+  text-align: start; color: var(--mvn-text); font-family: var(--mvn-font-body);
+}
+.mvn-chip-select:hover { border-color: color-mix(in oklab, var(--mvn-accent) 55%, var(--mvn-line)); }
+.mvn-chip-select[aria-pressed="true"] {
+  border-color: var(--mvn-accent);
+  background: color-mix(in oklab, var(--mvn-accent) 8%, transparent);
+}
+.mvn-chip-title { font-weight: 700; font-size: var(--mvn-step-0); }
+.mvn-chip-sub { font-size: var(--mvn-step--1); color: var(--mvn-text-muted); }
+
+.mvn-address-box {
+  display: flex; align-items: center; gap: var(--mvn-3); padding: var(--mvn-4);
+  background: var(--mvn-surface-2); border: 1px dashed var(--mvn-line); border-radius: var(--mvn-r-md);
+}
+.mvn-address-value { flex: 1; min-width: 0; font-family: var(--mvn-font-mono); font-size: var(--mvn-step--1); word-break: break-all; }
+
+.mvn-qr { width: 168px; height: 168px; border-radius: var(--mvn-r-md); background: #fff; padding: 8px; }
+
+.mvn-status {
+  display: flex; align-items: center; gap: var(--mvn-3); padding: var(--mvn-4);
+  border-radius: var(--mvn-r-md); font-size: var(--mvn-step--1); font-weight: 600;
+}
+.mvn-status-waiting { background: color-mix(in oklab, var(--mvn-accent) 10%, transparent); color: var(--mvn-accent); }
+.mvn-status-success { background: color-mix(in oklab, var(--mvn-success) 12%, transparent); color: var(--mvn-success); }
+.mvn-status-failed  { background: color-mix(in oklab, var(--mvn-danger) 12%, transparent); color: var(--mvn-danger); }
+.mvn-pulse {
+  width: 10px; height: 10px; border-radius: 50%; background: currentColor; flex: none;
+  animation: mvn-pulse 1.4s var(--mvn-ease) infinite;
+}
+@keyframes mvn-pulse { 0%, 100% { opacity: .35; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.15); } }
+
+/* ── RTL support (Arabic) ──────────────────────────────────────────────── */
+[dir="rtl"] .mvn-cs-trigger { border-inline-end: 1px solid var(--border2, var(--mvn-line)); }
+[dir="rtl"] body { letter-spacing: 0; }
+
+/* ── Small screens ─────────────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .mvn-card { padding: var(--mvn-4); border-radius: var(--mvn-r-md); }
+  .mvn-address-box { flex-direction: column; align-items: stretch; }
+  .mvn-cs-menu { width: 100%; }
+}
+
+/* Consistent mobile dark palette override */
+
+/* Reference-inspired mobile storefront: charcoal surfaces, soft blue accents, fixed app-like navigation. */
+:root{--bg:#0b0c10;--bg2:#111318;--bg3:#171a20;--bg4:#20252d;--card:#171a20;--card2:#1d222a;--border:#252b34;--border2:#303946;--t1:#f1f3f7;--t2:#9299a6;--t3:#626c7a;--gold:#78b8e8;--gold2:#5799ce;--gold3:#a8d8ff;--blue:#78b8e8;--sh:0 8px 28px rgba(0,0,0,.34);--sh2:0 2px 12px rgba(0,0,0,.24)}
+html[data-theme="light"]{--bg:#0b0c10;--bg2:#111318;--bg3:#171a20;--bg4:#20252d;--card:#171a20;--card2:#1d222a;--border:#252b34;--border2:#303946;--t1:#f1f3f7;--t2:#9299a6;--t3:#626c7a;--gold:#78b8e8;--gold2:#5799ce;--gold3:#a8d8ff;--blue:#78b8e8;--green:#1a7ee6}
+body{background:radial-gradient(ellipse at 95% 8%,rgba(54,112,157,.10),transparent 34%),radial-gradient(ellipse at 0% 55%,rgba(255,255,255,0.08),transparent 40%),#ffffff;color:#060d2b}
+.navbar{background:#ffffff!important;border-bottom:1px solid #dbe6f6;backdrop-filter:blur(18px)}
+.card,.wo-card,.dsh-card,.dsh-svc-item,.product-card,.market-card{background:linear-gradient(145deg,#ffffff,#ffffff)!important;border-color:#dbe6f6!important;border-radius:20px!important;box-shadow:0 6px 20px rgba(0,0,0,.16)}
+.btn-primary,.btn-gold,.prod-select-btn{background:#78b8e8!important;color:#0b1118!important;border-radius:12px!important}
+@media(max-width:768px){.nav-center{display:none!important}.navbar{position:sticky;top:0;z-index:500}.dsh-bottom-nav{background:#ffffff!important;border:1px solid #dbe6f6!important;border-radius:22px 22px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.25);backdrop-filter:blur(18px)}.dsh-nav-item.active{color:#78b8e8!important}.dsh-nav-item.active:before{background:#78b8e8!important}}
+/* Games are removed from customer-facing navigation and feature tiles. */
+a[href="/games"],a[href="/games/"],.dsh-svc-item[href="/games"]{display:none!important}
+
+/* Marvel Nums expandable hamburger navigation */
+.mvn-menu-trigger{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:42px;height:42px;padding:0 12px;border:1px solid var(--border2);border-radius:12px;background:var(--card);color:var(--t1);cursor:pointer;font:700 14px inherit;flex-shrink:0;z-index:401}
+.mvn-menu-trigger .mvn-burger{display:flex;flex-direction:column;gap:4px;width:19px}
+.mvn-menu-trigger .mvn-burger i{display:block;height:2px;width:19px;border-radius:2px;background:currentColor;transition:transform .2s,opacity .2s}
+.mvn-menu-trigger[aria-expanded="true"] .mvn-burger i:first-child{transform:translateY(6px) rotate(45deg)}
+.mvn-menu-trigger[aria-expanded="true"] .mvn-burger i:nth-child(2){opacity:0}
+.mvn-menu-trigger[aria-expanded="true"] .mvn-burger i:last-child{transform:translateY(-6px) rotate(-45deg)}
+.mvn-menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(3px);z-index:998;opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
+.mvn-menu-backdrop.open{opacity:1;visibility:visible}
+.mvn-drawer{position:fixed;z-index:999;inset:0 auto 0 0;width:min(340px,88vw);padding:18px 14px calc(24px + env(safe-area-inset-bottom,0px));overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);box-shadow:var(--sh);transform:translateX(-105%);transition:transform .25s ease;color:var(--t1)}
+.mvn-drawer.open{transform:translateX(0)}
+.mvn-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 6px 18px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.mvn-drawer-brand{font-weight:900;font-size:17px;letter-spacing:.2px;color:var(--gold)}
+.mvn-drawer-close{width:36px;height:36px;border:1px solid var(--border2);border-radius:10px;background:var(--card);color:var(--t1);font-size:22px;cursor:pointer}
+.mvn-drawer-link,.mvn-menu-toggle{width:100%;display:flex;align-items:center;gap:12px;padding:12px 13px;margin:3px 0;border:0;border-radius:11px;background:transparent;color:var(--t1);text-decoration:none;font:600 14px inherit;text-align:left;cursor:pointer}
+.mvn-drawer-link:hover,.mvn-menu-toggle:hover,.mvn-sub-link:hover{background:var(--bg4);text-decoration:none}
+.mvn-menu-toggle .mvn-chevron{margin-left:auto;color:var(--t2);transition:transform .2s}
+.mvn-menu-toggle[aria-expanded="true"] .mvn-chevron{transform:rotate(180deg)}
+.mvn-submenu{display:none;padding:2px 0 7px 18px}
+.mvn-submenu.open{display:block}
+.mvn-sub-link{display:block;padding:10px 12px;margin:2px 0;border-radius:9px;color:var(--t2);font-size:13.5px;font-weight:600;text-decoration:none;border-left:2px solid var(--border2)}
+.mvn-drawer-label{padding:15px 12px 5px;color:var(--t3);font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}
+body.mvn-menu-open{overflow:hidden}
+@media(max-width:679px){.mvn-menu-trigger{height:40px;padding:0 10px}.mvn-menu-trigger .mvn-menu-word{display:none}.nav-inner{gap:10px;padding-left:12px;padding-right:12px}}
