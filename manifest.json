@@ -1,0 +1,17 @@
+{
+  "name": "Marvel Nums",
+  "short_name": "Marvel Nums",
+  "description": "Your Digital Growth Hub: social media boosting, virtual numbers and social accounts.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#040a24",
+  "theme_color": "#1a6dff",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/img/marvel-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/img/marvel-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/img/marvel-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,58 @@
+/* Admin announcements — popup + notifications-page cards. Scoped to .mvnann-* */
+.mvnann-modal{position:fixed;inset:0;z-index:4000;display:flex;align-items:center;justify-content:center;padding:18px}
+.mvnann-modal[hidden]{display:none}
+.mvnann-backdrop{position:absolute;inset:0;background:rgba(4,10,24,.6);backdrop-filter:blur(3px)}
+body.mvnann-open{overflow:hidden}
+.mvnann-box{position:relative;width:min(430px,100%);background:var(--card,#fff);color:var(--t1,inherit);
+  border:1px solid rgba(128,140,160,.22);border-radius:20px;padding:22px;
+  box-shadow:0 30px 70px -30px rgba(4,10,24,.75);animation:annPop .22s ease}
+@keyframes annPop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.mvnann-level{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 11px;border-radius:999px;background:rgba(26,109,255,.12);color:#1a6dff;margin-bottom:12px}
+.mvnann-box[data-level="success"] .mvnann-level{background:rgba(0,180,255,.14);color:#0f4fd6}
+.mvnann-box[data-level="warning"] .mvnann-level{background:rgba(245,158,11,.16);color:#b45309}
+.mvnann-box[data-level="urgent"] .mvnann-level{background:rgba(239,68,68,.14);color:#b91c1c}
+.mvnann-title{margin:0 0 8px;font-size:19px;font-weight:800;line-height:1.3}
+.mvnann-image{display:block;width:100%;height:190px;object-fit:cover;border-radius:12px;margin:0 0 14px;border:1px solid rgba(128,140,160,.22)}
+.mvnann-image[hidden]{display:none}
+.mvnann-msg{font-size:14.5px;line-height:1.6;opacity:.85;white-space:pre-line;max-height:44vh;overflow:auto}
+.mvnann-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.mvnann-btn{flex:1 1 auto;min-width:120px;min-height:46px;padding:12px 14px;border-radius:12px;cursor:pointer;
+  font:inherit;font-weight:700;font-size:14px;background:transparent;color:inherit;
+  border:1px solid rgba(128,140,160,.35);touch-action:manipulation}
+.mvnann-btn:hover{border-color:#1a6dff}
+.mvnann-btn-primary{background:#1a6dff;border-color:#1a6dff;color:#fff}
+.mvnann-btn-primary:hover{filter:brightness(1.06)}
+.mvnann-btn-ghost{flex-basis:100%;opacity:.75;font-weight:600}
+
+/* Notifications page cards — read vs unread are clearly different */
+.mvnann-page{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.mvnann-page-head{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.mvnann-page-count{font-size:11px;font-weight:700;letter-spacing:0;text-transform:none;
+  padding:3px 9px;border-radius:999px;background:rgba(26,109,255,.12);color:#1a6dff;opacity:1}
+.mvnann-card{border-radius:16px;padding:14px 16px;border:1px solid rgba(128,140,160,.2);background:var(--card,#fff)}
+.mvnann-card-image{width:76px;height:76px;object-fit:cover;border-radius:10px;float:left;margin:0 12px 8px 0;border:1px solid rgba(128,140,160,.22)}
+.mvnann-card-foot{clear:both}
+.mvnann-card.is-unread{border-color:rgba(26,109,255,.55);background:rgba(26,109,255,.06);
+  box-shadow:inset 3px 0 0 #1a6dff}
+.mvnann-card.is-read{opacity:.72;background:transparent;border-style:dashed}
+.mvnann-card-top{display:flex;align-items:center;gap:8px}
+.mvnann-dot{width:9px;height:9px;border-radius:50%;background:#1a6dff;flex:0 0 auto}
+.mvnann-card.is-read .mvnann-dot{background:rgba(128,140,160,.55)}
+.mvnann-card-title{margin:0;font-size:15px;font-weight:800;line-height:1.35;flex:1;min-width:0}
+.mvnann-card.is-read .mvnann-card-title{font-weight:600}
+.mvnann-card-state{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  padding:3px 8px;border-radius:999px;background:rgba(26,109,255,.14);color:#1a6dff}
+.mvnann-card.is-read .mvnann-card-state{background:rgba(128,140,160,.16);color:inherit;opacity:.7}
+.mvnann-card-msg{margin:8px 0 0;font-size:13.5px;line-height:1.6;opacity:.82;white-space:pre-line}
+.mvnann-card-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+.mvnann-card-time{font-size:11.5px;opacity:.6}
+.mvnann-card-link{font-size:12.5px;font-weight:700;color:#1a6dff;text-decoration:none}
+.mvnann-card-btn{background:transparent;border:0;padding:0;cursor:pointer;font:inherit;font-size:12.5px;
+  font-weight:700;color:inherit;opacity:.7;text-decoration:underline}
+@media(max-width:520px){
+  .mvnann-box{padding:18px;border-radius:18px}
+  .mvnann-title{font-size:17.5px}
+  .mvnann-btn{min-width:100%}
+}
