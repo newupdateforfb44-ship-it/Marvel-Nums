@@ -146,18 +146,37 @@ async function m4LoadProducts(refresh){
   try { try { m4List = await aFetch('/api/admin/market4/products'+(refresh?'?refresh=1':'')); } catch(e1){ if(!refresh) throw e1; m4List = await aFetch('/api/admin/market4/products'); setTimeout(function(){ alert('Could not refresh from the provider: '+e1.message+'\nShowing the last saved list.'); },50); } m4Render(); }
   catch(e){ el.innerHTML=`<span style="color:var(--red)">${esc(e.message)}</span>`; }
 }
+let m4OpenCat=null, m4Shown={};
+function m4OpenCategory(c){ m4OpenCat=(m4OpenCat===c)?null:c; m4Render(); }
+function m4More(c){ m4Shown[c]=(m4Shown[c]||40)+40; m4Render(); }
+function m4Row(p){
+  return `<tr><td><b>${esc(p.name)}</b><br/><input type="text" id="m4t_${p.id}" value="${esc(p.customTitle)}" placeholder="Custom title (optional)" style="margin-top:4px;width:100%"/><input type="text" id="m4d_${p.id}" value="${esc(p.description)}" placeholder="Description (optional)" style="margin-top:4px;width:100%"/><input type="text" id="m4i_${p.id}" value="${esc(p.picture&&!String(p.picture).startsWith('data:')?p.picture:'')}" placeholder="Picture URL (optional)" style="margin-top:4px;width:100%"/></td>
+      <td style="color:${p.inStock?'var(--green,#00b4ff)':'var(--red)'}">${p.inStock?p.stock+' available':'Out of stock'}</td>
+      <td>${m2N(p.cost)}</td><td><input type="number" min="0" id="m4p_${p.id}" value="${p.sellPrice||''}" placeholder="0 = hidden" style="width:110px" oninput="m4Profit(${p.id},${p.cost})"/></td>
+      <td id="m4pr_${p.id}" style="color:${p.profit>0?'var(--green,#00b4ff)':'var(--red)'}">${p.priced?m2N(p.profit):'—'}</td>
+      <td><input type="checkbox" id="m4e_${p.id}" ${p.enabled?'checked':''}/></td>
+      <td><button class="btn-sm" type="button" onclick="m4Save(${p.id},${p.cost})">Save</button></td></tr>`;
+}
+// Products are grouped by category. Only the category you open is drawn, so the page never builds every product at once.
 function m4Render(){
   const q=(document.getElementById('m4Search').value||'').toLowerCase(), f=document.getElementById('m4Filter').value;
   let rows=m4List.filter(p=>!q||`${p.name} ${p.category} ${p.customTitle}`.toLowerCase().includes(q));
   if(f==='priced') rows=rows.filter(p=>p.priced); if(f==='unpriced') rows=rows.filter(p=>!p.priced); if(f==='instock') rows=rows.filter(p=>p.inStock);
-  document.getElementById('m4Products').innerHTML = rows.length ? `<table class="data-table" style="width:100%"><thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>API cost</th><th>Your price</th><th>Profit</th><th>Show</th><th></th></tr></thead><tbody>`+
-    rows.map(p=>`<tr><td><b>${esc(p.name)}</b><br/><input type="text" id="m4t_${p.id}" value="${esc(p.customTitle)}" placeholder="Custom title (optional)" style="margin-top:4px;width:100%"/><input type="text" id="m4d_${p.id}" value="${esc(p.description)}" placeholder="Description (optional)" style="margin-top:4px;width:100%"/><input type="text" id="m4i_${p.id}" value="${esc(p.picture&&!String(p.picture).startsWith('data:')?p.picture:'')}" placeholder="Picture URL (optional)" style="margin-top:4px;width:100%"/></td>
-      <td>${esc(p.category)}</td><td style="color:${p.inStock?'var(--green,#00b4ff)':'var(--red)'}">${p.inStock?p.stock+' available':'Out of stock'}</td>
-      <td>${m2N(p.cost)}</td><td><input type="number" min="0" id="m4p_${p.id}" value="${p.sellPrice||''}" placeholder="0 = hidden" style="width:110px" oninput="m4Profit(${p.id},${p.cost})"/></td>
-      <td id="m4pr_${p.id}" style="color:${p.profit>0?'var(--green,#00b4ff)':'var(--red)'}">${p.priced?m2N(p.profit):'—'}</td>
-      <td><input type="checkbox" id="m4e_${p.id}" ${p.enabled?'checked':''}/></td>
-      <td><button class="btn-sm" type="button" onclick="m4Save(${p.id},${p.cost})">Save</button></td></tr>`).join('')+'</tbody></table>'
-    : '<div class="no-items">No products</div>';
+  const host=document.getElementById('m4Products');
+  if(!rows.length){ host.innerHTML='<div class="no-items">No products</div>'; return; }
+  const cats={}; rows.forEach(p=>{ const c=p.category||'Other'; (cats[c]=cats[c]||[]).push(p); });
+  const names=Object.keys(cats).sort((x,y)=>x.localeCompare(y));
+  if(m4OpenCat && !cats[m4OpenCat]) m4OpenCat=null;
+  host.innerHTML=names.map(c=>{
+    const list=cats[c], open=(c===m4OpenCat), key=encodeURIComponent(c).replace(/'/g,'%27');
+    let body='';
+    if(open){
+      const lim=m4Shown[c]||40, part=list.slice(0,lim);
+      body=`<div style="overflow-x:auto;margin-top:8px"><table class="data-table" style="width:100%"><thead><tr><th>Product</th><th>Stock</th><th>API cost</th><th>Your price</th><th>Profit</th><th>Show</th><th></th></tr></thead><tbody>${part.map(m4Row).join('')}</tbody></table></div>`+
+        (list.length>lim?`<button class="btn-sm" type="button" style="margin-top:8px" onclick="m4More(decodeURIComponent('${key}'))">Show more (${list.length-lim} left)</button>`:'');
+    }
+    return `<div style="border:1px solid var(--border2,#dbe6f6);border-radius:12px;padding:10px 12px;margin-bottom:8px"><button type="button" onclick="m4OpenCategory(decodeURIComponent('${key}'))" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;width:100%;font-weight:800"><span>${esc(c)}</span><span style="opacity:.7;font-weight:600">${list.length} ${open?'▲':'▼'}</span></button>${body}</div>`;
+  }).join('');
 }
 function m4Profit(id,cost){ const v=Number(document.getElementById('m4p_'+id).value||0), el=document.getElementById('m4pr_'+id); el.textContent=v?m2N(v-cost):'—'; el.style.color=v>cost?'var(--green,#00b4ff)':'var(--red)'; }
 async function m4Save(id,cost){
