@@ -663,18 +663,19 @@ const PaymentMethodSetting = mongoose.model('PaymentMethodSetting', paymentMetho
 // One row per gateway. No row yet = the built-in default: Flutterwave ON (so existing sites keep
 // working exactly as before) and Paystack OFF until an admin turns it on.
 const gatewaySettingSchema = new mongoose.Schema({
- gateway: { type: String, enum: ['flutterwave', 'paystack'], required: true, unique: true },
+ gateway: { type: String, enum: ['flutterwave', 'paystack', 'monnify'], required: true, unique: true },
  enabled: { type: Boolean, default: true },
  disabledMessage: { type: String, default: '' },
  updatedAt: { type: Date, default: Date.now }
 });
 const GatewaySetting = mongoose.model('GatewaySetting', gatewaySettingSchema);
-const GATEWAY_LIST = ['flutterwave', 'paystack'];
-const GATEWAY_LABELS = { flutterwave: 'Flutterwave', paystack: 'Paystack' };
-const GATEWAY_DEFAULT_ENABLED = { flutterwave: true, paystack: false };
+const GATEWAY_LIST = ['flutterwave', 'paystack', 'monnify'];
+const GATEWAY_LABELS = { flutterwave: 'Flutterwave', paystack: 'Paystack', monnify: 'Monnify' };
+const GATEWAY_DEFAULT_ENABLED = { flutterwave: true, paystack: false, monnify: false };
 function gatewayConfigured(g) {
  if (g === 'flutterwave') return !!process.env.FLW_V3_SECRET_KEY;
  if (g === 'paystack') return !!process.env.PAYSTACK_SECRET_KEY;
+ if (g === 'monnify') return !!(process.env.MONNIFY_API_KEY && process.env.MONNIFY_SECRET_KEY && process.env.MONNIFY_CONTRACT_CODE);
  return false;
 }
 // { flutterwave: { enabled, configured, available, disabledMessage }, paystack: {...} }
@@ -3976,7 +3977,7 @@ const paymentLinkDepositSchema = new mongoose.Schema({
  fee: { type: Number, default: 0 },
  status: { type: String, enum: ['pending', 'success', 'failed'], default: 'pending' },
  flwTransactionId: { type: String, default: '' },
- gateway: { type: String, enum: ['flutterwave', 'paystack'], default: 'flutterwave' }, // which provider took this payment (old rows = flutterwave)
+ gateway: { type: String, enum: ['flutterwave', 'paystack', 'monnify'], default: 'flutterwave' }, // which provider took this payment (old rows = flutterwave)
  gatewayTxId: { type: String, default: '' }, // Paystack's own transaction id
  rawPayload: { type: mongoose.Schema.Types.Mixed },
  creditedAt: { type: Date },
@@ -4029,15 +4030,19 @@ function paystackTxOk(tx, deposit) {
   && Number(tx.amount) >= Math.round(Number(deposit.amount) * 100)
   && String(tx.reference || '') === String(deposit.txRef);
 }
+// ── MONNIFY gateway (lib/monnify.js) — adds its own webhook + callback routes ──
+const mvnMonnify = require('./lib/monnify')({
+ app, axios, crypto, PaymentLinkDeposit, creditPaymentLinkDeposit, getPlatform: () => mvnPlatform
+});
 app.post('/api/deposit/paymentlink/create', auth, async (req, res) => {
  let gateway = '';
  try {
  const gwStates = await getGatewayStates();
- if (!gwStates.flutterwave.configured && !gwStates.paystack.configured) {
+ if (!gwStates.flutterwave.configured && !gwStates.paystack.configured && !gwStates.monnify.configured) {
   return res.status(503).json({ error: 'Payments are not configured yet — contact support.' });
  }
- if (!gwStates.flutterwave.available && !gwStates.paystack.available) {
-  return res.status(503).json({ error: gwStates.flutterwave.disabledMessage || gwStates.paystack.disabledMessage || 'Deposits are temporarily unavailable — please try again later.' });
+ if (!gwStates.flutterwave.available && !gwStates.paystack.available && !gwStates.monnify.available) {
+  return res.status(503).json({ error: gwStates.flutterwave.disabledMessage || gwStates.paystack.disabledMessage || gwStates.monnify.disabledMessage || 'Deposits are temporarily unavailable — please try again later.' });
  }
  const methodSetting = await PaymentMethodSetting.findOne({ method: 'paymentlink' });
  if (methodSetting && methodSetting.enabled === false) {
@@ -4084,9 +4089,10 @@ app.post('/api/deposit/paymentlink/create', auth, async (req, res) => {
  if (requested && !GATEWAY_LIST.includes(requested)) return res.status(400).json({ error: 'Unknown payment gateway' });
  const gwOk = {
   flutterwave: gwStates.flutterwave.available,
-  paystack: gwStates.paystack.available && paystackSupportsCurrency(chargeCurrency)
+  paystack: gwStates.paystack.available && paystackSupportsCurrency(chargeCurrency),
+  monnify: gwStates.monnify.available && mvnMonnify.supportsCurrency(chargeCurrency)
  };
- gateway = requested || (gwOk.flutterwave ? 'flutterwave' : (gwOk.paystack ? 'paystack' : ''));
+ gateway = requested || (gwOk.flutterwave ? 'flutterwave' : (gwOk.paystack ? 'paystack' : (gwOk.monnify ? 'monnify' : '')));
  if (!gateway || !gwOk[gateway]) {
   const which = gateway || 'flutterwave';
   return res.status(503).json({ error: gwStates[which].disabledMessage || `${GATEWAY_LABELS[which]} is currently unavailable for your country or currency — please choose another payment option.` });
@@ -4094,7 +4100,15 @@ app.post('/api/deposit/paymentlink/create', auth, async (req, res) => {
  let txRef = `${BRAND.txPrefix}-PL-${user._id}-${Date.now()}`;
  const siteUrl = process.env.SITE_URL || '';
  let link, paymentOptions = null;
- if (gateway === 'paystack') {
+ if (gateway === 'monnify') {
+  const mn = await mvnMonnify.createCheckout({
+   amount: chargeAmount, currency: chargeCurrency, reference: txRef,
+   customerName: user.name || 'MVN Customer', customerEmail: user.email,
+   description: `Wallet deposit for ${user.name || 'customer'}`,
+   redirectUrl: `${siteUrl}/api/deposit/monnify/callback`
+  });
+  link = mn.link;
+ } else if (gateway === 'paystack') {
   // Paystack references may only contain letters, numbers and - . =
   txRef = txRef.replace(/[^A-Za-z0-9.=-]/g, '-');
   const psRes = await paystackAxios.post('/transaction/initialize', {
@@ -4307,7 +4321,7 @@ app.post('/api/webhooks/paystack', async (req, res) => {
 async function creditPaymentLinkDeposit(deposit, tx) {
   const fresh = await PaymentLinkDeposit.findOneAndUpdate(
     { _id: deposit._id, status: 'pending' },
-    { status: 'success', ...(deposit.gateway === 'paystack' ? { gatewayTxId: String(tx.id || '') } : { flwTransactionId: String(tx.id || '') }), creditedAt: new Date(), rawPayload: tx },
+    { status: 'success', ...((deposit.gateway === 'paystack' || deposit.gateway === 'monnify') ? { gatewayTxId: String(tx.id || '') } : { flwTransactionId: String(tx.id || '') }), creditedAt: new Date(), rawPayload: tx },
     { new: true }
   );
   if (!fresh) return; // Already credited or failed — never double-credit
@@ -4322,7 +4336,7 @@ async function creditPaymentLinkDeposit(deposit, tx) {
   await Transaction.create({
     userId: updated._id, type: 'deposit', amount: creditAmount,
     txRef: deposit.txRef,
-    description: deposit.gateway === 'paystack' ? `Deposit via Paystack (${tx.channel || 'unknown method'})` : `Deposit via Flutterwave payment link (${tx.payment_type || 'unknown method'})`,
+    description: deposit.gateway === 'monnify' ? `Deposit via Monnify (${tx.channel || 'unknown method'})` : deposit.gateway === 'paystack' ? `Deposit via Paystack (${tx.channel || 'unknown method'})` : `Deposit via Flutterwave payment link (${tx.payment_type || 'unknown method'})`,
     status: 'success'
   });
   pushBalanceToUser(updated._id, updated.balance, creditAmount);
@@ -4390,6 +4404,10 @@ app.get('/api/deposit/paymentlink/status/:txRef', auth, async (req, res) => {
  const deposit = await PaymentLinkDeposit.findOne({ txRef: req.params.txRef, userId: req.user._id });
  if (!deposit) return res.status(404).json({ error: 'Deposit not found' });
  if (deposit.status !== 'pending') return res.json({ status: deposit.status, creditAmount: deposit.creditAmount });
+ if (deposit.gateway === 'monnify') {
+ try { const r = await mvnMonnify.checkAndCredit(deposit); return res.json({ status: r, creditAmount: deposit.creditAmount }); }
+ catch (pollErr) { console.error('Monnify status poll error:', pollErr.response?.data || pollErr.message); return res.json({ status: 'pending' }); }
+ }
  if (deposit.gateway === 'paystack') {
  if (process.env.PAYSTACK_SECRET_KEY) {
  try {
@@ -8220,9 +8238,10 @@ app.get('/api/deposit/payment-methods', optionalAuth, async (req, res) => {
  const payCur = mvnCountries.payCurrencyFor(geo.code);
  byMethod.gateways = {
   flutterwave: { enabled: gw.flutterwave.enabled, available: gw.flutterwave.available, disabledMessage: gw.flutterwave.disabledMessage },
-  paystack: { enabled: gw.paystack.enabled, available: gw.paystack.available && paystackSupportsCurrency(payCur), disabledMessage: gw.paystack.disabledMessage }
+  paystack: { enabled: gw.paystack.enabled, available: gw.paystack.available && paystackSupportsCurrency(payCur), disabledMessage: gw.paystack.disabledMessage },
+  monnify: { enabled: gw.monnify.enabled, available: gw.monnify.available && mvnMonnify.supportsCurrency(payCur), disabledMessage: gw.monnify.disabledMessage }
  };
- byMethod.defaultGateway = byMethod.gateways.flutterwave.available ? 'flutterwave' : (byMethod.gateways.paystack.available ? 'paystack' : '');
+ byMethod.defaultGateway = byMethod.gateways.flutterwave.available ? 'flutterwave' : (byMethod.gateways.paystack.available ? 'paystack' : (byMethod.gateways.monnify.available ? 'monnify' : ''));
  // Virtual accounts can be issued by Flutterwave or Paystack — a gateway that is switched off stops issuing them.
  byMethod.vaGateways = { flutterwave: gw.flutterwave.enabled, paystack: gw.paystack.available };
  if (!byMethod.vaGateways.flutterwave && !byMethod.vaGateways.paystack) {
@@ -8377,7 +8396,7 @@ app.get('/api/admin/payment-gateways', anyAdminAuth, async (req, res) => {
   res.json({
    ...states,
    paystackUsdEnabled: String(process.env.PAYSTACK_ALLOW_USD || '').toLowerCase() === 'true',
-   webhookUrls: { flutterwave: `${site}/api/webhooks/flutterwave`, paystack: `${site}/api/webhooks/paystack` }
+   webhookUrls: { flutterwave: `${site}/api/webhooks/flutterwave`, paystack: `${site}/api/webhooks/paystack`, monnify: `${site}/api/webhooks/monnify` }
   });
  } catch (e) { res.status(500).json({ error: 'Failed to load payment gateways' }); }
 });
@@ -8389,7 +8408,7 @@ app.post('/api/admin/payment-gateways/:gateway', adminAuth, async (req, res) => 
   const update = { gateway, updatedAt: new Date() };
   if (enabled !== undefined) {
    if (enabled && !gatewayConfigured(gateway)) {
-    const keyName = gateway === 'paystack' ? 'PAYSTACK_SECRET_KEY' : 'FLW_V3_SECRET_KEY';
+    const keyName = gateway === 'paystack' ? 'PAYSTACK_SECRET_KEY' : (gateway === 'monnify' ? 'MONNIFY_API_KEY / MONNIFY_SECRET_KEY / MONNIFY_CONTRACT_CODE' : 'FLW_V3_SECRET_KEY');
     return res.status(400).json({ error: `${GATEWAY_LABELS[gateway]} cannot be switched on yet — ${keyName} is not set on the server.` });
    }
    update.enabled = !!enabled;
@@ -8619,7 +8638,7 @@ async function checkAllPendingFlutterwaveDeposits() {
     // 1. Check all pending PaymentLinkDeposit records
     const pendingPLs = await PaymentLinkDeposit.find({
       status: 'pending',
-      gateway: { $ne: 'paystack' },
+      gateway: { $nin: ['paystack', 'monnify'] },
       createdAt: { $gte: since48h }
     }).limit(60);
 
@@ -8819,6 +8838,7 @@ async function checkPendingPaystackDeposits() {
 async function checkAllPendingDeposits() {
   await checkAllPendingFlutterwaveDeposits();
   await checkPendingPaystackDeposits();
+  await mvnMonnify.reconcilePending();
 }
 setTimeout(() => {
   reconcileVADeposits();
@@ -8901,6 +8921,10 @@ async function retryDepositConfirmation(source, id) {
     const dep = await PaymentLinkDeposit.findById(id);
     if (!dep) return { ok: false, message: 'Deposit not found' };
     if (dep.status === 'success') return { ok: true, credited: false, reference: dep.txRef, message: 'Already credited' };
+    if (dep.gateway === 'monnify') {
+      const result = await mvnMonnify.checkAndCredit(dep);
+      return { ok: true, credited: result === 'success', creditNgn: dep.creditAmount, reference: dep.txRef, message: 'Confirmation re-run against Monnify (' + result + ')' };
+    }
     if (dep.gateway === 'paystack') {
       const psTx = await paystackVerify(dep.txRef);
       if (!paystackTxOk(psTx, dep)) return { ok: true, credited: false, reference: dep.txRef, message: `Paystack reports status: ${psTx?.status || 'not found'}` };
