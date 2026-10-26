@@ -793,6 +793,21 @@
   },true);
 })();
 </script>
+<!-- MVN-TUTORIALS-FIX -->
+<script>
+(function(){
+  // Runs on window in the capture phase, before any other click handler on the page,
+  // so nothing can swallow the tap. Goes to the same /tutorials page the menu opens.
+  window.addEventListener('click',function(ev){
+    if(ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey)return;
+    var a=ev.target&&ev.target.closest?ev.target.closest('a[href="/tutorials"]'):null;
+    if(!a||a.closest('#mvnDrawer'))return;
+    ev.preventDefault();ev.stopImmediatePropagation();
+    try{window.MVNLoader&&window.MVNLoader.show('tut');setTimeout(function(){try{window.MVNLoader.hide('tut');}catch(e){}},4000);}catch(e){}
+    window.location.assign('/tutorials');
+  },true);
+})();
+</script>
 <script src="/js/loader-failsafe.js?v=1" defer></script>
 </body>
 </html>
