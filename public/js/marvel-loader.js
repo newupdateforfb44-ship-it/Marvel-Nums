@@ -4,7 +4,7 @@
 (function () {
   'use strict';
   if (window.MVNLoader) return;
-  var holds = {}, el = null, t0 = Date.now(), MIN_MS = 450, MAX_MS = 15000, hideTimer = null, forceTimer = null;
+  var holds = {}, el = null, t0 = Date.now(), MIN_MS = 350, MAX_MS = 4000, hideTimer = null, forceTimer = null;
 
   var css =
     '.dbfl-overlay,#dbfl-overlay,#mvn-page-transition{display:none!important}' +
@@ -50,13 +50,18 @@
   function reset() { holds = {}; fade(); }
 
   holds.page = 1; display();                                       // up immediately for every new page
-  var domReady = function () { setTimeout(function () { hide('page'); }, 3500); };   // slow images can't hold it
+  var domReady = function () { setTimeout(function () { hide('page'); }, 700); };   // slow images can't hold it
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', domReady); else domReady();
   if (document.readyState === 'complete') hide('page'); else window.addEventListener('load', function () { hide('page'); });
-  window.addEventListener('pageshow', function (ev) { if (ev.persisted) reset(); });
+  window.addEventListener('pageshow', function () { reset(); });
+  window.addEventListener('pagehide', function () { setTimeout(reset, 1500); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) reset(); });
+  window.addEventListener('error', function () { setTimeout(reset, 1200); });
+  window.addEventListener('unhandledrejection', function () { setTimeout(reset, 1200); });
+  setTimeout(reset, MAX_MS + 500);   // absolute last resort
 
   // Leaving the page: keep the same loader up so there is no second, different animation.
-  function leaving() { show('nav'); setTimeout(function () { hide('nav'); }, 6000); }
+  function leaving() { show('nav'); setTimeout(function () { hide('nav'); }, 2500); }
   window.addEventListener('beforeunload', leaving);
   document.addEventListener('click', function (ev) {
     var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;

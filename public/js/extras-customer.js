@@ -117,7 +117,7 @@
   }
 
   /* ── 3. notification bell ───────────────────────────────── */
-  var bell = fab('\uD83D\uDD14<span class="mx-badge" style="display:none"></span>', 150, 'Notifications');
+  var bell = fab('\uD83D\uDD14<span class="mx-badge" style="display:none"></span>', 218, 'Notifications');
   var badge = bell.querySelector('.mx-badge');
   var items = [];
   function unreadCount() { var seen = get('mvn_notif_seen', 0); return items.filter(function (i) { return new Date(i.at).getTime() > seen; }).length; }
@@ -136,7 +136,7 @@
   setInterval(function () { if (!document.hidden) loadNotifs(); }, 60000);
 
   /* ── 4. quick panel: search, favourites, recent ─────────── */
-  var quick = fab('\uD83D\uDD0D', 98, 'Search and favourites');
+  var quick = fab('\uD83D\uDD0D', 160, 'Search and favourites');
   quick.addEventListener('click', function () {
     var favs = get('mvn_favpages', []), rec = get('mvn_recent', []);
     var here = favs.some(function (f) { return f.p === location.pathname; });

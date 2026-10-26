@@ -62,7 +62,7 @@
       }
       loadEl.querySelector('.kui-lt').textContent = text || 'Please wait…';
       requestAnimationFrame(function () { loadEl && loadEl.classList.add('kui-in'); });
-      clearTimeout(loadTimer); loadTimer = setTimeout(function () { loadCount = 0; loading(false); }, 120000); // failsafe
+      clearTimeout(loadTimer); loadTimer = setTimeout(function () { loadCount = 0; loading(false); }, 20000); // failsafe
     } else {
       loadCount = Math.max(0, loadCount - 1);
       if (loadCount > 0 && arguments.length < 3) return;
