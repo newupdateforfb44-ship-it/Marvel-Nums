@@ -3417,7 +3417,7 @@ async function checkPaymentMethodSettings() {
     window.MVN_GATEWAYS = data.gateways || null;
     window.MVN_VA_GATEWAYS = data.vaGateways || null;
     renderVAGatewayChooser();
-    const gwList = data.gateways ? ['flutterwave', 'paystack'].filter(g => data.gateways[g] && data.gateways[g].available) : null;
+    const gwList = data.gateways ? ['flutterwave', 'paystack', 'monnify'].filter(g => data.gateways[g] && data.gateways[g].available) : null;
     const noGateway = !!gwList && gwList.length === 0;
     renderGatewayChooser(data.gateways, data.defaultGateway);
     const plOff   = (data.paymentlink && data.paymentlink.enabled === false) || noGateway;
@@ -3427,7 +3427,7 @@ async function checkPaymentMethodSettings() {
         plCard.onclick = null; plCard.onkeydown = null;
         if (plBtn) plBtn.disabled = true;
         if (plNote) {
- plNote.textContent = ' ' + ((data.paymentlink && data.paymentlink.disabledMessage) || (noGateway && data.gateways && (data.gateways.flutterwave.disabledMessage || data.gateways.paystack.disabledMessage)) || 'Payment Link is temporarily unavailable — please use Bank Transfer instead.');
+ plNote.textContent = ' ' + ((data.paymentlink && data.paymentlink.disabledMessage) || (noGateway && data.gateways && (data.gateways.flutterwave.disabledMessage || data.gateways.paystack.disabledMessage || (data.gateways.monnify && data.gateways.monnify.disabledMessage))) || 'Payment Link is temporarily unavailable — please use Bank Transfer instead.');
           plNote.style.display = 'block';
         }
       } else {
@@ -3756,18 +3756,18 @@ const selectedPlMethod = 'banktransfer';
 // The admin switches each gateway on/off. This shows the customer only what is currently on:
 // two on -> a picker, one on -> used silently, none on -> Payment Link greys out.
 let selectedGateway = '';
-const GATEWAY_NAMES = { flutterwave: 'Flutterwave', paystack: 'Paystack' };
+const GATEWAY_NAMES = { flutterwave: 'Flutterwave', paystack: 'Paystack', monnify: 'Monnify' };
 function gatewayName() { return GATEWAY_NAMES[selectedGateway] || 'our secure payment partner'; }
 function renderGatewayChooser(gateways, defaultGateway) {
   const box = document.getElementById('depGatewayChooser');
-  const avail = ['flutterwave', 'paystack'].filter(g => gateways && gateways[g] && gateways[g].available);
+  const avail = ['flutterwave', 'paystack', 'monnify'].filter(g => gateways && gateways[g] && gateways[g].available);
   if (!avail.includes(selectedGateway)) selectedGateway = avail.includes(defaultGateway) ? defaultGateway : (avail[0] || '');
   if (!box) return;
   if (avail.length < 2) { box.style.display = 'none'; box.innerHTML = ''; return; }
   box.style.display = 'block';
   box.innerHTML = '<div class="dep-amt-label" style="margin-bottom:8px">Pay with</div>' +
-    '<div style="display:flex;gap:10px">' + avail.map(g =>
-      `<button type="button" data-gw="${g}" onclick="pickGateway('${g}')" style="flex:1;padding:12px 10px;border-radius:10px;cursor:pointer;font:inherit;font-weight:700;` +
+    '<div style="display:flex;flex-wrap:wrap;gap:10px">' + avail.map(g =>
+      `<button type="button" data-gw="${g}" onclick="pickGateway('${g}')" style="flex:1 1 30%;padding:12px 10px;border-radius:10px;cursor:pointer;font:inherit;font-weight:700;` +
       `border:2px solid ${g === selectedGateway ? 'var(--accent)' : 'var(--border2, rgba(255,255,255,.15))'};` +
       `background:${g === selectedGateway ? 'rgba(26,109,255,.14)' : 'transparent'};color:var(--t1)">${GATEWAY_NAMES[g]}</button>`
     ).join('') + '</div>';
@@ -3859,7 +3859,7 @@ function startPaymentLinkCheckout() {
   else if (amount >= 1000 && amount <= 9999) fee = 50;
   else if (amount >= 10000) fee = 100;
   const charged = amount + fee;
- document.getElementById('depPlConfirmMethod').textContent = ' ' + gatewayName() + (selectedGateway === 'paystack' ? ' (Card / Bank / USSD)' : ' (Bank / Card / OPay)');
+ document.getElementById('depPlConfirmMethod').textContent = ' ' + gatewayName() + (selectedGateway === 'paystack' ? ' (Card / Bank / USSD)' : selectedGateway === 'monnify' ? ' (Card / Bank Transfer / USSD)' : ' (Bank / Card / OPay)');
   const feeEl = document.getElementById('depPlConfirmFee');
   const chargeEl = document.getElementById('depPlConfirmCharge');
   if (feeEl) feeEl.textContent = '₦' + fmtNGNn(fee);

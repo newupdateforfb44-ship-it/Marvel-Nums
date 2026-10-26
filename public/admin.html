@@ -1133,6 +1133,19 @@ tr:hover td{background:rgba(255,255,255,.035)}
             <div id="gwFeedbackPaystack" class="form-feedback"></div>
             <p style="font-size:.74rem;color:var(--t2);margin:6px 0 0">Webhook URL (paste in Paystack dashboard → Settings → API Keys &amp; Webhooks): <code id="gwHookPaystack"></code></p>
           </div>
+          <div class="pm-row" style="margin-top:10px">
+            <div class="pm-row-head">
+              <span class="pm-row-title">Monnify <small id="gwStatusMonnify" style="font-weight:500;color:var(--t2)"></small></span>
+              <label class="pm-switch">
+                <input type="checkbox" id="gwToggleMonnify" onchange="toggleGateway('monnify', this.checked)"/>
+                <span class="pm-slider"></span>
+              </label>
+            </div>
+            <div class="fg"><label>Message shown to users when off</label><input type="text" id="gwMsgMonnify" placeholder="e.g. Monnify is under maintenance — please use another option."/></div>
+            <button class="btn-secondary" onclick="saveGatewayMessage('monnify')">Save Message</button>
+            <div id="gwFeedbackMonnify" class="form-feedback"></div>
+            <p style="font-size:.74rem;color:var(--t2);margin:6px 0 0">Webhook URL (paste in Monnify dashboard → Settings → Webhook URLs, for "Transaction Completion"): <code id="gwHookMonnify"></code></p>
+          </div>
         </div>
         <div class="pm-row" id="pmRowPaymentlink">
           <div class="pm-row-head">
@@ -4850,7 +4863,7 @@ async function loadPaymentMethodsAdmin() {
 async function loadGatewaysAdmin() {
   try {
     const g = await aFetch('/api/admin/payment-gateways');
-    [['flutterwave','Flutterwave'],['paystack','Paystack']].forEach(([key, name]) => {
+    [['flutterwave','Flutterwave'],['paystack','Paystack'],['monnify','Monnify']].forEach(([key, name]) => {
       const st = g[key] || {};
       const toggle = document.getElementById('gwToggle' + name);
       const msg = document.getElementById('gwMsg' + name);
@@ -4864,7 +4877,7 @@ async function loadGatewaysAdmin() {
   } catch (e) { console.error('Failed to load payment gateways', e); }
 }
 async function toggleGateway(gateway, enabled) {
-  const name = gateway === 'paystack' ? 'Paystack' : 'Flutterwave';
+  const name = ({ paystack: 'Paystack', monnify: 'Monnify' })[gateway] || 'Flutterwave';
   const fb = document.getElementById('gwFeedback' + name);
   setFb(fb, 'Saving...', '');
   try {
@@ -4878,7 +4891,7 @@ async function toggleGateway(gateway, enabled) {
   }
 }
 async function saveGatewayMessage(gateway) {
-  const name = gateway === 'paystack' ? 'Paystack' : 'Flutterwave';
+  const name = ({ paystack: 'Paystack', monnify: 'Monnify' })[gateway] || 'Flutterwave';
   const fb = document.getElementById('gwFeedback' + name);
   setFb(fb, 'Saving...', '');
   try {
