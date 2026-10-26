@@ -1,122 +1,123 @@
-/* ═══ MARVEL NUMS — white + blue theme (loaded last on every page) ═══════════
-   Brand blue comes from the logo: cyan #19c3ff → #1a6dff → deep #0f4fd6.      */
+/* ═══ MARVEL NUMS — Navy + Electric Blue + Red (matches the logo) ═══════════
+   Loaded last on every page. Dark surfaces, light text: no white-on-white.   */
+:root{--mvn-navy:#050b22;--mvn-navy2:#0a1433;--mvn-card:#0f1b44;--mvn-card2:#13235a;--mvn-line:rgba(90,150,255,.22);
+  --mvn-ink:#eef3ff;--mvn-muted:#a3b5dc;--mvn-blue:#1a6dff;--mvn-cyan:#19c3ff;--mvn-red:#ff2a4d;--mvn-red2:#d9143a}
 html,html[data-theme],html[data-theme="light"],html[data-theme="dark"],:root{
-  --kb-control:#ffffff !important; --kb-surface:#ffffff !important; --kb-glass:rgba(255,255,255,.95) !important; --kb-ink:#060d2b !important;
-  --bg:#ffffff !important; --bg2:#f4f8ff !important; --bg3:#eef4fd !important; --bg4:#e3edfb !important;
-  --card:#ffffff !important; --card2:#f4f8ff !important;
-  --border:#dbe6f6 !important; --border2:#c5d6ee !important;
-  --t1:#060d2b !important; --t2:#4a5d7e !important; --t3:#7b8cab !important;
-  --gold:#1a6dff !important; --gold2:#0f4fd6 !important; --gold3:#7fd0ff !important;
-  --blue:#1a6dff !important; --green:#1a6dff !important; --accent:#1a6dff !important; --primary:#1a6dff !important;
-  --sh:0 8px 28px rgba(6,20,80,.10) !important; --sh2:0 2px 12px rgba(6,20,80,.08) !important;
-  --text:#060d2b !important; --text2:#4a5d7e !important; --text3:#7b8cab !important;
-  --white:#ffffff !important; --blue-light:#eaf3ff !important;
-  --app-blue:#1a6dff !important; --app-blue2:#0f4fd6 !important; --app-blue-soft:#eaf3ff !important;
-  --mvn-surface:#fff !important; --mvn-surface-2:#f4f8ff !important; --mvn-line:#dbe6f6 !important;
-  --mvn-text:#060d2b !important; --mvn-text-muted:#4a5d7e !important; --mvn-accent:#1a6dff !important;
-  --glass-bg:rgba(255,255,255,.92) !important; --glass-bg-hover:#fff !important;
-  --glass-border:rgba(26,109,255,.18) !important; --glass-border-hover:rgba(26,109,255,.45) !important;
-  --glass-glow:0 6px 18px -12px rgba(26,109,255,.35) !important; --glass-glow-hover:0 10px 24px -10px rgba(26,109,255,.5) !important;
-  --pill-bg:rgba(255,255,255,.96) !important; --pill-border:rgba(26,109,255,.22) !important;
-  --pill-active-bg:rgba(26,109,255,.12) !important; --pill-active-fg:#0f4fd6 !important; --pill-idle-fg:#5a6c8c !important;
-  color-scheme:light !important;
+  --kb-control:#13235a !important; --kb-surface:#0f1b44 !important; --kb-glass:rgba(15,27,68,.95) !important; --kb-ink:#eef3ff !important;
+  --bg:#050b22 !important; --bg2:#0a1433 !important; --bg3:#0f1b44 !important; --bg4:#13235a !important;
+  --card:#0f1b44 !important; --card2:#13235a !important;
+  --border:rgba(90,150,255,.22) !important; --border2:rgba(90,150,255,.35) !important;
+  --t1:#eef3ff !important; --t2:#a3b5dc !important; --t3:#7f93c2 !important;
+  --gold:#19c3ff !important; --gold2:#1a6dff !important; --gold3:#7fd0ff !important;
+  --blue:#1a6dff !important; --green:#19c3ff !important; --accent:#1a6dff !important; --primary:#1a6dff !important; --red:#ff2a4d !important;
+  --sh:0 8px 28px rgba(0,0,0,.45) !important; --sh2:0 2px 12px rgba(0,0,0,.35) !important;
+  --text:#eef3ff !important; --text2:#a3b5dc !important; --text3:#7f93c2 !important;
+  --white:#0f1b44 !important; --blue-light:#13235a !important;
+  --app-blue:#1a6dff !important; --app-blue2:#0f4fd6 !important; --app-blue-soft:#13235a !important;
+  --mvn-surface:#0f1b44 !important; --mvn-surface-2:#13235a !important; --mvn-line:rgba(90,150,255,.22) !important;
+  --mvn-text:#eef3ff !important; --mvn-text-muted:#a3b5dc !important; --mvn-accent:#1a6dff !important;
+  --glass-bg:rgba(15,27,68,.9) !important; --glass-bg-hover:#13235a !important;
+  --glass-border:rgba(90,150,255,.25) !important; --glass-border-hover:rgba(25,195,255,.6) !important;
+  --glass-glow:0 6px 18px -12px rgba(26,109,255,.6) !important; --glass-glow-hover:0 10px 24px -10px rgba(26,109,255,.8) !important;
+  --pill-bg:rgba(15,27,68,.96) !important; --pill-border:rgba(90,150,255,.3) !important;
+  --pill-active-bg:rgba(26,109,255,.3) !important; --pill-active-fg:#fff !important; --pill-idle-fg:#a3b5dc !important;
+  color-scheme:dark !important;
 }
-html{background:#fff !important}
-body{background:#fff !important;background-color:#fff !important;background-image:none !important;color:#060d2b !important;--kb-ov:none !important}
-body::before,body::after{background-image:none !important}
-body::before{background:#fff !important}
+html{background:#050b22 !important}
+body{background:#050b22 !important;background-color:#050b22 !important;color:#eef3ff !important;--kb-ov:none !important;
+  background-image:radial-gradient(ellipse at 0% 0%,rgba(26,109,255,.28),transparent 45%),radial-gradient(ellipse at 100% 100%,rgba(255,42,77,.16),transparent 45%) !important;
+  background-attachment:fixed !important}
+body::before,body::after{background-image:none !important;background:transparent !important}
 
-/* header */
-.navbar,.topbar,.app-header,.sidebar,header.nav,.dsh-topbar{background:rgba(255,255,255,.94) !important;border-color:#dbe6f6 !important;color:#060d2b !important;box-shadow:0 1px 0 #e3edfb}
-.brand-mvn,.brand-name,.site-brand{background:none !important;-webkit-text-fill-color:#060d2b !important;color:#060d2b !important}
-.brand-icon,.dbfl-crown-svg{border-color:#dbe6f6 !important;box-shadow:0 2px 10px rgba(26,109,255,.18) !important}
+/* header + nav */
+.navbar,.topbar,.app-header,.sidebar,header.nav,.dsh-topbar{background:rgba(5,11,34,.92) !important;border-color:rgba(90,150,255,.22) !important;color:#eef3ff !important;backdrop-filter:blur(14px)}
+.brand-mvn,.brand-name,.site-brand{background:none !important;-webkit-text-fill-color:#eef3ff !important;color:#eef3ff !important}
+.brand-icon,.dbfl-crown-svg{border-color:rgba(90,150,255,.4) !important;box-shadow:0 2px 14px rgba(26,109,255,.5) !important}
 
 /* surfaces */
 .card,.mvn-card,.stat-card,.panel,.box,.glass,.section-card,.tool-card,.log-card,.prod-card,.modal-content,.settings-card,.wallet-card,
-.modal,.dsh-card,.dsh-section,.bst-card,.pc-card,.review-item,.detail-box,.api-key-box,.mvn-gate-box,.wal-card,.wal-row{
-  background:#fff !important;color:#060d2b !important;border-color:#dbe6f6 !important;box-shadow:0 6px 22px rgba(6,20,80,.08) !important}
+.modal,.dsh-card,.dsh-section,.bst-card,.pc-card,.review-item,.detail-box,.api-key-box,.mvn-gate-box,.wal-card,.wal-row,
+.wo-card,.dsh-svc-item,.product-card,.market-card,.feature-card,.service-card,.step,.faq-item,.offer-card,.mkt-card,.order-card,.txn-card,.nh-card{
+  background:linear-gradient(145deg,#0f1b44,#0b1637) !important;color:#eef3ff !important;border:1px solid rgba(90,150,255,.22) !important;box-shadow:0 8px 26px rgba(0,0,0,.4) !important}
 .dsh-shell,.app-shell,.main,main,.page,.container{background:transparent !important}
-input,select,textarea,.bst-input{background:#fff !important;color:#060d2b !important;border-color:#c5d6ee !important}
-input::placeholder,textarea::placeholder{color:#8a9bb8 !important}
-input:focus,select:focus,textarea:focus{border-color:#1a6dff !important;box-shadow:0 0 0 3px rgba(26,109,255,.15) !important;outline:none}
-table,th,td{border-color:#e3edfb !important}
-th{background:#f4f8ff !important;color:#060d2b !important}
-td{color:#060d2b}
-h1,h2,h3,h4,h5,label,p,li,span,small,b,strong{border-color:#dbe6f6}
-a{color:#0f4fd6}
 
-/* buttons: logo gradient */
+/* text: always light on dark */
+h1,h2,h3,h4,h5,h6,label,li,b,strong,td,th,legend,summary,dt,dd{color:#eef3ff !important}
+p,span,small,div,.sub,.desc,.muted,.txt-muted,.hero-p,.welcome-hero p{color:inherit}
+.card p,.card span,.card small,.dsh-card p,.prod-card p,.muted,.sub,.desc,.hero-p,.welcome-hero p,small{color:#a3b5dc !important;text-shadow:none !important}
+a{color:#5fb0ff}
+a:hover{color:#9fd2ff}
+.hero,.welcome-hero,.hero h1,.welcome-hero h1{color:#eef3ff !important}
+h1 em,h1 span.grad,.hero h1 span,.grad-text,.hero-grad{background:linear-gradient(90deg,#19c3ff,#ff2a4d) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important;color:transparent !important}
+
+/* inputs */
+input,textarea,select,.nh-input,.as-search,.bst-input,.bst-input-search,#passInput,.fg input{background:#0a1433 !important;color:#eef3ff !important;border:1px solid rgba(90,150,255,.35) !important}
+input::placeholder,textarea::placeholder{color:#7f93c2 !important}
+input:focus,select:focus,textarea:focus{border-color:#19c3ff !important;box-shadow:0 0 0 3px rgba(25,195,255,.2) !important;outline:none}
+input[type="file"]{background:#0f1b44 !important}
+option{background:#0a1433 !important;color:#eef3ff !important}
+table,th,td{border-color:rgba(90,150,255,.18) !important}
+th{background:#13235a !important}
+
+/* buttons: blue primary, red accent */
 .btn-primary,.btn-gold,.btn-nav-reg,.hero-cta,.buy-btn,.prod-select-btn,button.primary,.btn-blue{
-  background:linear-gradient(115deg,#0f4fd6,#1a6dff 55%,#00b4ff) !important;color:#fff !important;border:1px solid #1a6dff !important;
-  box-shadow:0 8px 22px rgba(26,109,255,.28) !important}
-.btn-nav-login,.btn-secondary,.btn-outline,.btn-ghost{background:#fff !important;color:#0f4fd6 !important;border:1px solid #bcd3f3 !important}
-.nav-balance-btn,.ph-chip{background:#eaf3ff !important;color:#0f4fd6 !important;border-color:#cfe2fb !important}
-.dsh-balance-card,.dsh-promo,.wal-hero{color:#fff !important;background:linear-gradient(135deg,#0f4fd6 0%,#1a6dff 50%,#19c3ff 100%) !important}
-.dsh-balance-card *,.dsh-promo *,.wal-hero *{color:#fff}
+  background:linear-gradient(115deg,#0f4fd6,#1a6dff 55%,#19c3ff) !important;color:#fff !important;border:1px solid #1a6dff !important;border-radius:12px !important;
+  box-shadow:0 8px 22px rgba(26,109,255,.45) !important}
+.btn-danger,.btn-red,.logout-btn,.btn-delete{background:linear-gradient(115deg,#d9143a,#ff2a4d) !important;color:#fff !important;border:1px solid #ff2a4d !important}
+.btn-nav-login,.btn-secondary,.btn-outline,.btn-ghost{background:transparent !important;color:#9fd2ff !important;border:1px solid rgba(90,150,255,.5) !important}
+.nav-balance-btn,.ph-chip{background:#13235a !important;color:#9fd2ff !important;border-color:rgba(90,150,255,.4) !important}
+button{color:inherit}
+.dsh-balance-card,.dsh-promo,.wal-hero{color:#fff !important;background:linear-gradient(135deg,#0f4fd6 0%,#1a6dff 55%,#d9143a 140%) !important;border:1px solid rgba(255,255,255,.15) !important}
+.dsh-balance-card *,.dsh-promo *,.wal-hero *{color:#fff !important}
 .dsh-balance-card .dsh-add-btn,.dsh-balance-card button{color:#0f4fd6 !important;background:#fff !important}
 
-/* hero / landing text that was white over artwork */
-.hero-p,.welcome-hero p{text-shadow:none !important;color:#4a5d7e !important}
-.hero,.welcome-hero,.hero h1,.welcome-hero h1{color:#060d2b !important}
+/* nav bars, tabs, chips */
+.bottom-tabbar,.dsh-bottom-nav{background:rgba(5,11,34,.96) !important;border:1px solid rgba(90,150,255,.3) !important;box-shadow:0 10px 30px rgba(0,0,0,.6) !important}
+.mkt-chip,.dsh-nav-item,.bt-item,.hm-tab,.txn-seg-opt{background:#0f1b44 !important;color:#a3b5dc !important;border:1px solid rgba(90,150,255,.25) !important}
+.mkt-chip.active,.dsh-nav-item.active,.dsh-nav-item.on,.bt-item.active,.bt-item.on,.hm-tab.active,.hm-tab.on,.hm-tab[aria-selected="true"],.txn-seg-opt.active,.txn-seg-opt.on,.lock-role-tab.active,a[aria-current="page"]{
+  background:linear-gradient(115deg,#0f4fd6,#1a6dff) !important;border-color:#19c3ff !important;color:#fff !important}
+.badge{background:rgba(255,42,77,.18) !important;color:#ff8da1 !important;border:1px solid rgba(255,42,77,.4) !important}
+.notif-badge,.badge-count,.unread-count,.cart-count{background:#ff2a4d !important;color:#fff !important}
+.online-pill,.dsh-stat-dot,.pdot{color:#19c3ff !important}
+.msg.err,p.msg.err,.err{color:#ff6b84 !important}
+.tb-link,.tb-back,.tb-title,summary.how-sum,a.back,.back,.wrap>a:first-child{color:#9fd2ff !important;background:transparent !important}
 
-/* bottom nav pill */
-.bottom-tabbar,.dsh-bottom-nav{background:rgba(255,255,255,.96) !important;border:1px solid #dbe6f6 !important;box-shadow:0 10px 30px rgba(6,20,80,.16) !important}
+/* menu drawer, selector sheet, modals */
+.mvn-drawer{background:#08112e !important;color:#eef3ff !important;border-color:rgba(90,150,255,.25) !important}
+.mvn-drawer-link,.mvn-menu-toggle{color:#eef3ff !important}
+.mvn-drawer-link:hover,.mvn-menu-toggle:hover,.mvn-sub-link:hover{background:#13235a !important}
+.ks-sheet-trigger{background:#0f1b44 !important;color:#eef3ff !important;border:1px solid rgba(90,150,255,.35) !important}
+.ks-sheet-subtitle{color:#a3b5dc !important}
+.ks-sheet{background:#0a1433 !important;color:#eef3ff !important;border-color:rgba(90,150,255,.3) !important}
+.ks-sheet *{border-color:rgba(90,150,255,.2) !important}
+.ks-sheet-grab{background:#2a3f80 !important}
+.ks-sheet input{background:#0f1b44 !important}
+.ks-sheet button,.ks-sheet [class*="option"],.ks-sheet [class*="item"]{color:#eef3ff !important;background:#0f1b44 !important}
+.ks-sheet [class*="option"]:hover,.ks-sheet [class*="item"]:hover,.ks-sheet [aria-selected="true"]{background:#1a3a8f !important}
+.ks-sheet-overlay,.mvn-gate,.mvn-menu-backdrop{background:rgba(2,5,18,.7) !important}
+#kb-loader{background:#050b22 !important}
+#kb-loader .kb-logo{box-shadow:0 6px 28px rgba(26,109,255,.6) !important}
+#kb-loader .kb-logo::after{border-color:rgba(26,109,255,.2) !important;border-top-color:#ff2a4d !important}
+::selection{background:#1a6dff;color:#fff}
 
-/* chips / pills */
-.mkt-chip{background:#fff !important;color:#4a5d7e !important;border-color:#c5d6ee !important}
-.mkt-chip.active{background:#1a6dff !important;border-color:#1a6dff !important;color:#fff !important}
-.online-pill,.dsh-stat-dot,.pdot{color:#1a6dff !important}
+/* any leftover inline white boxes -> dark (stops white-on-white) */
+[style*="background:#fff"],[style*="background: #fff"],[style*="background:#ffffff"],[style*="background: #ffffff"],
+[style*="background:white"],[style*="background: white"],[style*="background-color:#fff"],[style*="background-color: #fff"],[style*="background:#f4f8ff"],[style*="background:#eaf3ff"]{
+  background:#0f1b44 !important;color:#eef3ff !important}
+[style*="color:#fff"] *,[style*="color: #fff"] *{color:inherit}
+[style*="color:#060d2b"],[style*="color:#000"],[style*="color: #000"],[style*="color:#111"],[style*="color:#222"],[style*="color:#333"]{color:#eef3ff !important}
+code,pre,.api-key-box{background:#0a1433 !important;color:#9fd2ff !important}
+hr{border-color:rgba(90,150,255,.2) !important}
 
-/* overlays keep readable */
-.mvn-gate{background:rgba(6,13,43,.45) !important}
-::selection{background:#bfe0ff}
+/* header bars on home/index, password "Show" toggle, Google button */
+.nav,.navbar,nav#navbar,#navbar{background:rgba(5,11,34,.94) !important;border-bottom:1px solid rgba(90,150,255,.25) !important;box-shadow:0 2px 18px rgba(26,109,255,.25) !important;color:#eef3ff !important}
+.nav a,.navbar a,.nav .brand,.navbar .brand,.nav-brand,.nav-brand *{color:#eef3ff !important}
+.nav .btn-nav-login,.navbar .btn-nav-login,.nav .btn-nav-reg,.navbar .btn-nav-reg{color:#fff !important}
+.toggle{background:#13235a !important;color:#9fd2ff !important;border:1px solid rgba(90,150,255,.4) !important}
+.gbtn,.gbtn *{color:#1f1f1f !important;background-color:#fff}
+.gbtn svg *{background:none !important}
 
-/* no glow/shadow on headings (was for dark artwork) */
-h1,h2,h3,h4,.sec-title,p,.hero-p,.sub,.desc{text-shadow:none !important}
-/* admin passcode + generic dark inputs */
-#passInput,.fg input{background:#fff !important;color:#060d2b !important;border:1px solid #c5d6ee !important}
-/* "Back" pills etc keep readable on white */
-.wrap>a:first-child{color:#0f4fd6 !important;background:#eaf3ff !important}
-
-/* selector bottom-sheet + triggers (white/blue) */
-.ks-sheet-trigger{background:#fff !important;color:#060d2b !important;border:1px solid #c5d6ee !important;box-shadow:0 2px 10px rgba(6,20,80,.06) !important}
-.ks-sheet-subtitle{color:#5a6c8c !important}
-.ks-sheet{background:#fff !important;color:#060d2b !important;border-color:#dbe6f6 !important}
-.ks-sheet-overlay{background:rgba(6,13,43,.45) !important}
-.ks-sheet *{border-color:#e3edfb !important}
-.ks-sheet-grab{background:#c5d6ee !important}
-.ks-sheet input{background:#f4f8ff !important}
-.ks-sheet button,.ks-sheet [class*="option"],.ks-sheet [class*="item"]{color:#060d2b !important}
-.ks-sheet [class*="option"],.ks-sheet [class*="item"]{background:#fff !important}
-.ks-sheet [class*="option"]:hover,.ks-sheet [class*="item"]:hover,.ks-sheet [aria-selected="true"]{background:#eaf3ff !important}
-
-/* loader: Marvel mark with blue spinner on white */
-#kb-loader{background:#fff !important}
-#kb-loader .kb-logo{width:76px !important;height:76px !important;box-shadow:0 6px 24px rgba(26,109,255,.25) !important}
-#kb-loader .kb-logo::after{border-color:rgba(26,109,255,.15) !important;border-top-color:#1a6dff !important}
-
-/* remaining dark controls → white/blue */
-input,textarea,select,.nh-input,.as-search,.bst-input-search{background:#fff !important;color:#060d2b !important;border-color:#c5d6ee !important}
-input[type="file"]{background:#f4f8ff !important}
-.dsh-nav-item,.bt-item,.hm-tab{background:#fff !important;color:#5a6c8c !important;border-color:#dbe6f6 !important}
-.dsh-nav-item.active,.dsh-nav-item.on,.bt-item.active,.bt-item.on,.hm-tab.active,.hm-tab.on,.hm-tab[aria-selected="true"]{background:#1a6dff !important;color:#fff !important}
-
-/* contrast fixes for text that used to sit on dark */
-.wrap li,.wrap b,.wrap i,.wrap .notice,.wrap .msg,.how-sum+*{color:#060d2b}
-.msg.err,p.msg.err,.err{color:#d92d3f !important}
-.tb-link,.tb-back,.tb-title,summary.how-sum,a.back,.back{color:#0f4fd6 !important}
-.badge{color:#0f4fd6 !important}
-.txn-seg-opt{color:#4a5d7e !important}
-.txn-seg-opt.active,.txn-seg-opt.on{color:#fff !important}
-.lock-role-tab.active{color:#fff !important}
-.txt-muted,.muted,.sub,small{color:#5a6c8c}
-html body button.txn-seg-opt{color:#4a5d7e !important}
-html body button.txn-seg-opt.active{color:#fff !important}
-html body a.tb-link,html body button.tb-back{color:#0f4fd6 !important}
-a[aria-current="page"]{color:#fff !important}
-
-/* MVN-BRAND-COLORS: Marvel Nums = navy + electric blue + red */
-:root{--mvn-navy:#040a24;--mvn-blue:#1a6dff;--mvn-cyan:#00b4ff;--mvn-red:#ff1a45}
-.dsh-balance-card,.dsh-promo,.wal-hero{background:linear-gradient(135deg,#040a24 0%,#0f4fd6 55%,#00b4ff 120%) !important}
-.btn-primary,.btn-gold,.btn-nav-reg,.hero-cta,.buy-btn,.prod-select-btn,button.primary,.btn-blue{background:linear-gradient(115deg,#0f4fd6,#1a6dff 55%,#00b4ff) !important}
-.notif-badge,.badge-count,.unread-count,.cart-count{background:#ff1a45 !important;color:#fff !important}
+/* red accents from the logo's chat bubble */
+.btn-nav-reg,.hero-cta.alt,.btn-red{background:linear-gradient(115deg,#d9143a,#ff2a4d) !important;border-color:#ff2a4d !important;box-shadow:0 8px 22px rgba(255,42,77,.4) !important;color:#fff !important}
+.step-num,.num-badge,.sec-eyebrow{color:#ff5d78 !important}
+.card:hover,.prod-card:hover,.dsh-svc-item:hover{border-color:rgba(255,42,77,.55) !important}
