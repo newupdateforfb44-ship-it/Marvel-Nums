@@ -236,6 +236,12 @@ app.use((req, res, next) => {
 app.use(express.static('public', {
   index: false,
   setHeaders(res, filePath) {
+    // SECURITY: files in user-writable folders can never run as a page or script on our domain.
+    if (/[\\/]public[\\/](uploads|receipts|files)[\\/]/i.test(filePath)) {
+      res.set('X-Content-Type-Options', 'nosniff');
+      res.set('Content-Security-Policy', 'sandbox; default-src \'none\'; img-src \'self\' data:; media-src \'self\'; style-src \'unsafe-inline\'');
+      if (!/\.(jpe?g|png|gif|webp|mp4|mov|webm|mp3|m4a|ogg|wav)$/i.test(filePath)) res.set('Content-Disposition', 'attachment');
+    }
     if (/\.html?$/i.test(filePath)) {
       res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       res.set('Pragma', 'no-cache');
@@ -264,6 +270,11 @@ const fileDir = path.join(__dirname, 'public', 'files');
   try { if (fs.existsSync(d) && !fs.statSync(d).isDirectory()) fs.unlinkSync(d); } catch (e) { console.error('Could not clear non-directory at', d, e.message); }
   if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
 });
+// SECURITY: only ever keep a known-safe file extension on disk. A customer-supplied ".html"/".svg"/".js"
+// would otherwise be served from our own domain and run as a script (stored XSS).
+const SAFE_UPLOAD_EXT = new Set(['.jpg','.jpeg','.png','.gif','.webp','.mp4','.mov','.webm','.mp3','.m4a','.ogg','.wav','.pdf','.txt','.zip','.apk','.rar','.7z','.csv','.docx','.xlsx']);
+const safeExt = (name) => { const e = path.extname(String(name || '')).toLowerCase(); return SAFE_UPLOAD_EXT.has(e) ? e : ''; };
+const CHAT_ALLOWED_EXT = new Set(['.jpg','.jpeg','.png','.gif','.webp','.mp4','.mov','.webm','.mp3','.m4a','.ogg','.wav','.pdf','.txt','.zip','.csv','.docx','.xlsx']);
 function makeStorage(folder, resourceType) {
  if (cloudinaryConfigured) {
  return new CloudinaryStorage({
@@ -279,7 +290,7 @@ function makeStorage(folder, resourceType) {
  const dir = folder === 'receipts' ? receiptDir : folder === 'files' ? fileDir : uploadDir;
  return multer.diskStorage({
  destination: (req, file, cb) => cb(null, dir),
- filename: (req, file, cb) => cb(null, `${folder}_${Date.now()}_${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`)
+ filename: (req, file, cb) => cb(null, `${folder}_${Date.now()}_${Math.random().toString(36).slice(2)}${safeExt(file.originalname)}`)
  });
 }
 function fileUrl(file) {
@@ -291,7 +302,7 @@ const upload = multer({ storage: makeStorage('uploads', 'image'), limits: { file
 const receiptUpload = multer({
  storage: multer.diskStorage({
  destination: (req, file, cb) => cb(null, receiptDir),
- filename: (req, file, cb) => cb(null, `receipt_${Date.now()}_${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`)
+ filename: (req, file, cb) => cb(null, `receipt_${Date.now()}_${Math.random().toString(36).slice(2)}${safeExt(file.originalname)}`)
  }),
  limits: { fileSize: 10 * 1024 * 1024 },
  fileFilter: (req, file, cb) => /jpeg|jpg|png|gif|webp|pdf/.test(file.mimetype) ? cb(null, true) : cb(new Error('Image or PDF only'))
@@ -320,7 +331,7 @@ const uploadLogFields = multer({
  const isReview = file.fieldname === 'adminReviewFile' || file.fieldname.startsWith('subReviewFile_');
  const isTutorial = file.fieldname === 'tutorialImages' || file.fieldname === 'tutorialVideo' || file.fieldname.startsWith('subTutorialFile_');
  const prefix = file.fieldname === 'deliverableFile' ? 'file' : isReview ? 'review' : isTutorial ? 'tutorial' : 'img';
- cb(null, `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`);
+ cb(null, `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2)}${safeExt(file.originalname)}`);
  }
  }),
  limits: { fileSize: 100 * 1024 * 1024 },
@@ -352,7 +363,7 @@ const reviewUpload = multer({
  })
  : multer.diskStorage({
  destination: (req, file, cb) => cb(null, uploadDir),
- filename: (req, file, cb) => cb(null, `review_${Date.now()}_${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`)
+ filename: (req, file, cb) => cb(null, `review_${Date.now()}_${Math.random().toString(36).slice(2)}${safeExt(file.originalname)}`)
  }),
  limits: { fileSize: 50 * 1024 * 1024 },
  fileFilter: (req, file, cb) => /jpeg|jpg|png|gif|webp|mp4|mov|webm|quicktime/.test(file.mimetype) ? cb(null, true) : cb(new Error('Image or video only'))
@@ -370,9 +381,10 @@ const chatUpload = multer({
  })
  : multer.diskStorage({
  destination: (req, file, cb) => cb(null, uploadDir),
- filename: (req, file, cb) => cb(null, `chat_${Date.now()}_${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`)
+ filename: (req, file, cb) => cb(null, `chat_${Date.now()}_${Math.random().toString(36).slice(2)}${safeExt(file.originalname)}`)
  }),
- limits: { fileSize: 50 * 1024 * 1024 }
+ limits: { fileSize: 50 * 1024 * 1024 },
+ fileFilter: (req, file, cb) => CHAT_ALLOWED_EXT.has(path.extname(String(file.originalname || '')).toLowerCase()) ? cb(null, true) : cb(new Error('This file type is not allowed. Send an image, video, audio, PDF, text, zip or office file.'))
 });
 const depositTutorialUpload = multer({
  storage: cloudinaryConfigured
@@ -387,7 +399,7 @@ const depositTutorialUpload = multer({
  })
  : multer.diskStorage({
  destination: (req, file, cb) => cb(null, uploadDir),
- filename: (req, file, cb) => cb(null, `deptut_${Date.now()}_${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`)
+ filename: (req, file, cb) => cb(null, `deptut_${Date.now()}_${Math.random().toString(36).slice(2)}${safeExt(file.originalname)}`)
  }),
  limits: { fileSize: 100 * 1024 * 1024 },
  fileFilter: (req, file, cb) => {
@@ -1586,7 +1598,12 @@ const apiKeyAuth = async (req, res, next) => {
  const secret = req.headers['x-api-secret'];
  if (!key || !secret) return res.status(401).json({ error: 'Missing X-API-Key or X-API-Secret header' });
  const user = await User.findOne({ apiKey: key, apiEnabled: true }).select('-password');
- if (!user || user.apiSecret !== secret) return res.status(401).json({ error: 'Invalid API key or secret' });
+ if (!user) return res.status(401).json({ error: 'Invalid API key or secret' });
+ const stored = String(user.apiSecret || '');
+ const hashed = stored.startsWith('sha256:');
+ const okSecret = hashed ? safeEqual('sha256:' + _crypto.createHash('sha256').update(String(secret)).digest('hex'), stored) : safeEqual(secret, stored);
+ if (!okSecret) return res.status(401).json({ error: 'Invalid API key or secret' });
+ if (!hashed) user.apiSecret = 'sha256:' + _crypto.createHash('sha256').update(String(secret)).digest('hex'); // one-time upgrade of old plain-text secrets
  if (user.restricted) return res.status(403).json({ error: 'This account has been restricted', restricted: true });
  user.apiLastUsedAt = new Date();
  await user.save();
@@ -1612,10 +1629,32 @@ const subAdminAuth = async (req, res, next) => {
  next();
  } catch { res.status(401).json({ error: 'Invalid or expired session' }); }
 };
+// SECURITY: staff (support) logins may ONLY reach the routes below. Everything else that is wired to
+// anyAdminAuth (pricing, provider config, refunds, deposit confirm, wallet edits, bulk restrict...) is owner-only.
+const STAFF_ALLOWED = [
+ ['*', /^\/api\/admin\/support(\/|$)/],
+ ['*', /^\/api\/admin\/receipts(\/|$)/],
+ ['*', /^\/api\/admin\/system-errors(\/|$)/],
+ ['GET', /^\/api\/admin\/(ops-overview|restock-requests|whoami|providers\/status|site-links)$/],
+ ['GET', /^\/api\/admin\/numbers\/needs-review$/],
+ ['GET', /^\/api\/admin\/boost\/(settings|balance|orders|services|audit|sync-status|troubleshoot)/],
+ ['GET', /^\/api\/admin\/(market[234]|boost2|otp-suite|n3)\/(config|balance|orders|status|overview)$/],
+ ['GET', /^\/api\/admin\/categories$/],
+ ['POST', /^\/api\/admin\/site-links$/]
+];
+const staffMayUse = (req) => {
+ const url = String(req.originalUrl || '').split('?')[0].replace(/\/+$/, '');
+ if (/\.\.|%|\/\//.test(url)) return false;
+ return STAFF_ALLOWED.some(([m, re]) => (m === '*' || m === req.method) && re.test(url));
+};
 const anyAdminAuth = async (req, res, next) => {
  const p = req.headers['x-admin-passcode'];
  if (p && safeEqual(p, process.env.ADMIN_PASSCODE)) { req.adminRole = 'super'; return next(); }
- return subAdminAuth(req, res, next);
+ return subAdminAuth(req, res, (err) => {
+  if (err) return next(err);
+  if (!staffMayUse(req)) return res.status(403).json({ error: 'This action is for the site owner only.' });
+  next();
+ });
 };
 const { brandLogoFor } = require('./lib/brand-logos').register({
  app, mongoose, adminAuth, cloudinary, cloudinaryConfigured
@@ -2163,7 +2202,7 @@ app.post('/api/admin/staff/reset-password', subAdminAuth, async (req, res) => {
  try {
  const { currentPassword, newPassword } = req.body;
  if (!currentPassword || !newPassword) return res.status(400).json({ error: 'Both current and new password are required' });
- if (newPassword.length < 6) return res.status(400).json({ error: 'New password must be at least 6 characters' });
+ if (newPassword.length < 8) return res.status(400).json({ error: 'New password must be at least 8 characters' });
  const account = await AdminAccount.findById(req.subAdmin._id);
  if (!(await bcrypt.compare(currentPassword, account.password))) return res.status(400).json({ error: 'Current password is incorrect' });
  account.password = await bcrypt.hash(newPassword, 12);
@@ -2178,7 +2217,7 @@ app.post('/api/admin/staff', adminAuth, async (req, res) => {
  try {
  const { name, email, password } = req.body;
  if (!name || !email || !password) return res.status(400).json({ error: 'Name, email, and password are required' });
- if (password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+ if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
  if (await AdminAccount.findOne({ email: email.toLowerCase() })) return res.status(400).json({ error: 'An admin with this email already exists' });
  const account = await AdminAccount.create({ name, email: email.toLowerCase(), password: await bcrypt.hash(password, 12), role: 'support' });
  res.json({ id: account._id, name: account.name, email: account.email, role: account.role, message: ` Sub-admin "${name}" created — they can log in at /YOUR_ADMIN_PATH with these credentials.` });
@@ -2199,7 +2238,7 @@ app.delete('/api/admin/staff/:id', adminAuth, async (req, res) => {
 app.post('/api/admin/staff/:id/reset-password', adminAuth, async (req, res) => {
  try {
  const { newPassword } = req.body;
- if (!newPassword || newPassword.length < 6) return res.status(400).json({ error: 'New password must be at least 6 characters' });
+ if (!newPassword || newPassword.length < 8) return res.status(400).json({ error: 'New password must be at least 8 characters' });
  const account = await AdminAccount.findById(req.params.id);
  if (!account) return res.status(404).json({ error: 'Not found' });
  account.password = await bcrypt.hash(newPassword, 12);
@@ -2213,7 +2252,7 @@ app.post('/api/auth/reset-password', auth, async (req, res) => {
  const user = await User.findById(req.user._id);
  if (!user.password) return res.status(400).json({ error: 'This account uses Google Sign-In and has no password. There is nothing to reset — you can set one via "Add a password" in Settings.' });
  if (!(await bcrypt.compare(oldPassword, user.password))) return res.status(400).json({ error: 'Old password incorrect' });
- if (newPassword.length < 6) return res.status(400).json({ error: 'Minimum 6 characters' });
+ if (!newPassword || newPassword.length < 8) return res.status(400).json({ error: 'Minimum 8 characters' });
  user.password = await bcrypt.hash(newPassword, 12);
  await user.save();
  res.json({ message: 'Password updated successfully' });
@@ -2224,7 +2263,7 @@ app.post('/api/auth/set-password', auth, async (req, res) => {
  const { newPassword } = req.body;
  const user = await User.findById(req.user._id);
  if (user.password) return res.status(400).json({ error: 'This account already has a password. Use "Change Password" instead.' });
- if (!newPassword || newPassword.length < 6) return res.status(400).json({ error: 'Minimum 6 characters' });
+ if (!newPassword || newPassword.length < 8) return res.status(400).json({ error: 'Minimum 8 characters' });
  user.password = await bcrypt.hash(newPassword, 12);
  await user.save();
  res.json({ message: ' Password set! You can now log in with email + password too.' });
@@ -2294,11 +2333,12 @@ app.post('/api/user/api-key/generate', auth, async (req, res) => {
  try {
  const user = await User.findById(req.user._id);
  user.apiKey = 'mvn_live_' + crypto.randomBytes(16).toString('hex');
- user.apiSecret = crypto.randomBytes(32).toString('hex');
+ const plainSecret = crypto.randomBytes(32).toString('hex');
+ user.apiSecret = 'sha256:' + crypto.createHash('sha256').update(plainSecret).digest('hex'); // only the hash is stored
  user.apiEnabled = true;
  user.apiKeyCreatedAt = new Date();
  await user.save();
- res.json({ apiKey: user.apiKey, apiSecret: user.apiSecret, message: ' API key generated. Save your secret now — it will not be shown again.' });
+ res.json({ apiKey: user.apiKey, apiSecret: plainSecret, message: ' API key generated. Save your secret now — it will not be shown again.' });
  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 app.post('/api/user/api-key/revoke', auth, async (req, res) => {
@@ -6180,6 +6220,15 @@ app.post('/api/admin/receipts/:id/action', anyAdminAuth, async (req, res) => {
  try {
  const { action, note } = req.body;
  if (!['approved', 'rejected'].includes(action)) return res.status(400).json({ error: 'Invalid action' });
+ if (action === 'approved') {
+ // Check BEFORE claiming so a bad amount can never leave a receipt stuck as "approved" without a credit.
+ const pre = await Receipt.findOne({ _id: req.params.id, status: 'pending' }).select('claimedAmount');
+ if (!pre) return res.status(400).json({ error: 'Receipt not found or already processed' });
+ const preAmt = Number(pre.claimedAmount);
+ if (!Number.isFinite(preAmt) || preAmt <= 0) return res.status(400).json({ error: 'Invalid receipt amount' });
+ const staffLimit = Number(process.env.STAFF_APPROVE_LIMIT || 50000);
+ if (req.adminRole !== 'super' && preAmt > staffLimit) return res.status(403).json({ error: `Receipts above ₦${staffLimit.toLocaleString('en-NG')} must be approved by the site owner.` });
+ }
  // atomic claim: only ONE request can move a receipt out of "pending" (stops double-credit on double-click / replay)
  const receipt = await Receipt.findOneAndUpdate({ _id: req.params.id, status: 'pending' }, { $set: { status: action, adminNote: note || '', seenByUser: false } }, { new: true });
  if (!receipt) return res.status(400).json({ error: 'Receipt not found or already processed' });
