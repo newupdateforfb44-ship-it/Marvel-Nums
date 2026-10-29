@@ -668,12 +668,18 @@
       const fabAdmin=document.getElementById('dshFabAdmin');
       const fabChannel=document.getElementById('dshFabChannel');
       const fabGroup=document.getElementById('dshFabGroup');
-      if(admin) admin.href = links.whatsappChatLink || ('https://wa.me/'+(links.adminPhone||links.whatsappNumber||''));
-      if(channel && links.whatsappChannelLink) channel.href = links.whatsappChannelLink;
-      if(group && links.whatsappGroupLink) group.href = links.whatsappGroupLink;
-      if(fabAdmin) fabAdmin.href = links.whatsappChatLink || ('https://wa.me/'+(links.adminPhone||links.whatsappNumber||''));
-      if(fabChannel && links.whatsappChannelLink) fabChannel.href = links.whatsappChannelLink;
-      if(fabGroup && links.whatsappGroupLink) fabGroup.href = links.whatsappGroupLink;
+      const waOn = links.whatsappEnabled !== false;
+      const tg = links.telegramLink || (links.telegramUsername ? 'https://t.me/'+links.telegramUsername : '#');
+      const contact = waOn ? (links.whatsappChatLink || ('https://wa.me/'+(links.adminPhone||links.whatsappNumber||''))) : tg;
+      const chnL = links.telegramChannelLink || (waOn ? links.whatsappChannelLink : '');
+      const grpL = links.telegramCommunityLink || (waOn ? links.whatsappGroupLink : '');
+      if(admin) admin.href = contact;
+      if(channel && chnL) channel.href = chnL;
+      if(group && grpL) group.href = grpL;
+      if(fabAdmin) fabAdmin.href = contact;
+      if(fabChannel && chnL) fabChannel.href = chnL;
+      if(fabGroup && grpL) fabGroup.href = grpL;
+      if(!waOn){ [channel,fabChannel].forEach(function(e){ if(e && !chnL) e.style.display='none'; }); [group,fabGroup].forEach(function(e){ if(e && !grpL) e.style.display='none'; }); }
     }catch{}
   }
 

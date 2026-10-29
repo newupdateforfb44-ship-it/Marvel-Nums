@@ -2050,6 +2050,16 @@ tr:hover td{background:rgba(255,255,255,.035)}
  <div class="sec-title"><svg class="icon i-phone" aria-hidden="true"><use href="#i-phone"/></svg> Contact &amp; Links Settings</div>
  <div class="info-box"><svg class="icon i-pin" aria-hidden="true"><use href="#i-pin"/></svg> These settings are used everywhere across the site — the floating community button, Support page, footer, and buy prompts. Changes take effect immediately across all pages. Fields can be saved individually — you don't need to fill all three at once.</div>
         <div style="background:var(--card2,#ffffff);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px">
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:4px;color:var(--accent)">Contact Method — WhatsApp on/off</div>
+          <div style="font-size:.82rem;color:var(--t2);margin-bottom:12px">Turn WhatsApp <b>off</b> and every WhatsApp contact button/link on the site is hidden. Customers will only be able to reach you on <b>Telegram</b>, using the username you set in the Telegram section below. Turn it back on any time.</div>
+          <label style="display:flex;align-items:center;gap:12px;cursor:pointer;font-weight:600">
+            <input type="checkbox" id="slWaEnabled" style="width:22px;height:22px;accent-color:var(--accent)" onchange="saveWhatsappToggle(this)"/>
+            <span id="slWaEnabledLabel">WhatsApp contact: ON</span>
+          </label>
+          <div style="font-size:.8rem;color:var(--t2);margin-top:10px">Telegram username in use: <b id="slWaTgNote">—</b></div>
+          <div id="slWaToggleFb" class="fb" style="margin-top:8px"></div>
+        </div>
+        <div style="background:var(--card2,#ffffff);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px">
  <div style="font-weight:700;font-size:.95rem;margin-bottom:4px;color:var(--accent)"><svg class="icon i-phone" aria-hidden="true"><use href="#i-phone"/></svg> Admin WhatsApp Number</div>
           <div style="font-size:.82rem;color:var(--t2);margin-bottom:12px">This is the number users contact for support. Used in all WhatsApp chat links (wa.me/...). Enter digits only — no +, spaces, or dashes.</div>
           <div class="form-row" style="margin-bottom:10px">
@@ -6158,6 +6168,31 @@ function mvnSyncTelegramLink() {
   const linkEl = document.getElementById('slTelegramLink');
   if (linkEl) linkEl.value = u ? 'https://t.me/' + u : '';
 }
+function mvnRenderWaToggle(on, tgUser) {
+  const cb = document.getElementById('slWaEnabled'); if (!cb) return;
+  cb.checked = !!on;
+  const lab = document.getElementById('slWaEnabledLabel');
+  if (lab) lab.textContent = on ? 'WhatsApp contact: ON (customers see WhatsApp + Telegram)' : 'WhatsApp contact: OFF (customers see Telegram only)';
+  const note = document.getElementById('slWaTgNote');
+  if (note) note.textContent = tgUser ? '@' + String(tgUser).replace(/^@/, '') : 'not set — add it below first';
+}
+async function saveWhatsappToggle(cb) {
+  const fb = document.getElementById('slWaToggleFb');
+  const want = cb.checked;
+  // Use the username typed in the Telegram box if it's filled but not yet saved.
+  const typed = (document.getElementById('slTelegramUser') || {}).value || '';
+  const body = { whatsappEnabled: want };
+  if (!want && typed.trim()) body.telegramUsername = typed.trim().replace(/^@/, '');
+  try {
+    const out = await aFetch('/api/admin/site-links', 'POST', body);
+    mvnRenderWaToggle(out.whatsappEnabled !== false, out.telegramUsername || '');
+    setFb(fb, want ? 'WhatsApp contact is ON — live across the site' : 'WhatsApp contact is OFF — customers now contact you on Telegram only', 'ok');
+    setTimeout(() => setFb(fb, '', ''), 5000);
+  } catch (e) {
+    cb.checked = !want; // roll back the switch if the server refused
+    setFb(fb, e.message, 'err');
+  }
+}
 async function loadContactLinksAdmin() {
   try {
     const links = await aFetch('/api/admin/site-links');
@@ -6169,6 +6204,7 @@ async function loadContactLinksAdmin() {
     mvnTelegramLinkDirty = false; // freshly loaded from the server — back in sync
     set('slWaChatLink', links.whatsappChatLink || '');
     set('slSupportHours', links.supportHours || '');
+    mvnRenderWaToggle(links.whatsappEnabled !== false, links.telegramUsername || '');
     const prev = document.getElementById('slTgPreviewBtn');
     if (prev) prev.href = links.telegramLink || ('https://t.me/' + (links.telegramUsername || ''));
   } catch (e) {}

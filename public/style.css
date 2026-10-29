@@ -91,3 +91,8 @@ body{background:radial-gradient(ellipse at 95% 8%,rgba(54,112,157,.10),transpare
 @media(max-width:768px){.nav-center{display:none!important}.navbar{position:sticky;top:0;z-index:500}.dsh-bottom-nav{background:#ffffff!important;border:1px solid #dbe6f6!important;border-radius:22px 22px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.25);backdrop-filter:blur(18px)}.dsh-nav-item.active{color:#78b8e8!important}.dsh-nav-item.active:before{background:#78b8e8!important}}
 /* Games are removed from customer-facing navigation and feature tiles. */
 a[href="/games"],a[href="/games/"],.dsh-svc-item[href="/games"]{display:none!important}
+
+/* Admin switched WhatsApp contact OFF (Site Links) — Telegram is the only contact method.
+   script.js adds .wa-off to <html>; the Telegram buttons stay visible. */
+.wa-off a[data-link="contact"]:not(#termsWaTextLink),
+.wa-off a[data-link="adminphone"] { display: none !important; }
