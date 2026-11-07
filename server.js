@@ -6735,6 +6735,20 @@ const NovaCache = mongoose.models.NovaCache || mongoose.model('NovaCache', new m
   error: { type: String, default: '' }
 }, { minimize: false }));
 const NOVA_REFRESH_COOLDOWN_MS = 30 * 1000;
+const NOVA_AUTO_REFRESH_MS = 5 * 60 * 1000; // stored catalogue is re-checked with the provider at most every 5 minutes
+// A provider row counts as unavailable when it says so (flag, status, or zero stock).
+function novaRowAvailable(s) {
+  if (!s || typeof s !== 'object') return false;
+  const falsy = v => v === false || v === 0 || /^(0|false|no|off)$/i.test(String(v == null ? '' : v).trim());
+  for (const k of ['available', 'is_available', 'in_stock', 'inStock', 'enabled', 'is_enabled', 'active', 'is_active', 'online']) {
+    if (k in s && s[k] !== null && s[k] !== '' && falsy(s[k])) return false;
+  }
+  if (/^(unavailable|out[_ -]?of[_ -]?stock|sold[_ -]?out|disabled|inactive|offline|empty|no[_ -]?stock|suspended)$/i.test(String(s.status ?? s.state ?? s.availability ?? '').trim())) return false;
+  for (const k of ['stock', 'quantity', 'qty', 'count', 'available_count', 'available_numbers', 'numbers_available', 'numbers_count', 'total_available', 'amount_available']) {
+    if (k in s && s[k] !== null && s[k] !== '' && Number.isFinite(Number(s[k])) && Number(s[k]) <= 0) return false;
+  }
+  return true;
+}
 const _novaInflight = new Map();
 const _sleep = ms => new Promise(r => setTimeout(r, ms));
 // v2: the old keys may hold a truncated (first-page-only) catalogue, so a new prefix forces one clean re-pull.
@@ -6792,6 +6806,17 @@ async function novaGetCatalog(params, opts = {}) {
   const doc = await NovaCache.findOne({ key }).lean();
   const age = doc ? Date.now() - new Date(doc.syncedAt).getTime() : Infinity;
   const need = !doc || opts.force || (opts.refresh && age > NOVA_REFRESH_COOLDOWN_MS) || (opts.fresh && age > 60 * 1000) || (opts.maxAgeMs && age > opts.maxAgeMs);
+  if (!need && doc && age > NOVA_AUTO_REFRESH_MS && !_novaInflight.has(key)) {
+    // Stored copy is getting old: serve it now, but quietly re-pull from the provider in the
+    // background so services the provider no longer has disappear (and return when they come back).
+    const bg = novaFetchCatalogFull(params).then(async payload => {
+      if (!payload.services.length) return { ...doc.payload, syncedAt: doc.syncedAt, stale: true };
+      const syncedAt = new Date();
+      await NovaCache.updateOne({ key }, { $set: { payload, syncedAt, error: '' } }, { upsert: true });
+      return { ...payload, syncedAt, stale: false };
+    }).catch(() => ({ ...doc.payload, syncedAt: doc.syncedAt, stale: true })).finally(() => _novaInflight.delete(key));
+    _novaInflight.set(key, bg);
+  }
   if (!need) return { ...doc.payload, syncedAt: doc.syncedAt, stale: false };
   let job = _novaInflight.get(key);
   if (!job) {
@@ -6863,7 +6888,7 @@ app.get('/api/numbers/live-services', optionalAuth, async (req, res) => {
    const sidOf = s => Number(s.server_id ?? s.serverId ?? s.server?.id);
    // Only filter by server when the rows actually say which server they belong to.
    const hasServerInfo = services.some(s => Number.isInteger(sidOf(s)) && sidOf(s) > 0);
-   const picked = (serverId && hasServerInfo) ? services.filter(s => sidOf(s) === serverId) : services;
+   const picked = ((serverId && hasServerInfo) ? services.filter(s => sidOf(s) === serverId) : services).filter(novaRowAvailable);
    const minorOf = s => { const m = Number(s.price_minor); if (Number.isFinite(m)) return m; const x = Number(s.price ?? s.cost); return Number.isFinite(x) ? Math.round(x * 100) : NaN; };
    const configs = await NovaNumberServiceConfig.find({
      key: { $in: picked.map(s => novaNumberServiceConfigKey(sidOf(s) || serverId, Number(s.id ?? s.service_id), country)) }
