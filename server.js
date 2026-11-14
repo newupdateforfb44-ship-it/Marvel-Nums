@@ -58,26 +58,6 @@ const googleClient = process.env.GOOGLE_CLIENT_ID ? new OAuth2Client(process.env
 if (!googleClient) console.warn(' GOOGLE_CLIENT_ID not set in .env — Google Sign-In will be disabled until configured.');
 const app = express();
 
-// ── SPEED: gzip text responses (HTML, CSS, JS, JSON, SVG). Built-in zlib, no extra package. ──
-const __zlib = require('zlib');
-app.use((req, res, next) => {
-  if (req.method === 'HEAD' || !/\bgzip\b/i.test(req.headers['accept-encoding'] || '')) return next();
-  const _write = res.write, _end = res.end;
-  let gz = null, decided = false;
-  const decide = () => {
-    if (decided) return; decided = true;
-    const type = String(res.getHeader('Content-Type') || ''), len = Number(res.getHeader('Content-Length') || 0);
-    if (res.getHeader('Content-Encoding') || res.statusCode === 204 || res.statusCode === 304) return;
-    if (!/(text\/(html|css|plain|javascript)|json|javascript|xml|svg)/i.test(type) || /event-stream/i.test(type)) return;
-    if (len && len < 1024) return;
-    gz = __zlib.createGzip({ level: 5 });
-    res.setHeader('Content-Encoding', 'gzip'); res.setHeader('Vary', 'Accept-Encoding'); res.removeHeader('Content-Length');
-    gz.on('data', c => _write.call(res, c)); gz.on('end', () => _end.call(res)); gz.on('error', () => _end.call(res));
-  };
-  res.write = function (c, e, cb) { decide(); return gz ? gz.write(c, e, cb) : _write.call(res, c, e, cb); };
-  res.end = function (c, e, cb) { decide(); if (gz) { if (c) gz.write(c, typeof e === 'string' ? e : undefined); gz.end(); return res; } return _end.call(res, c, e, cb); };
-  next();
-});
 // Render's lightweight readiness probe; intentionally registered before all middleware/auth.
 app.get('/healthz', (req, res) => res.status(200).json({ ok: true }));
 // Shows whether each database is connected. No secrets are returned.
