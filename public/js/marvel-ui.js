@@ -5,7 +5,7 @@
   if (window.MarvelUI) return;
   // Stylesheet
   if (!document.getElementById('marvel-ui-css')) {
-    var l = document.createElement('link'); l.id = 'marvel-ui-css'; l.rel = 'stylesheet'; l.href = '/css/marvel-ui.css?v=1';
+    var l = document.createElement('link'); l.id = 'marvel-ui-css'; l.rel = 'stylesheet'; l.href = '/css/marvel-ui.css?v=2';
     (document.head || document.documentElement).appendChild(l);
   }
   var host = null, loadEl = null, loadTimer = null, loadCount = 0;
