@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="/js/mvn-fast.js?v=1"></script>
+<script src="/js/ks-helpers.js?v=1"></script>
+<script src="/js/marvel-loader.js?v=1"></script>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/theme.css">
+<script src="/js/marvel-ui.js?v=1"></script><link rel="stylesheet" href="/brand.css">
+<link rel="stylesheet" href="/css/marvel-select-sheet.css?v=1">
+<link rel="stylesheet" href="/css/page-transitions.css?v=1">
+<link rel="stylesheet" href="/css/responsive-device-fit.css?v=1">
+<link rel="stylesheet" href="/css/mvn-header-clean.css?v=20261022b">
+<script src="/js/mvn-menu-guard.js?v=20261022b" defer></script>
+<link rel="stylesheet" href="/css/mvn-ui-fixes.css?v=20261022c">
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+
+  <link rel="icon" type="image/png" href="/favicon.png"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rent a Number | Marvel Nums</title><style>body{padding:18px}.wrap{max-width:900px;margin:22px auto}.panel{background:var(--card,#15151d);border:1px solid var(--border2,#333);border-radius:16px;padding:18px;margin:14px 0}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}label{display:block;font-weight:700;margin:8px 0}select,input,button{font:inherit;width:100%;padding:12px;border-radius:10px;border:1px solid var(--border2,#444);background:var(--card2,#20202a);color:inherit}button{cursor:pointer;background:var(--gold,#16a34a);border:0;font-weight:800}.muted{opacity:.72;font-size:13px}.order{border-top:1px solid var(--border2,#333);padding:12px 0;overflow-wrap:anywhere}.status{font-weight:800}.code{font-size:22px;letter-spacing:2px;font-weight:900}.danger{background:#8b2525}.msg{padding:10px;border-radius:9px;margin:10px 0;background:var(--card2,#222)}a{color:var(--gold,#16a34a)}.order.active-order{border:1px solid var(--border2,#3a3a48);border-radius:17px;padding:16px;margin:12px 0;background:linear-gradient(145deg,rgba(22,163,74,.08),var(--card,#15151d));box-shadow:0 12px 30px #0002}.order-light{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:900;letter-spacing:.08em;margin-bottom:10px;color:#ff4757}.led{width:10px;height:10px;border-radius:50%;background:#ff4757;box-shadow:0 0 0 0 #ff475766;animation:otpPulse 1.2s infinite}.order-light.received{color:#16a34a}.order-light.received .led{background:#16a34a;box-shadow:0 0 14px #16a34a;animation:none}.order-phone{font-size:clamp(22px,5vw,30px);font-weight:900;overflow-wrap:anywhere;margin:8px 0}.order-timer{font-size:28px;font-weight:900;color:#ff4757;font-variant-numeric:tabular-nums}.order-timer.received{color:#16a34a}.order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.order-actions button{width:auto;flex:1;min-width:120px;padding:10px}.order-actions .danger{background:#8b2525;color:white}@keyframes otpPulse{70%{box-shadow:0 0 0 10px #ff475700}100%{box-shadow:0 0 0 0 #ff475700}}</style><link rel="stylesheet" href="/css/marvel-select-sheet.css?v=1">  <link rel="stylesheet" href="/css/page-transitions.css?v=1">
+
+<link rel="stylesheet" href="/css/responsive-device-fit.css?v=1">
+<style id="bn-redesign">
+/* Buy Number 2 & 3 — same black & green design as Buy Number 1. Layout order is unchanged. */
+html,body{background:#000!important}
+body{color:#eafff1!important}
+.wrap{max-width:640px!important;margin:0 auto!important;padding:6px 0 44px!important}
+.wrap>a:first-child{display:inline-block;padding:8px 14px;border:1px solid rgba(34,197,94,.35);border-radius:999px;color:#4ade80!important;background:rgba(34,197,94,.08);font-weight:800;font-size:13px;text-decoration:none}
+.wrap h1{color:#eafff1;font-size:26px;font-weight:900;margin:16px 0 6px}
+.wrap h2{color:#eafff1;font-size:17px;font-weight:800;margin-top:0}
+.muted{color:#86a894!important;opacity:1!important}
+.panel{background:linear-gradient(180deg,#0e1511,#070a08)!important;border:1px solid rgba(34,197,94,.24)!important;border-radius:20px!important;padding:18px!important;margin:0 0 14px!important;box-shadow:0 12px 32px rgba(0,0,0,.55)}
+label{display:block;color:#22c55e!important;font-size:11.5px!important;letter-spacing:.09em;text-transform:uppercase;font-weight:900!important;margin:16px 0 6px!important}
+select,input{background:#0a0f0c!important;border:1px solid rgba(34,197,94,.3)!important;border-radius:14px!important;color:#eafff1!important;padding:14px!important}
+select:focus,input:focus{border-color:#22c55e!important;outline:none;box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+button{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#03140a!important;font-weight:900!important;border:0!important;border-radius:14px!important;padding:14px 16px;box-shadow:0 8px 22px rgba(34,197,94,.22)}
+button[disabled]{opacity:.4;box-shadow:none}
+button.danger,.danger{background:#5c1a22!important;color:#fff!important;border:1px solid rgba(255,98,108,.4)!important;box-shadow:none!important}
+.notice,.msg{background:rgba(34,197,94,.08)!important;border:1px solid rgba(34,197,94,.25)!important;border-radius:12px!important;color:#cfe9da!important}
+.price{color:#4ade80!important;font-weight:900}
+.open-link{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#03140a!important;border-radius:12px!important;font-weight:900!important}
+.active-card,.order.active-order{background:linear-gradient(145deg,#0d3a20,#070a08 65%)!important;border:1px solid rgba(34,197,94,.45)!important;border-radius:20px!important;box-shadow:0 14px 36px rgba(0,0,0,.6)!important}
+.order{border-top:1px solid rgba(34,197,94,.15)!important}
+.code{color:#4ade80}
+.panel a:not(.open-link){color:#4ade80}
+@media(max-width:480px){body{padding:12px!important}.panel{padding:15px!important}}
+
+.sub-label{color:#22c55e;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:900;margin:16px 0 8px}
+.guide-list{margin:0;padding-left:20px;font-size:13.5px;line-height:1.75;color:#cfe9da}
+.guide-list li::marker{color:#22c55e}
+.how-sum{cursor:pointer;color:#4ade80;font-weight:900;font-size:14px;list-style:none;display:flex;align-items:center;justify-content:space-between}
+.how-sum::-webkit-details-marker{display:none}
+.how-sum::after{content:'+';font-size:20px;line-height:1;color:#22c55e}
+details[open]>.how-sum::after{content:'–'}
+</style>
+<style id="svc-extra">
+.tabs{display:flex;gap:8px;margin:0 0 14px}.tabs button{flex:1;background:#0a0f0c!important;color:#86a894!important;border:1px solid rgba(34,197,94,.3)!important;box-shadow:none!important;padding:12px}.tabs button.on{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#03140a!important}
+.hide{display:none!important}.mini{width:auto!important;padding:9px 14px!important;flex:1;min-width:110px}
+.codebox{margin-top:12px;padding:12px;border:1px solid #16a34a;background:#16a34a12;border-radius:12px}
+.msgs{margin-top:10px}.msgs div{padding:8px 10px;margin:6px 0;border-radius:10px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);overflow-wrap:anywhere}
+</style><link rel="stylesheet" href="/css/marvel-theme.css?v=3"/>
+<link rel="stylesheet" href="/css/marvel-final.css?v=1">
+<link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
+</head><body><main class="wrap"><a href="/buy-number">← All number services</a><h1>Rent a Number</h1><p class="muted">Keep a number for days or months and receive as many SMS messages as you need. Paid from your NGN wallet.</p>
+<div class="panel"><div class="tabs"><button type="button" id="tabA" class="on">Number rental</button><button type="button" id="tabB">Dedicated (one service)</button></div>
+<div id="paneA"><label for="cA">Step 1 — Pick the country</label><select id="cA"><option value="">Loading…</option></select><label for="pA">Step 2 — Pick the period</label><select id="pA" disabled><option value="">Select a country first</option></select><div id="noteA" class="muted" style="margin-top:8px"></div></div>
+<div id="paneB" class="hide"><label for="cB">Step 1 — Pick the country</label><select id="cB"><option value="">Loading…</option></select><label for="pB">Step 2 — Pick the service &amp; period</label><select id="pB" disabled><option value="">Select a country first</option></select><div class="muted" style="margin-top:8px">A dedicated number works for one service only and cannot be cancelled after purchase.</div></div>
+<div id="price" class="muted" style="margin:12px 0"></div><button id="buy" disabled>Rent Number</button><div id="notice" role="status" class="msg" style="display:none"></div></div>
+<div class="panel"><h2>My Rentals</h2><p class="muted">Open "Messages" to read incoming SMS. Messages refresh automatically while the panel is open.</p><div id="orders">Loading…</div></div>
+<div class="panel"><h2>How It Works &amp; Refund Rules</h2><ul class="guide-list"><li>Your wallet is charged when you rent; the number is yours until the period ends</li><li>Number rental: you can cancel for a refund only shortly after purchase (20 minutes or 2 hours, shown for each option) and only if no SMS has arrived</li><li>Dedicated rentals have no cancellation once purchased</li><li>Renew any time before it ends to keep the same number</li></ul></div></main>
+<script>
+const token=()=>localStorage.getItem('mvn_token')||localStorage.getItem('token')||'';
+const $=id=>document.getElementById(id);
+function money(n){return '₦'+Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function api(url,opts={}){const r=await fetch(url,{...opts,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token(),...(opts.headers||{})}});let d={};try{d=await r.json()}catch{}if(r.status===401){location.href='/login?next='+encodeURIComponent(location.pathname);throw Error('Please log in again.')}if(!r.ok)throw Error(d.error||'Request failed.');return d}
+function notice(t){$('notice').style.display='block';$('notice').textContent=t}
+function copyLiteral(t){navigator.clipboard?.writeText(String(t||'')).then(()=>notice('Copied to clipboard.')).catch(()=>notice('Could not copy automatically.'))}
+function copyValue(id){copyLiteral($(id)?.textContent||'')}
+let mode='A',rows={A:[],B:[]},orders=[],open=new Set(),timer=null;
+const sel=()=>mode==='A'?{c:$('cA'),p:$('pA')}:{c:$('cB'),p:$('pB')};
+function setMode(m){mode=m;$('tabA').classList.toggle('on',m==='A');$('tabB').classList.toggle('on',m==='B');$('paneA').classList.toggle('hide',m!=='A');$('paneB').classList.toggle('hide',m!=='B');$('buy').textContent=m==='A'?'Rent Number':'Rent Dedicated Number';upd()}
+$('tabA').onclick=()=>setMode('A');$('tabB').onclick=()=>setMode('B');
+async function loadCountries(){await kswr('/api/rentals/countries',api,l=>{const h='<option value="">Choose country</option>'+l.map(c=>`<option value="${esc(c.code)}">${esc(c.name)}</option>`).join('');kset($('cA'),h);kset($('cB'),h)},e=>{$('cA').innerHTML=$('cB').innerHTML='<option value="">Could not load</option>';notice(e.message)})}
+async function loadPeriods(m){const s=m==='A'?{c:$('cA'),p:$('pA')}:{c:$('cB'),p:$('pB')};rows[m]=[];s.p.disabled=true;if(!s.c.value){s.p.innerHTML='<option value="">Select a country first</option>';upd();return}const c=s.c.value,u=(m==='A'?'/api/rentals/pricing?country=':'/api/rentals/ps/services?country=')+encodeURIComponent(c);if(!kpeek(u))s.p.innerHTML='<option value="">Loading…</option>';
+await kswr(u,api,d=>{if(s.c.value!==c)return;rows[m]=d.map(r=>m==='A'?({...r,id:r.provider+'|'+r.hours,text:`Server ${r.provider} · ${r.label} — ${money(r.price)}`}):({...r,id:r.code+'|'+r.preset,text:`${r.name} · ${r.label} — ${money(r.price)}`}));kset(s.p,rows[m].length?'<option value="">Choose…</option>'+rows[m].map(r=>`<option value="${esc(r.id)}">${esc(r.text)}</option>`).join(''):'<option value="">Nothing available for this country</option>');s.p.disabled=!rows[m].length;upd()},e=>{s.p.innerHTML='<option value="">Could not load</option>';notice(e.message)});upd()}
+function cur(){return rows[mode].find(r=>r.id===sel().p.value)}
+function upd(){const r=cur();$('price').textContent=r?'Price: '+money(r.price)+' (NGN).':'Choose an option to see its price.';$('noteA').textContent=(mode==='A'&&r)?r.cancelNote:'';$('buy').disabled=!r}
+$('cA').onchange=()=>loadPeriods('A');$('cB').onchange=()=>loadPeriods('B');$('pA').onchange=upd;$('pB').onchange=upd;
+$('buy').onclick=async()=>{const r=cur();if(!r)return;const btn=$('buy');if(!(await MarvelUI.confirm('Rent this number for '+money(r.price)+'?\nThe amount will be taken from your wallet.',{title:'Confirm rental',okText:'Rent'})))return;btn.disabled=true;btn.textContent='Processing…';MarvelUI.loading(true,'Getting your number…');
+try{const body=mode==='A'?{country:sel().c.value,provider:r.provider,hours:r.hours}:{country:sel().c.value,serviceCode:r.code,preset:r.preset};body.clientRef=crypto.randomUUID();const d=await api(mode==='A'?'/api/rentals/buy':'/api/rentals/ps/buy',{method:'POST',body:JSON.stringify(body)});notice(d.pending?d.message:'Number rented. It is listed below.');MarvelUI.banner(d.pending?d.message:'Number rented successfully.',d.pending?'info':'success');await loadOrders();const id=d.order?.id;if(id)setTimeout(()=>document.getElementById('order-'+id)?.scrollIntoView({behavior:'smooth',block:'center'}),150)}
+catch(e){notice(e.message);MarvelUI.banner(e.message,'err')}finally{MarvelUI.loading(false);btn.textContent=mode==='A'?'Rent Number':'Rent Dedicated Number';upd()}};
+const fmt=d=>d?new Date(d).toLocaleString('en-NG'):'—';
+function renderOrders(){if(!orders.length){$('orders').innerHTML='<p class="muted">No rentals yet.</p>';return}
+$('orders').innerHTML=orders.map(o=>{const live=o.status==='active';const id=esc(o.id);
+return `<div class="order active-order" id="order-${id}"><div class="order-light ${live?'received':''}"><span class="led"></span><span>${esc(o.status).toUpperCase()}</span></div><div><b>${esc(o.service)} · ${esc(o.country)}</b></div><div class="order-phone" id="ph-${id}">${esc(o.number||'Preparing…')}</div><div>Price: <b>${money(o.price)}</b> · Messages: <b>${o.smsCount}</b></div><div class="muted">Expires: ${fmt(o.expiresAt)}</div>
+<div class="order-actions"><button type="button" class="mini" onclick="copyValue('ph-${id}')" ${o.number?'':'disabled'}>Copy number</button><button type="button" class="mini" onclick="toggleMsgs('${id}')">Messages</button>${o.canRenew?`<button type="button" class="mini" onclick="renewOpts('${id}')">Renew</button>`:''}${o.canCancel?`<button type="button" class="danger mini" onclick="cancelOne('${id}')">Cancel &amp; Refund</button>`:''}</div>
+<div class="msgs ${open.has(o.id)?'':'hide'}" id="ms-${id}"><span class="muted">Loading messages…</span></div><div class="msgs hide" id="rn-${id}"></div></div>`}).join('');open.forEach(id=>loadMsgs(id))}
+async function loadOrders(){try{orders=await api('/api/rentals/orders');renderOrders();if(timer)clearInterval(timer);timer=setInterval(()=>open.forEach(id=>loadMsgs(id,true)),6000)}catch(e){$('orders').textContent=e.message}}
+function toggleMsgs(id){if(open.has(id)){open.delete(id);$('ms-'+id).classList.add('hide')}else{open.add(id);$('ms-'+id).classList.remove('hide');loadMsgs(id)}}
+async function loadMsgs(id,silent){try{const d=await api('/api/rentals/sms/'+encodeURIComponent(id));const el=$('ms-'+id);if(!el)return;el.innerHTML=d.messages.length?d.messages.map(m=>`<div>${m.sender?'<b>'+esc(m.sender)+'</b> · ':''}${esc(m.content)}${m.at?'<br><span class="muted">'+esc(m.at)+'</span>':''}</div>`).join(''):'<span class="muted">No messages yet.</span>';const i=orders.findIndex(o=>o.id===id);if(i>=0&&orders[i].smsCount!==d.order.smsCount){orders[i]=d.order}}catch(e){if(!silent&&$('ms-'+id))$('ms-'+id).textContent=e.message}}
+async function renewOpts(id){const box=$('rn-'+id);box.classList.remove('hide');box.innerHTML='<span class="muted">Loading options…</span>';try{const l=await api('/api/rentals/renew-options/'+encodeURIComponent(id));box.innerHTML=l.length?`<select id="rs-${id}">${l.map(x=>`<option value="${esc(x.value)}">${esc(x.label)} — ${money(x.price)}</option>`).join('')}</select><button type="button" style="margin-top:8px" onclick="doRenew('${id}')">Confirm renewal</button>`:'<span class="muted">No renewal options available.</span>'}catch(e){box.textContent=e.message}}
+async function doRenew(id){const v=$('rs-'+id).value;if(!(await MarvelUI.confirm('Renew this number? The price is taken from your wallet.',{title:'Confirm renewal',okText:'Renew'})))return;MarvelUI.loading(true,'Renewing…');try{const d=await api('/api/rentals/renew/'+encodeURIComponent(id),{method:'POST',body:JSON.stringify({value:v})});notice(d.pending?d.message:'Renewed successfully.');MarvelUI.banner(d.pending?d.message:'Rental renewed.',d.pending?'info':'success');await loadOrders()}catch(e){notice(e.message);MarvelUI.banner(e.message,'err')}finally{MarvelUI.loading(false)}}
+async function cancelOne(id){if(!(await MarvelUI.confirm('Cancel this rental and get a refund?',{title:'Cancel & refund',okText:'Cancel rental'})))return;try{const d=await api('/api/rentals/cancel/'+encodeURIComponent(id),{method:'POST',body:'{}'});const i=orders.findIndex(o=>o.id===id);if(i>=0)orders[i]=d.order;renderOrders();notice('Cancelled — your refund was added to your wallet.')}catch(e){notice(e.message)}}
+if(!token())location.href='/login?next=/rental';else{loadCountries();loadOrders()}
+</script>
+<script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/app-shell.js?v=3" defer></script>
+<script src="/js/section-tabs.js?v=1" defer></script>
+<script src="/js/page-transitions.js?v=1" defer></script>
+<script src="/js/loader-failsafe.js?v=1" defer></script>
+<script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/app-shell.js?v=3" defer></script>
+<script src="/js/section-tabs.js?v=1" defer></script>
+<script src="/js/page-transitions.js?v=1" defer></script>
+<script src="/js/loader-failsafe.js?v=1" defer></script>
+<script src="/js/marvel-smooth.js?v=1" defer></script>
+<script src="/js/marvel-pro.js?v=1" defer></script>
+</body></html>

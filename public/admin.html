@@ -249,7 +249,8 @@ tr:hover td{background:rgba(255,255,255,.035)}
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#ffffff"/>
-<link rel="stylesheet" href="/css/marvel-final.css?v=1"></head>
+<link rel="stylesheet" href="/css/marvel-final.css?v=1"><link rel="stylesheet" href="/css/marvel-smooth.css?v=1">
+</head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-check-circle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></g></symbol>
@@ -1190,18 +1191,408 @@ tr:hover td{background:rgba(255,255,255,.035)}
     <!-- ══════════════ BUYNUMBER 2 (Server 2 · GrizzlySMS) ══════════════ -->
     
 <!-- MVN-ADMIN-TABS -->
+<div id="tab-numnotice" class="tab-panel">
+      <div class="sec">
+        <div class="sec-title"><svg class="icon i-pin" aria-hidden="true"><use href="#i-pin"/></svg> Buy Number notice (WhatsApp login help)</div>
+        <div class="info-box">This message pops up when a customer opens any Buy Number page. They must tap the button to continue. Use it to tell them how to log in to WhatsApp (VPN, reinstall, time settings). Edits apply within seconds and show again to customers who already dismissed the old one.</div>
+        <div class="form-row"><div class="fg"><label>Notice status</label>
+          <button class="btn-gold" type="button" id="nnToggle" onclick="nnFlip()" style="width:100%">…</button></div></div>
+        <div class="form-row"><div class="fg" style="flex:2"><label>Title</label><input type="text" id="nnTitle" maxlength="120"/></div></div>
+        <div class="form-row"><div class="fg" style="flex:2"><label>Message (line breaks are kept)</label><textarea id="nnMsg" rows="10" maxlength="2500"></textarea></div></div>
+        <div class="form-row"><div class="fg"><label>Button text</label><input type="text" id="nnBtn" maxlength="60"/></div></div>
+        <div class="form-row"><button class="btn-gold" type="button" onclick="nnSave()">Save notice</button></div>
+        <div id="nnMeta" style="font-size:12px;opacity:.7;margin-top:8px"></div>
+      </div>
+    </div>
+
 <div id="tab-otp2" class="tab-panel">
-  <div class="sec-title">Buy Number 2 (OTP Suite)</div>
-  <div id="mvnOtpStatus" style="margin:8px 0">Loading...</div>
+  <div class="sec-title">SMS-COOL — Buy Number 2, Temp Email &amp; Rentals</div>
+  <div id="scStatus" style="margin:8px 0">Loading...</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
-    <button class="btn-primary" type="button" id="mvnOtpToggle">...</button>
-    <input id="mvnOtpMarkup" type="number" min="0" placeholder="Markup (NGN)" style="padding:8px;border-radius:8px;max-width:160px">
-    <button class="btn-primary" type="button" onclick="mvnOtpSaveMarkup()">Save markup</button>
-    <button class="btn-primary" type="button" onclick="mvnOtpBalance()">Check provider balance</button>
+    <input id="scKey" type="password" placeholder="Paste SMS-COOL API key" autocomplete="off" style="padding:8px;border-radius:8px;min-width:220px;flex:1">
+    <button class="btn-primary" type="button" onclick="scSaveKey()">Save API key</button>
+    <button class="btn-primary" type="button" onclick="scBalance()">Check SMS-COOL balance</button>
   </div>
-  <div id="mvnOtpBal" style="margin:6px 0"></div>
-  <div class="sec-title" style="margin-top:14px">Recent orders</div>
-  <div id="mvnOtpOrders" style="overflow:auto">Loading...</div>
+  <div id="scBal" style="margin:6px 0"></div>
+  <div class="sec-title" style="margin-top:14px">Turn products on / off</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+    <button class="btn-primary" type="button" id="scTogNum" onclick="scToggle('enabled')">...</button>
+    <button class="btn-primary" type="button" id="scTogEmail" onclick="scToggle('emailEnabled')">...</button>
+    <button class="btn-primary" type="button" id="scTogRental" onclick="scToggle('rentalEnabled')">...</button>
+  </div>
+  <div class="sec-title" style="margin-top:14px">Markup (applies to every price of that product)</div>
+  <p style="opacity:.8;margin:6px 0 10px">Selling price = provider cost in NGN + percentage + fixed amount. Use either one or both (for example 20% and 500 NGN).</p>
+  <div style="overflow:auto"><table style="width:100%;font-size:13px;border-collapse:collapse">
+    <tr><th align="left">Product</th><th align="left">Percentage (%)</th><th align="left">Fixed amount (NGN)</th></tr>
+    <tr style="border-top:1px solid #252535"><td>Buy Number 2 (all numbers)</td><td><input id="scNumPct" type="number" min="0" step="0.01" style="padding:7px;border-radius:8px;width:110px"></td><td><input id="scNumFlat" type="number" min="0" style="padding:7px;border-radius:8px;width:110px"></td></tr>
+    <tr style="border-top:1px solid #252535"><td>Temp Email</td><td><input id="scEmPct" type="number" min="0" step="0.01" style="padding:7px;border-radius:8px;width:110px"></td><td><input id="scEmFlat" type="number" min="0" style="padding:7px;border-radius:8px;width:110px"></td></tr>
+    <tr style="border-top:1px solid #252535"><td>Rentals</td><td><input id="scRnPct" type="number" min="0" step="0.01" style="padding:7px;border-radius:8px;width:110px"></td><td><input id="scRnFlat" type="number" min="0" style="padding:7px;border-radius:8px;width:110px"></td></tr>
+  </table></div>
+  <button class="btn-primary" type="button" style="margin-top:10px" onclick="scSaveMarkup()">Save markup</button>
+  <div class="sec-title" style="margin-top:20px">Fixed prices (exact selling price, overrides the markup)</div>
+  <p style="opacity:.8;margin:6px 0 10px">Number: service name (e.g. WhatsApp). Email: Server 1 service name or Server 2 domain (e.g. outlook.com). Rental: hours (e.g. 720) or dedicated "service|period" (e.g. whatsapp|oneMonth). Country is optional (number: country ID, rental: country code like ca). Leave it empty for all countries.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+    <select id="scOvKind" style="padding:8px;border-radius:8px"><option value="num">Number</option><option value="email">Email</option><option value="rental">Rental</option></select>
+    <input id="scOvName" placeholder="Name" style="padding:8px;border-radius:8px;width:150px">
+    <input id="scOvCountry" placeholder="Country (optional)" style="padding:8px;border-radius:8px;width:150px">
+    <input id="scOvPrice" type="number" min="1" placeholder="Price (NGN)" style="padding:8px;border-radius:8px;width:130px">
+    <button class="btn-primary" type="button" onclick="scAddOv()">Add fixed price</button>
+  </div>
+  <div id="scOvList" style="overflow:auto">Loading...</div>
+  <div class="sec-title" style="margin-top:20px">Price browser (numbers)</div>
+  <p style="opacity:.8;margin:6px 0 10px">Pick a server and country to see your cost and selling price for every service, and set an exact price right there.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+    <select id="scBrSrv" onchange="scBrServer()" style="padding:8px;border-radius:8px;min-width:140px"><option value="">Server…</option></select>
+    <select id="scBrCty" onchange="scBrCountry()" style="padding:8px;border-radius:8px;min-width:170px"><option value="">Country…</option></select>
+  </div>
+  <div id="scBrList" style="overflow:auto"></div>
+  <div class="sec-title" style="margin-top:20px">Recent orders (numbers, emails, rentals)</div>
+  <div id="scOrders" style="overflow:auto">Loading...</div>
+</div>
+<script>
+(function(){
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function $(i){return document.getElementById(i);}
+  var cfg=null, KIND={num:'Number',email:'Email',rental:'Rental'};
+  function ngn(n){return '\u20a6'+Number(n||0).toLocaleString('en-NG');}
+  function tog(id,label,on){var b=$(id);if(b)b.textContent=label+' is '+(on?'ON (tap to turn off)':'OFF (tap to turn on)');}
+  function put(body,msg){return aFetch('/api/admin/otp-suite/config','PUT',body).then(function(r){if(msg)alert(msg);return scLoad();}).catch(function(e){alert(e.message);});}
+  function fill(){
+    $('scStatus').innerHTML='API key: <b>'+(cfg.configured?'configured':'NOT set')+'</b> &middot; '+esc(cfg.baseUrl);
+    tog('scTogNum','Buy Number 2',cfg.enabled);tog('scTogEmail','Temp Email',cfg.emailEnabled);tog('scTogRental','Rentals',cfg.rentalEnabled);
+    $('scNumPct').value=cfg.markupPercent||0;$('scNumFlat').value=cfg.markupNgn||0;$('scEmPct').value=cfg.emailMarkupPercent||0;$('scEmFlat').value=cfg.emailMarkupNgn||0;$('scRnPct').value=cfg.rentalMarkupPercent||0;$('scRnFlat').value=cfg.rentalMarkupNgn||0;
+    var o=cfg.overrides||[];
+    $('scOvList').innerHTML=o.length?'<table style="width:100%;font-size:13px;border-collapse:collapse"><tr><th align=left>Type</th><th align=left>Name</th><th align=left>Country</th><th align=left>Price</th><th></th></tr>'+o.map(function(x,i){return '<tr style="border-top:1px solid #252535"><td>'+KIND[x.kind]+'</td><td>'+esc(x.name)+'</td><td>'+esc(x.country||'All')+'</td><td>'+ngn(x.price)+'</td><td><button class="btn-primary" type="button" onclick="scDelOv('+i+')">Remove</button></td></tr>';}).join('')+'</table>':'No fixed prices yet.';
+  }
+  window.scLoad=async function(){
+    try{cfg=await aFetch('/api/admin/otp-suite/status');fill();}catch(e){$('scStatus').textContent='Error: '+e.message;}
+    scOrders();scBrInit();
+  };
+  window.scToggle=function(f){if(!cfg)return;var b={};b[f]=!cfg[f];put(b);};
+  window.scSaveKey=function(){var k=$('scKey').value.trim();if(!k){alert('Paste the API key first.');return;}put({apiKey:k},'API key saved.').then(function(){$('scKey').value='';});};
+  window.scBalance=async function(){var el=$('scBal');try{var b=await aFetch('/api/admin/otp-suite/balance');el.textContent='SMS-COOL balance: '+ngn(b.balance)+' (about $'+Number(b.balanceUsd||0).toFixed(2)+')';}catch(e){el.textContent='Error: '+e.message;}};
+  window.scSaveMarkup=function(){
+    put({markupPercent:$('scNumPct').value||0,markupNgn:$('scNumFlat').value||0,emailMarkupPercent:$('scEmPct').value||0,emailMarkupNgn:$('scEmFlat').value||0,rentalMarkupPercent:$('scRnPct').value||0,rentalMarkupNgn:$('scRnFlat').value||0},'Markup saved. New prices apply immediately.');
+  };
+  function saveOv(list,msg){return put({overrides:list},msg);}
+  window.scAddOv=function(){
+    var name=$('scOvName').value.trim(),price=Number($('scOvPrice').value);
+    if(!name||!(price>0)){alert('Enter a name and a price above 0.');return;}
+    var list=(cfg.overrides||[]).filter(function(x){return !(x.kind===$('scOvKind').value&&x.name.toLowerCase()===name.toLowerCase()&&String(x.country||'').toLowerCase()===$('scOvCountry').value.trim().toLowerCase());});
+    list.push({kind:$('scOvKind').value,name:name,country:$('scOvCountry').value.trim(),price:price});
+    saveOv(list,'Fixed price saved.').then(function(){$('scOvName').value='';$('scOvPrice').value='';});
+  };
+  window.scDelOv=function(i){var list=(cfg.overrides||[]).slice();list.splice(i,1);saveOv(list,'Fixed price removed.');};
+  // price browser
+  var brSrv='',brCty='';
+  async function scBrInit(){
+    var s=$('scBrSrv');if(s.options.length>1)return;
+    try{var d=await aFetch('/api/admin/otp-suite/browse');s.innerHTML='<option value="">Server…</option>'+(d.servers||[]).map(function(x){return '<option value="'+esc(x.server_number)+'">'+esc(x.name)+'</option>';}).join('');}catch(e){}
+  }
+  window.scBrServer=async function(){
+    brSrv=$('scBrSrv').value;$('scBrList').innerHTML='';$('scBrCty').innerHTML='<option value="">Country…</option>';if(!brSrv)return;
+    try{var d=await aFetch('/api/admin/otp-suite/browse?server='+encodeURIComponent(brSrv));$('scBrCty').innerHTML='<option value="">Country…</option>'+(d.countries||[]).map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.name)+'</option>';}).join('');}catch(e){alert(e.message);}
+  };
+  window.scBrCountry=async function(){
+    brCty=$('scBrCty').value;var el=$('scBrList');if(!brCty){el.innerHTML='';return;}el.textContent='Loading...';
+    try{var d=await aFetch('/api/admin/otp-suite/browse?server='+encodeURIComponent(brSrv)+'&country='+encodeURIComponent(brCty));var r=d.services||[];
+      el.innerHTML=r.length?'<table style="width:100%;font-size:13px;border-collapse:collapse"><tr><th align=left>Service</th><th align=left>Your cost</th><th align=left>Selling price</th><th align=left>Set exact price</th></tr>'+r.map(function(x,i){return '<tr style="border-top:1px solid #252535"><td>'+esc(x.name)+'</td><td>'+ngn(x.costNgn)+'</td><td>'+ngn(x.sellPrice)+(x.override?' <b>(fixed)</b>':'')+'</td><td><input id="scBrP'+i+'" type="number" min="1" style="padding:6px;border-radius:8px;width:90px"> <button class="btn-primary" type="button" onclick="scBrSet('+i+')">Set</button></td></tr>';}).join('')+'</table>':'No services for this country.';
+      window._scBr=r;
+    }catch(e){el.textContent='Error: '+e.message;}
+  };
+  window.scBrSet=function(i){
+    var x=(window._scBr||[])[i],price=Number($('scBrP'+i).value);if(!x||!(price>0)){alert('Enter a price above 0.');return;}
+    var list=(cfg.overrides||[]).filter(function(o){return !(o.kind==='num'&&o.name.toLowerCase()===x.name.toLowerCase()&&String(o.country||'')===brCty);});
+    list.push({kind:'num',name:x.name,country:brCty,price:price});
+    saveOv(list,'Price set for '+x.name+' in this country.').then(function(){scBrCountry();});
+  };
+  async function scOrders(){
+    var el=$('scOrders');
+    try{var rows=await aFetch('/api/admin/otp-suite/orders');
+      if(!Array.isArray(rows)||!rows.length){el.textContent='No orders yet.';return;}
+      el.innerHTML='<table style="width:100%;font-size:13px;border-collapse:collapse"><tr><th align=left>Type</th><th align=left>ID</th><th align=left>Item</th><th align=left>Price</th><th align=left>Status</th><th></th></tr>'+rows.map(function(o){
+        return '<tr style="border-top:1px solid #252535"><td>'+esc(o.type)+'</td><td>'+esc(String(o.id).slice(-6))+'</td><td>'+esc((o.service||'')+' '+(o.number||''))+'</td><td>'+ngn(o.price)+'</td><td>'+esc(o.status)+(o.lastError?' <span style="opacity:.7">('+esc(o.lastError).slice(0,60)+')</span>':'')+'</td><td>'+((o.refunded||o.status==='received'||o.status==='failed'||o.status==='cancelled')?'':'<button class="btn-primary" type="button" onclick="scRefund(\''+esc(o.id)+'\')">Refund</button>')+'</td></tr>';}).join('')+'</table>';
+    }catch(e){el.textContent='Error: '+e.message;}
+  }
+  window.scRefund=async function(id){
+    if(!confirm('Refund this order to the customer wallet? Only do this if no code/message was delivered.'))return;
+    try{await aFetch('/api/admin/otp-suite/orders/'+encodeURIComponent(id)+'/refund','POST',{});alert('Refunded');scOrders();}catch(e){alert(e.message);}
+  };
+})();
+</script>
+<div id="tab-priceadj" class="tab-panel"><!-- KSH-PRICE-ADJUST -->
+  <div class="sec-title">Markup / Price adjustment</div>
+  <div class="info-box" style="margin:8px 0">
+    Tick one or more providers, enter an amount, then press <b>Add</b>, <b>Subtract</b> or <b>Set</b>. It changes <b>every</b> product price of that provider at once &mdash; what customers see and what is taken from their wallet. <b>Restore default</b> returns the provider to its normal pricing.
+    <br>&bull; Buy Number &amp; Marketplace: the amount is added to each item/number.
+    <br>&bull; Boosting: the amount is per <b>1,000</b> units (a 100-unit order changes by one tenth).
+    <br>&bull; Prices never drop below what the supplier charges you.
+  </div>
+  <div class="tbl-wrap" style="margin:10px 0">
+    <table>
+      <thead><tr><th style="width:36px"><input type="checkbox" id="paAll" onchange="kshPaAll(this.checked)"></th><th>Provider</th><th>Applies</th><th>Current adjustment</th></tr></thead>
+      <tbody id="paRows"><tr><td colspan="4">Loading...</td></tr></tbody>
+    </table>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0">
+    <select id="paType" style="padding:9px;border-radius:8px"><option value="amount">Amount (₦)</option><option value="percent">Percent (%)</option></select>
+    <input id="paVal" type="number" step="any" min="0" placeholder="e.g. 1000" style="padding:9px;border-radius:8px;width:140px">
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px">
+    <button type="button" class="btn-sm" style="background:var(--gold);color:#000;border:none" onclick="kshPaDo('add')">+ Add</button>
+    <button type="button" class="btn-sm" onclick="kshPaDo('subtract')">&minus; Subtract</button>
+    <button type="button" class="btn-sm" onclick="kshPaDo('set')">Set to this value</button>
+    <button type="button" class="btn-sm" onclick="kshPaDo('reset')">Restore default</button>
+  </div>
+  <div id="paMsg" style="margin:6px 0;min-height:20px"></div>
+  <div class="sec-title" style="margin-top:18px">Recent changes</div>
+  <div id="paLog" style="overflow:auto">Loading...</div>
+</div>
+<script>
+(function(){
+  var rows=[];
+  function el(i){return document.getElementById(i);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function naira(n){return '\u20a6'+Math.abs(n).toLocaleString('en-NG',{maximumFractionDigits:2});}
+  function fmt(a){
+    var parts=[];
+    if(a&&a.amountNgn)parts.push((a.amountNgn>0?'+':'\u2212')+naira(a.amountNgn));
+    if(a&&a.percent)parts.push((a.percent>0?'+':'\u2212')+Math.abs(a.percent)+'%');
+    return parts.length?parts.join(' and '):'Default (no change)';
+  }
+  function say(t,bad){var m=el('paMsg');if(m){m.textContent=t;m.style.color=bad?'var(--red)':'';}}
+  window.kshPaAll=function(on){document.querySelectorAll('.paChk').forEach(function(c){c.checked=on;});};
+  window.kshPaLoad=async function(){
+    try{
+      var d=await aFetch('/api/admin/price-adjust');
+      rows=d.providers||[];
+      el('paRows').innerHTML=rows.map(function(p){
+        var on=p.amountNgn||p.percent;
+        return '<tr><td><input type="checkbox" class="paChk" value="'+esc(p.key)+'"></td><td>'+esc(p.label)+'</td><td>'+esc(p.unit)+'</td><td style="font-weight:700;color:'+(on?'var(--gold)':'inherit')+'">'+esc(fmt(p))+'</td></tr>';
+      }).join('');
+      var log=d.log||[];
+      el('paLog').innerHTML=log.length?'<div class="tbl-wrap"><table><thead><tr><th>When</th><th>Provider</th><th>Action</th><th>Result</th></tr></thead><tbody>'+log.map(function(l){
+        var what=l.action==='reset'?'Restored default':(l.action==='add'?'Added ':l.action==='subtract'?'Subtracted ':'Set ')+(l.type==='percent'?l.value+'%':naira(l.value));
+        return '<tr><td>'+esc(new Date(l.at).toLocaleString())+'</td><td>'+esc(l.label)+'</td><td>'+esc(what)+'</td><td>'+esc(fmt(l.after))+'</td></tr>';
+      }).join('')+'</tbody></table></div>':'<div class="muted">No changes yet.</div>';
+    }catch(e){say('Could not load: '+e.message,true);el('paRows').innerHTML='<tr><td colspan="4">'+esc(e.message)+'</td></tr>';}
+  };
+  window.kshPaDo=async function(action){
+    var keys=[].slice.call(document.querySelectorAll('.paChk:checked')).map(function(c){return c.value;});
+    if(!keys.length){say('Tick at least one provider first.',true);return;}
+    var type=el('paType').value, raw=el('paVal').value.trim(), val=Number(raw);
+    if(action!=='reset'&&(raw===''||!isFinite(val))){say('Enter an amount first.',true);return;}
+    var names=rows.filter(function(p){return keys.indexOf(p.key)>-1;}).map(function(p){return p.label;}).join(', ');
+    var what=action==='reset'?'RESTORE DEFAULT pricing':(action==='add'?'ADD ':action==='subtract'?'SUBTRACT ':'SET to ')+(type==='percent'?val+'%':naira(val));
+    if(!confirm(what+' for:\n'+names+'\n\nThis changes every price of these providers immediately. Continue?'))return;
+    say('Saving...');
+    try{
+      await aFetch('/api/admin/price-adjust','POST',{keys:keys,action:action,type:type,value:action==='reset'?0:val});
+      say('Done. New prices are live.');
+      el('paVal').value='';
+      kshPaLoad();
+    }catch(e){say(e.message,true);}
+  };
+})();
+</script>
+<div id="tab-websitesadm" class="tab-panel">
+  <div class="sec">
+    <div class="sec-title">&#127760; Websites for sale</div>
+    <div class="info-box">Websites added here appear on the customer <b>Website</b> page (dashboard). Customers can open the <b>customer panel link</b> to see how the site looks. The <b>admin panel link</b> is optional &mdash; if you add it, customers also get a "View admin panel" button.</div>
+    <input type="hidden" id="wsEditId"/>
+    <div class="fg"><label>Website name</label><input type="text" id="wsTitle" placeholder="e.g. SMM Panel Website"/></div>
+    <div class="fg"><label>Price (&#8358;)</label><input type="number" id="wsPrice" min="0" step="any" placeholder="e.g. 50000"/></div>
+    <div class="fg"><label>Customer panel link (required)</label><input type="text" id="wsCustomer" placeholder="https://demo-site.com"/></div>
+    <div class="fg"><label>Admin panel link (optional)</label><input type="text" id="wsAdminUrl" placeholder="https://demo-site.com/admin"/></div>
+    <div class="fg"><label>Demo login details (optional, shown to customers)</label><textarea id="wsNote" rows="2" placeholder="e.g. Username: demo / Password: demo123"></textarea></div>
+    <div class="fg"><label>Description (optional)</label><textarea id="wsDesc" rows="3" placeholder="What the website does, features, what the buyer gets&hellip;"></textarea></div>
+    <div class="fg"><label>Picture link (optional, a screenshot URL)</label><input type="text" id="wsImage" placeholder="https://..."/></div>
+    <div class="fg"><label>Order (small number shows first, optional)</label><input type="number" id="wsOrder" placeholder="0"/></div>
+    <div class="fg"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="wsPublished" checked/> Visible to customers</label></div>
+    <div class="fg"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="wsSold"/> Mark as sold</label></div>
+    <button class="btn-primary" type="button" id="wsSaveBtn" onclick="wsSave()">Save website</button>
+    <button class="btn-secondary" type="button" id="wsCancelBtn" onclick="wsReset()" style="margin-left:8px;display:none">Cancel edit</button>
+    <div id="wsFeedback" class="form-feedback"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">Your websites</div>
+    <div id="wsList">Loading...</div>
+  </div>
+</div>
+<script>
+(function(){
+  var items=[];
+  function E(id){return document.getElementById(id);}
+  function h(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function fb(msg,ok){var f=E('wsFeedback');f.textContent=msg||'';f.style.color=ok?'#16a34a':'#ef4444';}
+  window.wsReset=function(){
+    ['wsEditId','wsTitle','wsPrice','wsCustomer','wsAdminUrl','wsNote','wsDesc','wsImage','wsOrder'].forEach(function(i){E(i).value='';});
+    E('wsPublished').checked=true;E('wsSold').checked=false;
+    E('wsSaveBtn').textContent='Save website';E('wsCancelBtn').style.display='none';
+  };
+  window.wsLoad=async function(){
+    var box=E('wsList');
+    try{
+      items=await aFetch('/api/admin/websites');
+      if(!items.length){box.innerHTML='<p style="color:var(--t2);font-size:13px">No websites yet. Add your first one above.</p>';return;}
+      box.innerHTML=items.map(function(w){
+        return '<div style="border:1px solid var(--border,#2a2a3a);border-radius:10px;padding:10px 12px;margin-bottom:8px">'+
+          '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+h(w.title)+'</b><span>&#8358;'+Number(w.price).toLocaleString('en-NG')+'</span></div>'+
+          '<div style="font-size:12px;color:var(--t2);margin:4px 0;word-break:break-all">Customer: '+h(w.customerPanelUrl)+(w.adminPanelUrl?'<br>Admin: '+h(w.adminPanelUrl):'')+'</div>'+
+          '<div style="font-size:12px;margin-bottom:6px">'+(w.published?'Visible':'<b>Hidden</b>')+(w.sold?' &middot; <b>Sold</b>':'')+'</div>'+
+          '<button class="btn-secondary" type="button" onclick="wsEdit(\''+w.id+'\')">Edit</button> '+
+          '<button class="btn-secondary" type="button" onclick="wsToggle(\''+w.id+'\',\'published\')">'+(w.published?'Hide':'Show')+'</button> '+
+          '<button class="btn-secondary" type="button" onclick="wsToggle(\''+w.id+'\',\'sold\')">'+(w.sold?'Mark available':'Mark sold')+'</button> '+
+          '<button class="btn-secondary" type="button" onclick="wsDelete(\''+w.id+'\')">Delete</button></div>';
+      }).join('');
+    }catch(e){box.innerHTML='<p style="color:#ef4444;font-size:13px">Could not load: '+h(e.message)+'</p>';}
+  };
+  window.wsEdit=function(id){
+    var w=items.filter(function(x){return x.id===id;})[0];if(!w)return;
+    E('wsEditId').value=w.id;E('wsTitle').value=w.title;E('wsPrice').value=w.price;
+    E('wsCustomer').value=w.customerPanelUrl;E('wsAdminUrl').value=w.adminPanelUrl||'';
+    E('wsNote').value=w.demoNote||'';E('wsDesc').value=w.description||'';E('wsImage').value=w.imageUrl||'';
+    E('wsOrder').value=w.sortOrder||'';E('wsPublished').checked=!!w.published;E('wsSold').checked=!!w.sold;
+    E('wsSaveBtn').textContent='Update website';E('wsCancelBtn').style.display='inline-block';
+    fb('');try{E('tab-websitesadm').scrollIntoView({behavior:'smooth'});}catch(e){}
+  };
+  window.wsToggle=async function(id,field){
+    var w=items.filter(function(x){return x.id===id;})[0];if(!w)return;
+    var body={};body[field]=!w[field];
+    try{await aFetch('/api/admin/websites/'+id,'PUT',body);wsLoad();}catch(e){alert('Error: '+e.message);}
+  };
+  window.wsDelete=async function(id){
+    if(!confirm('Delete this website? Customers will no longer see it.'))return;
+    try{await aFetch('/api/admin/websites/'+id,'DELETE');if(E('wsEditId').value===id)wsReset();wsLoad();}catch(e){alert('Error: '+e.message);}
+  };
+  window.wsSave=async function(){
+    var editId=E('wsEditId').value;
+    var body={
+      title:E('wsTitle').value,price:E('wsPrice').value,customerPanelUrl:E('wsCustomer').value,
+      adminPanelUrl:E('wsAdminUrl').value,demoNote:E('wsNote').value,description:E('wsDesc').value,
+      imageUrl:E('wsImage').value,sortOrder:E('wsOrder').value,
+      published:E('wsPublished').checked,sold:E('wsSold').checked
+    };
+    fb('Saving...',true);
+    try{
+      await aFetch(editId?'/api/admin/websites/'+editId:'/api/admin/websites',editId?'PUT':'POST',body);
+      fb(editId?'Website updated.':'Website added.',true);wsReset();wsLoad();
+    }catch(e){fb(e.message,false);}
+  };
+})();
+</script>
+<div id="tab-ticksadm" class="tab-panel">
+  <div class="sec">
+    <div class="sec-title">&#9989; Telegram Tick &mdash; settings</div>
+    <div class="info-box">Customers open <b>Telegram Tick</b> from the dashboard, type their Telegram username, pick a package and place the order. The amount is taken from their wallet (they cannot order without enough balance). You get a WhatsApp/email alert, do the verification, then set the order to <b>Completed</b> below. The customer is notified automatically.</div>
+    <div class="fg"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tkEnabled" checked/> Telegram Tick is ON (customers can order)</label></div>
+    <div class="fg"><label>Notice shown on the customer page (optional)</label><textarea id="tkNotice" rows="2" placeholder="e.g. Orders are completed within 24 hours."></textarea></div>
+    <button class="btn-primary" type="button" onclick="tkSaveSettings()">Save settings</button>
+    <div id="tkSetFb" class="form-feedback"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">Packages</div>
+    <input type="hidden" id="tkPkgId"/>
+    <div class="fg"><label>Number of months</label><input type="number" id="tkMonths" min="1" step="1" placeholder="e.g. 3"/></div>
+    <div class="fg"><label>Amount (&#8358;)</label><input type="number" id="tkPrice" min="1" step="any" placeholder="e.g. 15000"/></div>
+    <div class="fg"><label>Small tag (optional)</label><input type="text" id="tkLabel" placeholder="e.g. Best value"/></div>
+    <div class="fg"><label>Order (small number shows first, optional)</label><input type="number" id="tkSort" placeholder="0"/></div>
+    <div class="fg"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tkActive" checked/> Visible to customers</label></div>
+    <button class="btn-primary" type="button" id="tkPkgBtn" onclick="tkSavePkg()">Add package</button>
+    <button class="btn-secondary" type="button" id="tkPkgCancel" onclick="tkPkgReset()" style="margin-left:8px;display:none">Cancel edit</button>
+    <div id="tkPkgFb" class="form-feedback"></div>
+    <div id="tkPkgList" style="margin-top:12px">Loading...</div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">Orders</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <button class="btn-secondary" type="button" onclick="tkFilter('processing')">Processing</button>
+      <button class="btn-secondary" type="button" onclick="tkFilter('completed')">Completed</button>
+      <button class="btn-secondary" type="button" onclick="tkFilter('cancelled')">Cancelled</button>
+      <button class="btn-secondary" type="button" onclick="tkFilter('')">All</button>
+      <button class="btn-secondary" type="button" onclick="tkLoadOrders()">Refresh</button>
+    </div>
+    <div id="tkOrders">Loading...</div>
+  </div>
+</div>
+<script>
+(function(){
+  var pk=[],filter='processing';
+  function E(i){return document.getElementById(i);}
+  function h(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function fb(id,m,ok){var f=E(id);f.textContent=m||'';f.style.color=ok?'#16a34a':'#ef4444';}
+  function naira(n){return '\u20A6'+Number(n||0).toLocaleString('en-NG');}
+  function when(d){try{return new Date(d).toLocaleString('en-NG');}catch(e){return '';}}
+  window.tkPkgReset=function(){['tkPkgId','tkMonths','tkPrice','tkLabel','tkSort'].forEach(function(i){E(i).value='';});E('tkActive').checked=true;E('tkPkgBtn').textContent='Add package';E('tkPkgCancel').style.display='none';};
+  window.tkLoad=async function(){
+    try{var s=await aFetch('/api/admin/telegram-tick/settings');E('tkEnabled').checked=!!s.enabled;E('tkNotice').value=s.notice||'';}catch(e){fb('tkSetFb',e.message,false);}
+    tkLoadPkgs();tkLoadOrders();
+  };
+  window.tkSaveSettings=async function(){
+    fb('tkSetFb','Saving...',true);
+    try{await aFetch('/api/admin/telegram-tick/settings','PUT',{enabled:E('tkEnabled').checked,notice:E('tkNotice').value});fb('tkSetFb','Saved.',true);}catch(e){fb('tkSetFb',e.message,false);}
+  };
+  window.tkLoadPkgs=async function(){
+    var box=E('tkPkgList');
+    try{
+      pk=await aFetch('/api/admin/telegram-tick/packages');
+      if(!pk.length){box.innerHTML='<p style="color:var(--t2);font-size:13px">No packages yet. Add your first one above.</p>';return;}
+      box.innerHTML=pk.map(function(p){
+        return '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--border,#252535)">'+
+          '<div style="flex:1;min-width:140px"><b>'+p.months+' month'+(p.months===1?'':'s')+'</b> &middot; '+naira(p.price)+(p.label?' &middot; '+h(p.label):'')+(p.active?'':' <span style="color:#ef4444">(hidden)</span>')+'</div>'+
+          '<button class="btn-secondary" type="button" onclick="tkEditPkg(\''+p.id+'\')">Edit</button>'+
+          '<button class="btn-secondary" type="button" onclick="tkDelPkg(\''+p.id+'\')">Delete</button></div>';
+      }).join('');
+    }catch(e){box.textContent='Error: '+e.message;}
+  };
+  window.tkEditPkg=function(id){
+    var p=pk.find(function(x){return x.id===id;});if(!p)return;
+    E('tkPkgId').value=p.id;E('tkMonths').value=p.months;E('tkPrice').value=p.price;E('tkLabel').value=p.label||'';E('tkSort').value=p.sortOrder||'';E('tkActive').checked=!!p.active;
+    E('tkPkgBtn').textContent='Save changes';E('tkPkgCancel').style.display='';
+    try{E('tkMonths').scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
+  };
+  window.tkDelPkg=async function(id){
+    if(!confirm('Delete this package? Past orders are not affected.'))return;
+    try{await aFetch('/api/admin/telegram-tick/packages/'+id,'DELETE');if(E('tkPkgId').value===id)tkPkgReset();tkLoadPkgs();}catch(e){alert('Error: '+e.message);}
+  };
+  window.tkSavePkg=async function(){
+    var id=E('tkPkgId').value;
+    var body={months:E('tkMonths').value,price:E('tkPrice').value,label:E('tkLabel').value,sortOrder:E('tkSort').value,active:E('tkActive').checked};
+    fb('tkPkgFb','Saving...',true);
+    try{await aFetch(id?'/api/admin/telegram-tick/packages/'+id:'/api/admin/telegram-tick/packages',id?'PUT':'POST',body);fb('tkPkgFb',id?'Package updated.':'Package added.',true);tkPkgReset();tkLoadPkgs();}
+    catch(e){fb('tkPkgFb',e.message,false);}
+  };
+  window.tkFilter=function(f){filter=f;tkLoadOrders();};
+  window.tkLoadOrders=async function(){
+    var box=E('tkOrders');
+    try{
+      var list=await aFetch('/api/admin/telegram-tick/orders'+(filter?'?status='+filter:''));
+      if(!list.length){box.innerHTML='<p style="color:var(--t2);font-size:13px">No '+(filter||'')+' orders.</p>';return;}
+      box.innerHTML=list.map(function(o){
+        var col=o.status==='completed'?'#16a34a':o.status==='cancelled'?'#ef4444':'#f59e0b';
+        var x='<div style="padding:12px 0;border-top:1px solid var(--border,#252535)">'+
+          '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="word-break:break-all">@'+h(o.username)+'</b><span style="font-size:11px;font-weight:800;color:'+col+'">'+h(o.status.toUpperCase())+'</span></div>'+
+          '<div style="font-size:12.5px;opacity:.85;line-height:1.6;margin-top:4px">'+o.months+' month'+(o.months===1?'':'s')+' &middot; '+naira(o.price)+' &middot; '+h(o.ref)+'<br>'+h(o.userName)+' ('+h(o.userEmail)+')<br>'+when(o.createdAt)+(o.adminNote?'<br>Note: '+h(o.adminNote):'')+'</div>';
+        if(o.status==='processing'){
+          x+='<input type="text" id="tkNote_'+o.id+'" placeholder="Note to customer (optional)" style="width:100%;margin-top:8px"/>'+
+             '<div style="display:flex;gap:8px;margin-top:8px"><button class="btn-primary" type="button" onclick="tkSetStatus(\''+o.id+'\',\'completed\')">Mark completed</button>'+
+             '<button class="btn-secondary" type="button" onclick="tkSetStatus(\''+o.id+'\',\'cancelled\')">Cancel &amp; refund</button></div>';
+        }
+        return x+'</div>';
+      }).join('');
+    }catch(e){box.textContent='Error: '+e.message;}
+  };
+  window.tkSetStatus=async function(id,status){
+    var msg=status==='completed'?'Mark this order as completed? The customer will be notified that their Telegram is verified.':'Cancel this order and refund the customer?';
+    if(!confirm(msg))return;
+    var n=E('tkNote_'+id);
+    try{await aFetch('/api/admin/telegram-tick/orders/'+id,'PUT',{status:status,note:n?n.value:''});tkLoadOrders();}catch(e){alert('Error: '+e.message);tkLoadOrders();}
+  };
+})();
+</script>
+<div id="tab-vtuadm" class="tab-panel">
+  <div class="sec-title">Airtime &amp; Data (VTU) — prices, markup &amp; orders</div>
+  <div id="vtuAdmRoot">Loading…</div>
 </div>
 <div id="tab-boost2adm" class="tab-panel">
   <div class="sec-title">Boost 2 services</div>
@@ -2628,7 +3019,12 @@ const ADMIN_NAV = [
     { tab:'n3adm', icon:'i-plug', label:'Buy Number 3', owner:true, keywords:'buy number 3 numbers sync services prices hide on off' },
     { tab:'kinglogos', icon:'i-zap', label:'Product logos', owner:true, keywords:'logo logos picture image facebook icon brand' },
     { tab:'numbers2', icon:'i-smartphone', label:'Server 2 — low SMS rate pools', owner:true },
-    { tab:'otp2', icon:'i-smartphone', label:'Buy Number 2 (OTP Suite)', owner:true, keywords:'otp suite buy number 2 markup orders balance' },
+    { tab:'numnotice', icon:'i-pin', label:'Number notice (WhatsApp help)', owner:true, keywords:'buy number notice banner whatsapp login help message vpn' },
+    { tab:'otp2', icon:'i-smartphone', label:'Buy Number 2, Temp Email & Rentals', owner:true, keywords:'buy number 2 sms cool temp email rental rentals markup orders balance api key' },
+    { tab:'priceadj', icon:'i-banknote', label:'Markup / Price adjustment', owner:true, keywords:'markup price adjust add subtract restore default buy number boost marketplace increase decrease' },
+    { tab:'vtuadm', icon:'i-smartphone', label:'Airtime & Data (VTU)', owner:true, keywords:'vtu airtime data cable tv dstv gotv startimes markup price percentage vtugate profit' },
+    { tab:'websitesadm', icon:'i-zap', label:'Websites for sale', owner:true, keywords:'website websites sell sale demo customer panel admin panel link price' },
+    { tab:'ticksadm', icon:'i-zap', label:'Telegram Tick', owner:true, keywords:'telegram tick verification verify blue orders packages months username' },
     { tab:'boost2adm', icon:'i-rocket', label:'Boost 2 services', owner:true, keywords:'boost 2 nova services sync' },
     { tab:'tutlib', icon:'i-video', label:'Tutorial library', owner:true, keywords:'tutorial tutorials video images login how to facebook tiktok customers watch' },
     { tab:'tutorialsadm', icon:'i-video', label:'Tutorials', owner:true, keywords:'tutorial tutorials video images login how to' },
@@ -2757,7 +3153,7 @@ function switchTab(name,el) {
   if(name==='campaigns')    cmpLoad();
   if(name==='logs')         { loadLogs(); loadCategories(); loadCategoriesIntoSelects(); loadRestockDemand(); }
   if(name==='tools')        loadTools();
-  if(name==='otp2'&&window.mvnOtpLoad)mvnOtpLoad(); if(name==='boost2adm'&&window.mvnB2Load)mvnB2Load(); if(name==='tutorialsadm'&&window.mvnTutLoad)mvnTutLoad(); if(name==='tutlib'&&window.tlLoad)tlLoad();
+  if(name==='numnotice'&&window.nnLoad)nnLoad(); if(name==='otp2'&&window.scLoad)scLoad(); if(name==='websitesadm'&&window.wsLoad)wsLoad(); if(name==='ticksadm'&&window.tkLoad)tkLoad(); if(name==='priceadj'&&window.kshPaLoad)kshPaLoad(); if(name==='vtuadm'&&window.vtuAdmLoad)vtuAdmLoad(); if(name==='boost2adm'&&window.mvnB2Load)mvnB2Load(); if(name==='tutorialsadm'&&window.mvnTutLoad)mvnTutLoad(); if(name==='tutlib'&&window.tlLoad)tlLoad();
   if(name==='logs2') { m2LoadConfig(); m2LoadProducts(false); m2LoadBalance(); m2LoadOrders(); }
   if(name==='logs3')        { m3LoadConfig(); m3LoadProducts(false); m3LoadBalance(); m3LoadOrders(); }
   if(name==='logs4')        { m4LoadConfig(); m4LoadProducts(false); m4LoadBalance(); m4LoadOrders(); }
@@ -3004,7 +3400,7 @@ async function runBoostSelfCheck(){
 (function(){
   var SV=[
     {id:'buy1',name:'Buy Number 1 (GrizzlySMS)',get:async function(){var c=await aFetch('/api/admin/numbers/server-config');return Number(c.buy1AdjustNgn)||0},set:function(v){return aFetch('/api/admin/numbers/server-config','PUT',{buy1AdjustNgn:v})}},
-    {id:'buy2',name:'Buy Number 2 (OTP Suite)',get:async function(){var c=await aFetch('/api/admin/otp-suite/status');return Number(c.adjustNgn)||0},set:function(v){return aFetch('/api/admin/otp-suite/config','PUT',{adjustNgn:v})}},
+    {id:'buy2',name:'Buy Number 2 (SMS-COOL)',get:async function(){var d=await aFetch('/api/admin/price-adjust');var p=(d.providers||[]).find(function(x){return x.key==='bn2'})||{};return Number(p.amountNgn)||0},set:function(v){return aFetch('/api/admin/price-adjust','POST',{keys:['bn2'],action:Number(v)===0?'reset':'set',type:'amount',value:Number(v)})}},
     {id:'buy3',name:'Buy Number 3 (NovaSolution)',get:async function(){var c=await aFetch('/api/admin/numbers/server-config');return Number(c.buy3AdjustNgn)||0},set:function(v){return aFetch('/api/admin/numbers/server-config','PUT',{buy3AdjustNgn:v})}},
     {id:'boost2',name:'Boost 2 (all services)',get:async function(){var c=await aFetch('/api/admin/boost2/config');return Number(c.adjustNgn)||0},set:function(v){return aFetch('/api/admin/boost2/config','PUT',{adjustNgn:v})}}
   ];
@@ -7546,6 +7942,23 @@ async function wpReset(){
   if(!confirm('Reset the welcome popup to its default text and settings? This clears the saved WhatsApp link too. Nothing else on the site is affected.')) return;
   try { const d=await aFetch('/api/admin/welcome-popup/reset','POST',{}); wpFill(d.settings); wpMeta(d); alert('Reset to defaults.'); } catch(e){ alert(e.message); }
 }
+/* ── Buy Number notice ── */
+var nnOn=true;
+function nnRender(){ var b=document.getElementById('nnToggle'); if(b){ b.textContent=nnOn?'Notice is ON (tap to turn off)':'Notice is OFF (tap to turn on)'; } }
+function nnFlip(){ nnOn=!nnOn; nnRender(); }
+window.nnLoad=nnLoad;
+async function nnLoad(){
+  try { const d=await aFetch('/api/admin/number-notice'); const s=d.settings;
+    nnOn=!!s.enabled; nnRender();
+    document.getElementById('nnTitle').value=s.title||''; document.getElementById('nnMsg').value=s.message||''; document.getElementById('nnBtn').value=s.buttonText||'';
+    document.getElementById('nnMeta').textContent=d.updatedAt?'Last saved '+new Date(d.updatedAt).toLocaleString():'Using the default message (nothing saved yet).';
+  } catch(e){ document.getElementById('nnMeta').textContent='Could not load: '+e.message; }
+}
+async function nnSave(){
+  try { const d=await aFetch('/api/admin/number-notice','PUT',{enabled:nnOn,title:document.getElementById('nnTitle').value,message:document.getElementById('nnMsg').value,buttonText:document.getElementById('nnBtn').value});
+    document.getElementById('nnMeta').textContent='Last saved '+new Date(d.updatedAt).toLocaleString(); alert('Notice saved.');
+  } catch(e){ alert('Not saved: '+e.message); }
+}
 function wpClearMemory(){ if(window.MVNWelcomePopup){ window.MVNWelcomePopup.clearBrowserMemory(); alert('Done. The popup can show again in this browser (if it is enabled and the frequency allows).'); } }
 
 // ── Saved-catalogue sync (numbers + Boost 2) ─────────────────────────────────
@@ -7613,5 +8026,7 @@ async function refundOtpSuiteOrder(){const id=prompt('Paste the OTP Suite order 
 })();
 </script>
 <script src="/js/admin-marvel.js?v=3"></script>
+<script src="/js/admin-vtu.js?v=1"></script>
+<script src="/js/marvel-smooth.js?v=1" defer></script>
 </body>
 </html>

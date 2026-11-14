@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="/js/mvn-fast.js?v=1"></script>
+<script src="/js/marvel-loader.js?v=1"></script>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/theme.css">
+<script src="/js/marvel-ui.js?v=1"></script><link rel="stylesheet" href="/brand.css">
+<link rel="stylesheet" href="/css/marvel-select-sheet.css?v=1">
+<link rel="stylesheet" href="/css/page-transitions.css?v=1">
+<link rel="stylesheet" href="/css/responsive-device-fit.css?v=1">
+<link rel="stylesheet" href="/css/mvn-header-clean.css?v=20261022b">
+<script src="/js/mvn-menu-guard.js?v=20261022b" defer></script>
+<link rel="stylesheet" href="/css/mvn-ui-fixes.css?v=20261022c">
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Telegram Tick - Marvel Nums</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/favicon.png">
+<script>
+  (function(){
+    var t='dark';
+    try{var s=localStorage.getItem('mvn_theme');if(s==='light'||s==='dark')t=s;}catch(e){}
+    document.documentElement.setAttribute('data-theme',t);
+    try{ if(!localStorage.getItem('mvn_token')) location.replace('/login'); }catch(e){}
+  })();
+</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --blue:#16a34a;--blue2:#15803d;--tg:#229ED9;
+    --bg:#f7f7fb;--white:#fff;--text:#15151f;--text2:#55556e;--text3:#8b8ba3;
+    --border:#e2e2ec;--shadow:0 1px 4px rgba(0,0,0,.08);--radius:14px;--radius-sm:10px;
+    --red:#ef4444;--amber:#f59e0b;
+  }
+  html[data-theme="dark"]{--bg:#08080f;--white:#131320;--text:#eeeef5;--text2:#8888a8;--text3:#55557a;--border:#252535}
+  html,body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+  .shell{max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:40px}
+  .top{display:flex;align-items:center;gap:10px;padding:16px;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+  .top a.back{font-size:22px;line-height:1;padding:2px 8px 4px 0;color:var(--text2)}
+  .top b{font-size:17px;font-weight:800;flex:1}
+  .top .bal{font-size:12.5px;font-weight:800;color:var(--blue);background:rgba(22,163,74,.12);padding:6px 10px;border-radius:99px;white-space:nowrap}
+  .hero{margin:16px;padding:18px;border-radius:var(--radius);background:linear-gradient(135deg,#229ED9,#1479b0);color:#fff;display:flex;gap:14px;align-items:center}
+  .hero svg{flex:none;width:46px;height:46px}
+  .hero h2{font-size:17px;font-weight:800}
+  .hero p{font-size:12.5px;line-height:1.5;opacity:.92;margin-top:3px}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin:14px 16px 0;padding:16px}
+  .card h3{font-size:14px;font-weight:800;margin-bottom:10px}
+  label.l{display:block;font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:6px}
+  .inp{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);overflow:hidden}
+  .inp:focus-within{border-color:var(--tg)}
+  .inp span{padding:0 4px 0 14px;font-weight:800;color:var(--text3)}
+  .inp input{flex:1;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:15px;padding:13px 14px 13px 2px;min-width:0}
+  .hint{font-size:11.5px;color:var(--text3);margin-top:6px;line-height:1.45}
+  .notice{margin:14px 16px 0;padding:11px 13px;border-radius:var(--radius-sm);background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);font-size:12.5px;line-height:1.5;color:var(--text);white-space:pre-line}
+  .pk{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1.5px solid var(--border);border-radius:12px;margin-bottom:9px;cursor:pointer;background:var(--bg)}
+  .pk.sel{border-color:var(--tg);background:rgba(34,158,217,.1)}
+  .pk .dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex:none;position:relative}
+  .pk.sel .dot{border-color:var(--tg)}
+  .pk.sel .dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--tg)}
+  .pk .m{flex:1;font-size:14.5px;font-weight:800}
+  .pk .m small{display:block;font-size:11px;font-weight:700;color:var(--blue);margin-top:2px}
+  .pk .p{font-size:15px;font-weight:800;color:var(--blue);white-space:nowrap}
+  .sum{display:none;margin-top:6px;padding:12px;border-radius:12px;background:var(--bg);border:1px dashed var(--border);font-size:13px;line-height:1.7}
+  .sum b{font-weight:800}
+  .sum .short{color:var(--red);font-weight:700}
+  .btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:14px;padding:14px;border-radius:12px;font-size:14.5px;font-weight:800;border:0;cursor:pointer;font-family:inherit;background:var(--tg);color:#fff}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.dep{background:var(--blue)}
+  .msg{margin-top:12px;font-size:13px;line-height:1.5;padding:11px 12px;border-radius:10px;display:none}
+  .msg.err{display:block;background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+  .msg.ok{display:block;background:rgba(22,163,74,.12);color:var(--blue);border:1px solid rgba(22,163,74,.3)}
+  .o{padding:13px 0;border-top:1px solid var(--border)}
+  .o:first-child{border-top:0;padding-top:0}
+  .o .r1{display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .o .u{font-size:14px;font-weight:800;word-break:break-all}
+  .o .r2{font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5}
+  .st{font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;white-space:nowrap}
+  .st.processing{background:rgba(245,158,11,.15);color:var(--amber)}
+  .st.completed{background:rgba(22,163,74,.15);color:var(--blue)}
+  .st.cancelled{background:rgba(239,68,68,.15);color:var(--red)}
+  .done{margin-top:8px;padding:9px 11px;border-radius:10px;background:rgba(22,163,74,.1);font-size:12.5px;line-height:1.5}
+  .empty{text-align:center;color:var(--text2);font-size:13px;padding:14px 0}
+  .off{margin:30px 16px;text-align:center;color:var(--text2);font-size:14px;line-height:1.6}
+  .off .big{font-size:40px;margin-bottom:6px}
+</style>
+<link rel="stylesheet" href="/css/marvel-theme.css?v=3"/>
+<link rel="stylesheet" href="/css/marvel-final.css?v=1">
+<link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
+</head>
+<body>
+<div class="shell">
+  <div class="top">
+    <a class="back" href="/dashboard" aria-label="Back">&lsaquo;</a>
+    <b>Telegram Tick</b>
+    <a class="bal" href="/deposit" id="bal">&#8358;0</a>
+  </div>
+
+  <div class="hero">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#fff"/><path fill="#229ED9" d="M24 4l4.6 3.1 5.5-.3 2.3 5 4.9 2.6-.3 5.5L43 24l-2.9 4.1.3 5.5-4.9 2.6-2.3 5-5.5-.3L24 44l-4.6-3.1-5.5.3-2.3-5-4.9-2.6.3-5.5L5 24l2.9-4.1-.3-5.5 4.9-2.6 2.3-5 5.5.3z"/><path fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" d="M15.5 24.5l6 6 11-12"/></svg>
+    <div>
+      <h2>Get your Telegram verified</h2>
+      <p>Enter your Telegram username, choose how long you want the tick, and place your order.</p>
+    </div>
+  </div>
+
+  <div id="app"><div class="empty">Loading...</div></div>
+
+  <div class="card" id="histCard" style="display:none">
+    <h3>My Telegram Tick orders</h3>
+    <div id="hist"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var app=document.getElementById('app'),balEl=document.getElementById('bal');
+  var packages=[],selected=null,balance=0,enabled=true,notice='',placing=false;
+
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function naira(n){return '\u20A6'+Number(n||0).toLocaleString('en-NG');}
+  function mtxt(m){return m+' month'+(m===1?'':'s');}
+  function when(d){try{return new Date(d).toLocaleString('en-NG',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});}catch(e){return '';}}
+
+  function api(url,opts){
+    opts=opts||{};opts.headers=Object.assign({'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('mvn_token')||'')},opts.headers||{});
+    return fetch(url,opts).then(function(r){
+      var rt=r.headers.get('X-Refresh-Token');if(rt){try{localStorage.setItem('mvn_token',rt);}catch(e){}}
+      return r.json().catch(function(){return {};}).then(function(d){
+        if(r.status===401){try{localStorage.removeItem('mvn_token');}catch(e){} location.replace('/login'); throw new Error(d.error||'Please log in again.');}
+        if(!r.ok){var e=new Error(d.error||'Request failed');e.data=d;throw e;}
+        return d;
+      });
+    });
+  }
+
+  function setBal(){balEl.textContent=naira(balance);}
+
+  function render(){
+    if(!enabled){
+      app.innerHTML='<div class="off"><div class="big">&#9208;</div>Telegram Tick is not available right now.<br>Please check back soon.</div>';
+      return;
+    }
+    var h='';
+    if(notice)h+='<div class="notice">'+esc(notice)+'</div>';
+    h+='<div class="card"><label class="l" for="un">Your Telegram username</label>'+
+       '<div class="inp"><span>@</span><input id="un" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="40" placeholder="username"></div>'+
+       '<div class="hint">5-32 characters: letters, numbers and underscore. Do not type the @.</div></div>';
+    h+='<div class="card"><h3>Select a package</h3>';
+    if(!packages.length)h+='<div class="empty">No packages available yet. Please check back soon.</div>';
+    packages.forEach(function(p){
+      h+='<div class="pk'+(selected===p.id?' sel':'')+'" data-id="'+esc(p.id)+'"><div class="dot"></div><div class="m">'+mtxt(p.months)+(p.label?'<small>'+esc(p.label)+'</small>':'')+'</div><div class="p">'+naira(p.price)+'</div></div>';
+    });
+    h+='<div class="sum" id="sum"></div>';
+    h+='<button class="btn" id="go" type="button">Place order</button>';
+    h+='<div class="msg" id="msg"></div></div>';
+    app.innerHTML=h;
+    var un=document.getElementById('un');
+    if(render.keep)un.value=render.keep;
+    un.addEventListener('input',function(){render.keep=un.value;});
+    Array.prototype.forEach.call(app.querySelectorAll('.pk'),function(el){
+      el.addEventListener('click',function(){render.keep=un.value;selected=el.getAttribute('data-id');render();});
+    });
+    document.getElementById('go').addEventListener('click',place);
+    summary();
+  }
+
+  function pkg(){for(var i=0;i<packages.length;i++)if(packages[i].id===selected)return packages[i];return null;}
+
+  function summary(){
+    var p=pkg(),s=document.getElementById('sum'),b=document.getElementById('go');
+    if(!s||!b)return;
+    if(!p){s.style.display='none';b.textContent='Place order';b.className='btn';return;}
+    var short=balance<p.price;
+    s.style.display='block';
+    s.innerHTML='Package: <b>'+mtxt(p.months)+'</b><br>Amount: <b>'+naira(p.price)+'</b><br>Your balance: <b>'+naira(balance)+'</b>'+
+      (short?'<br><span class="short">You need '+naira(p.price-balance)+' more to place this order.</span>':'');
+    if(short){b.textContent='Deposit '+naira(p.price-balance)+' to continue';b.className='btn dep';}
+    else{b.textContent='Place order - '+naira(p.price);b.className='btn';}
+  }
+
+  function showMsg(t,ok){var m=document.getElementById('msg');if(!m)return;m.className='msg '+(ok?'ok':'err');m.textContent=t;}
+
+  function place(){
+    if(placing)return;
+    var un=document.getElementById('un').value.trim();
+    var p=pkg();
+    if(!un){showMsg('Enter your Telegram username.');return;}
+    if(!p){showMsg('Please select a package.');return;}
+    if(balance<p.price){location.href='/deposit';return;}
+    placing=true;var b=document.getElementById('go');b.disabled=true;b.textContent='Placing order...';
+    api('/api/telegram-tick/order',{method:'POST',body:JSON.stringify({username:un,packageId:p.id})}).then(function(d){
+      if(typeof d.balance==='number')balance=d.balance;
+      setBal();
+      render.keep='';selected=null;render();
+      showMsg('Order placed! Your order is now processing. We will notify you when @'+d.order.username+' has been verified.',true);
+      loadOrders();
+    }).catch(function(e){
+      if(e.data&&typeof e.data.balance==='number'){balance=e.data.balance;setBal();}
+      summary();showMsg(e.message);
+    }).then(function(){placing=false;var g=document.getElementById('go');if(g){g.disabled=false;summary();}});
+  }
+
+  var HIST_LABEL={processing:'Processing',completed:'Completed',cancelled:'Cancelled'};
+  function loadOrders(){
+    api('/api/telegram-tick/orders').then(function(list){
+      var card=document.getElementById('histCard'),box=document.getElementById('hist');
+      if(!list.length){card.style.display='none';return;}
+      card.style.display='block';
+      box.innerHTML=list.map(function(o){
+        var h='<div class="o"><div class="r1"><span class="u">@'+esc(o.username)+'</span><span class="st '+esc(o.status)+'">'+(HIST_LABEL[o.status]||esc(o.status))+'</span></div>'+
+          '<div class="r2">'+mtxt(o.months)+' &middot; '+naira(o.price)+' &middot; '+when(o.createdAt)+' &middot; '+esc(o.ref)+'</div>';
+        if(o.status==='completed')h+='<div class="done">&#9989; Your Telegram <b>@'+esc(o.username)+'</b> has been verified ('+mtxt(o.months)+', '+naira(o.price)+' paid).'+(o.adminNote?'<br>'+esc(o.adminNote):'')+'</div>';
+        if(o.status==='cancelled')h+='<div class="done" style="background:rgba(239,68,68,.1)">This order was cancelled and '+naira(o.price)+' was returned to your balance.'+(o.adminNote?'<br>'+esc(o.adminNote):'')+'</div>';
+        return h+'</div>';
+      }).join('');
+    }).catch(function(){});
+  }
+
+  function load(){
+    api('/api/telegram-tick/packages').then(function(d){
+      enabled=d.enabled;notice=d.notice||'';balance=d.balance||0;packages=d.packages||[];
+      setBal();render();
+    }).catch(function(e){app.innerHTML='<div class="off">Could not load this page. Please refresh.</div>';});
+    loadOrders();
+  }
+  load();
+  // Keep the status badges fresh while the page is open (processing -> completed).
+  setInterval(function(){if(!document.hidden)loadOrders();},20000);
+})();
+</script>
+<script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/app-shell.js?v=3" defer></script>
+<script src="/js/section-tabs.js?v=1" defer></script>
+<script src="/js/page-transitions.js?v=1" defer></script>
+<script src="/js/loader-failsafe.js?v=1" defer></script>
+<script src="/js/marvel-smooth.js?v=1" defer></script>
+<script src="/js/marvel-pro.js?v=1" defer></script>
+</body>
+</html>

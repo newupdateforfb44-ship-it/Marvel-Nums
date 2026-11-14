@@ -1,0 +1,146 @@
+<!doctype html><html lang="en"><head>
+<script src="/js/mvn-fast.js?v=1"></script>
+<script src="/js/marvel-loader.js?v=1"></script>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/theme.css">
+<script src="/js/marvel-ui.js?v=1"></script><link rel="stylesheet" href="/brand.css">
+<link rel="stylesheet" href="/css/marvel-select-sheet.css?v=1">
+<link rel="stylesheet" href="/css/page-transitions.css?v=1">
+<link rel="stylesheet" href="/css/responsive-device-fit.css?v=1">
+<link rel="stylesheet" href="/css/mvn-header-clean.css?v=20261022b">
+<script src="/js/mvn-menu-guard.js?v=20261022b" defer></script>
+<link rel="stylesheet" href="/css/mvn-ui-fixes.css?v=20261022c">
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+
+<link rel="icon" type="image/png" href="/favicon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Airtime &amp; Data | Marvel Nums</title>
+
+<script>(function(){try{if(!localStorage.getItem('mvn_token')&&!localStorage.getItem('token'))location.replace('/login')}catch(e){}})();</script>
+<style>
+body{background:#050b22;color:#eef3ff;padding:18px}.wrap{max-width:640px;margin:20px auto}.muted{color:#a3b5dc}.back{color:#7fd0ff;text-decoration:none;font-weight:700}
+.panel{background:#0f1b44;border:1px solid rgba(90,150,255,.22);border-radius:16px;padding:16px;margin:14px 0}
+.tabs{display:flex;gap:8px}.tab{flex:1;text-align:center;padding:12px 6px;border-radius:12px;background:#0f1b44;border:1px solid rgba(90,150,255,.22);color:#d6e2ff;font-weight:800;cursor:pointer}.tab.on{border-color:#1a6dff;color:#19c3ff}
+label{display:block;margin-top:12px;color:#a3b5dc;font-size:14px}
+input,select{width:100%;padding:13px;border-radius:10px;background:#0a1433;color:#fff;border:1px solid rgba(90,150,255,.32);margin:6px 0;box-sizing:border-box;font-size:16px}
+.btn{border:0;border-radius:10px;background:#1a6dff;color:#ffffff;font-weight:800;padding:13px 16px;cursor:pointer;width:100%;font-size:16px;margin-top:14px}.btn:disabled{opacity:.5}
+.msg{margin-top:12px;padding:10px 12px;border-radius:10px;font-size:14px;display:none}.msg.ok{display:block;background:#0b2a3a;color:#5fe3b0}.msg.err{display:block;background:#3a1020;color:#ff8aa0}
+.price{color:#19c3ff;font-weight:800}.ord{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid rgba(90,150,255,.22);font-size:14px}.ord:first-child{border-top:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:8px 14px;border-radius:999px;background:#0a1433;border:1px solid rgba(90,150,255,.32);cursor:pointer;font-weight:700;font-size:14px}
+.ov{position:fixed;inset:0;background:rgba(3,6,10,.72);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:9999;padding:0}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:520px;background:#0f1b44;border:1px solid rgba(90,150,255,.22);border-radius:22px 22px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));box-shadow:0 -12px 40px rgba(0,0,0,.5);animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@media(min-width:600px){.ov{align-items:center}.sheet{border-radius:22px}}
+.sheet .grab{width:42px;height:4px;border-radius:4px;background:rgba(90,150,255,.32);margin:-8px auto 14px}
+.sheet h3{margin:0 0 4px;font-size:20px}.sheet .sub{color:#a3b5dc;font-size:14px;margin-bottom:14px}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-top:1px solid rgba(90,150,255,.22);font-size:15px}
+.kv span:first-child{color:#a3b5dc}.kv span:last-child{font-weight:700;text-align:right;word-break:break-word}
+.tot{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:14px;border-radius:14px;background:#0a1433;border:1px solid rgba(90,150,255,.32)}
+.tot span:first-child{color:#a3b5dc;font-weight:700}.tot b{color:#19c3ff;font-size:22px}
+.sbtns{display:flex;gap:10px;margin-top:16px}.sbtns button{flex:1;border-radius:12px;padding:14px;font-size:16px;font-weight:800;cursor:pointer;border:1px solid rgba(90,150,255,.32)}
+.sbtns .no{background:#0a1433;color:#d6e2ff}.sbtns .yes{background:#1a6dff;color:#ffffff;border-color:#1a6dff}.sbtns button:disabled{opacity:.6}
+</style><link rel="stylesheet" href="/css/marvel-theme.css?v=3"/>
+<link rel="stylesheet" href="/css/marvel-final.css?v=1">
+<link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
+</head><body>
+<main class="wrap"><a class="back" href="/dashboard">← Back</a>
+<h1>Airtime &amp; Data</h1><p class="muted">Airtime, data bundles and cable TV — delivered instantly from your wallet.</p>
+<div class="tabs"><div class="tab on" data-t="airtime">Airtime</div><div class="tab" data-t="data">Data</div><div class="tab" data-t="tv">Cable TV</div></div>
+<div class="panel">
+ <label>Network / Provider</label><select id="svc"><option>Loading…</option></select>
+ <div id="fAirtime"><label>Phone number</label><input id="aPhone" inputmode="numeric" maxlength="11" placeholder="08012345678">
+  <label>Amount (₦50 – ₦5,000)</label><input id="aAmt" inputmode="numeric" placeholder="500"><div class="chips" id="quick"></div></div>
+ <div id="fData" style="display:none"><label>Phone number</label><input id="dPhone" inputmode="numeric" maxlength="11" placeholder="08012345678">
+  <label>Data plan</label><select id="dPlan"></select></div>
+ <div id="fTv" style="display:none"><label>Smartcard / IUC number</label><input id="cCard" inputmode="numeric" placeholder="1234567890">
+  <div id="cName" class="muted" style="font-size:14px;margin-top:4px"></div>
+  <label>Package</label><select id="cPlan"></select></div>
+ <div class="price" id="total" style="margin-top:12px"></div>
+ <button class="btn" id="go">Buy now</button><div class="msg" id="msg"></div>
+</div>
+<div class="panel"><h3 style="margin:0 0 6px">Recent orders</h3><div id="orders" class="muted">Loading…</div></div>
+</main>
+<div class="ov" id="ov"><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>
+ <h3 id="shT">Confirm purchase</h3><div class="sub">Please check the details before you pay.</div>
+ <div id="shRows"></div>
+ <div class="tot"><span>You pay</span><b id="shTot"></b></div>
+ <div class="sbtns"><button class="no" id="shNo">Cancel</button><button class="yes" id="shYes">Confirm &amp; pay</button></div>
+</div></div>
+<script>
+const $=id=>document.getElementById(id);const money=n=>'₦'+Number(n||0).toLocaleString('en-NG');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(url,body){const t=localStorage.getItem('mvn_token')||localStorage.getItem('token')||'';
+ const r=await fetch(url,{method:body?'POST':'GET',headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},body:body?JSON.stringify(body):undefined});
+ const j=await r.json().catch(()=>({}));if(r.status===401){location.replace('/login');}return{ok:r.ok,status:r.status,j};}
+let tab='airtime',plans=[],airPct=0;
+api('/api/vtu/status').then(r=>{if(r.ok&&r.j.airtimePct)airPct=Number(r.j.airtimePct)||0;upd();});
+const airPrice=a=>Math.ceil(Math.round(a*(100+airPct))/100);
+function askConfirm(title,rows,total){return new Promise(res=>{
+ $('shT').textContent=title;$('shTot').textContent=money(total);
+ $('shRows').innerHTML=rows.map(r=>`<div class="kv"><span>${esc(r[0])}</span><span>${esc(r[1])}</span></div>`).join('');
+ const ov=$('ov');ov.classList.add('show');
+ const done=v=>{ov.classList.remove('show');$('shYes').onclick=$('shNo').onclick=ov.onclick=null;document.removeEventListener('keydown',key);res(v);};
+ const key=e=>{if(e.key==='Escape')done(false);};document.addEventListener('keydown',key);
+ $('shYes').onclick=()=>done(true);$('shNo').onclick=()=>done(false);ov.onclick=e=>{if(e.target===ov)done(false);};});}
+const svcName=()=>{const o=$('svc').selectedOptions[0];return o?o.text:'';};
+function show(kind,text){const m=$('msg');m.className='msg '+kind;m.textContent=text;}
+async function loadServices(){
+ $('svc').innerHTML='<option>Loading…</option>';
+ const r=await api('/api/vtu/services?type='+tab);
+ if(!r.ok){$('svc').innerHTML='<option value="">Unavailable</option>';show('err',r.j.error||'Unavailable');return;}
+ $('msg').className='msg';
+ $('svc').innerHTML=(r.j.services||[]).map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+ loadPlans();
+}
+async function loadPlans(){
+ if(tab==='airtime'){$('total').textContent='';return;}
+ const sel=tab==='data'?$('dPlan'):$('cPlan');sel.innerHTML='<option>Loading…</option>';
+ const r=await api('/api/vtu/'+(tab==='data'?'data-plans':'cable-plans')+'?service_id='+encodeURIComponent($('svc').value));
+ if(!r.ok){sel.innerHTML='';show('err',r.j.error||'Could not load plans');return;}
+ plans=r.j.plans||[];
+ sel.innerHTML=plans.map((p,i)=>`<option value="${i}">${esc(p.name)} — ${money(p.price)}</option>`).join('');
+ upd();
+}
+function upd(){
+ if(tab==='airtime'){const a=Number($('aAmt').value);$('total').textContent=a?'You pay: '+money(airPrice(a)):'';return;}
+ const p=plans[Number((tab==='data'?$('dPlan'):$('cPlan')).value)];$('total').textContent=p?'You pay: '+money(p.price):'';
+}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');tab=t.dataset.t;
+ $('fAirtime').style.display=tab==='airtime'?'':'none';$('fData').style.display=tab==='data'?'':'none';$('fTv').style.display=tab==='tv'?'':'none';
+ $('msg').className='msg';loadServices();});
+$('svc').onchange=loadPlans;$('dPlan').onchange=upd;$('cPlan').onchange=upd;$('aAmt').oninput=upd;
+$('quick').innerHTML=[100,200,500,1000,2000].map(n=>`<span class="chip" data-n="${n}">${money(n)}</span>`).join('');
+$('quick').onclick=e=>{const n=e.target.dataset.n;if(n){$('aAmt').value=n;upd();}};
+let vt;$('cCard').oninput=()=>{clearTimeout(vt);$('cName').textContent='';const v=$('cCard').value.trim();
+ if(v.length<6)return;vt=setTimeout(async()=>{const r=await api('/api/vtu/verify-cable',{service_id:$('svc').value,smartcard_number:v});
+  $('cName').textContent=r.ok&&r.j.name?'✔ '+r.j.name:(r.ok?'':(r.j.error||''));},600);};
+$('go').onclick=async()=>{
+ const b=$('go');let url,body,title,rows,total;
+ if(tab==='airtime'){url='/api/vtu/airtime';body={service_id:$('svc').value,phone:$('aPhone').value.trim(),amount:Number($('aAmt').value)};
+  if(!/^0\d{10}$/.test(body.phone))return show('err','Enter a valid 11-digit phone number.');
+  if(!(body.amount>=50))return show('err','Enter an amount of at least ₦50.');
+  title='Confirm airtime';total=airPrice(body.amount);rows=[['Service','Airtime'],['Network',svcName()],['Phone number',body.phone],['Amount',money(body.amount)]];}
+ else if(tab==='data'){const p=plans[Number($('dPlan').value)];if(!p)return show('err','Choose a plan');url='/api/vtu/data';body={service_id:p.service_id||$('svc').value,network_service_id:$('svc').value,phone:$('dPhone').value.trim(),plan_code:p.code};
+  if(!/^0\d{10}$/.test(body.phone))return show('err','Enter a valid 11-digit phone number.');
+  title='Confirm data bundle';total=p.price;rows=[['Service','Data'],['Network',svcName()],['Plan',p.name],['Phone number',body.phone]];}
+ else{const p=plans[Number($('cPlan').value)];if(!p)return show('err','Choose a package');url='/api/vtu/cable';body={service_id:$('svc').value,smartcard_number:$('cCard').value.trim(),plan_code:p.code};
+  if(!/^\d{6,20}$/.test(body.smartcard_number))return show('err','Enter a valid smartcard number.');
+  title='Confirm cable TV';total=p.price;rows=[['Service','Cable TV'],['Provider',svcName()],['Package',p.name],['Smartcard',body.smartcard_number]];
+  if($('cName').textContent.indexOf('✔')===0)rows.push(['Name',$('cName').textContent.replace('✔','').trim()]);}
+ if(!(await askConfirm(title,rows,total)))return;
+ b.disabled=true;show('','');$('msg').className='msg';
+ const r=await api(url,body);b.disabled=false;
+ if(r.ok)show('ok',r.j.message||'Successful');else show('err',r.j.error||'Failed');
+ loadOrders();
+};
+async function loadOrders(){const r=await api('/api/vtu/orders');const rows=r.ok?r.j:[];
+ $('orders').innerHTML=rows.length?rows.map(o=>`<div class="ord"><span>${esc(o.label)}<br><small class="muted">${new Date(o.createdAt).toLocaleString()}</small></span><span style="text-align:right">${money(o.amount)}<br><small class="muted">${esc(o.status)}</small></span></div>`).join(''):'No orders yet.';}
+loadServices();loadOrders();
+</script><script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/app-shell.js?v=3" defer></script>
+<script src="/js/section-tabs.js?v=1" defer></script>
+<script src="/js/page-transitions.js?v=1" defer></script>
+<script src="/js/loader-failsafe.js?v=1" defer></script>
+<script src="/js/marvel-smooth.js?v=1" defer></script>
+<script src="/js/marvel-pro.js?v=1" defer></script>
+</body></html>

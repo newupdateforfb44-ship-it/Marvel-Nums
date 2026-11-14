@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="/js/mvn-fast.js?v=1"></script>
+<script src="/js/ks-helpers.js?v=1"></script>
+<script src="/js/marvel-loader.js?v=1"></script>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/theme.css">
+<script src="/js/marvel-ui.js?v=1"></script><link rel="stylesheet" href="/brand.css">
+<link rel="stylesheet" href="/css/marvel-select-sheet.css?v=1">
+<link rel="stylesheet" href="/css/page-transitions.css?v=1">
+<link rel="stylesheet" href="/css/responsive-device-fit.css?v=1">
+<link rel="stylesheet" href="/css/mvn-header-clean.css?v=20261022b">
+<script src="/js/mvn-menu-guard.js?v=20261022b" defer></script>
+<link rel="stylesheet" href="/css/mvn-ui-fixes.css?v=20261022c">
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+
+  <link rel="icon" type="image/png" href="/favicon.png"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Temp Email | Marvel Nums</title><style>body{padding:18px}.wrap{max-width:900px;margin:22px auto}.panel{background:var(--card,#15151d);border:1px solid var(--border2,#333);border-radius:16px;padding:18px;margin:14px 0}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}label{display:block;font-weight:700;margin:8px 0}select,input,button{font:inherit;width:100%;padding:12px;border-radius:10px;border:1px solid var(--border2,#444);background:var(--card2,#20202a);color:inherit}button{cursor:pointer;background:var(--gold,#16a34a);border:0;font-weight:800}.muted{opacity:.72;font-size:13px}.order{border-top:1px solid var(--border2,#333);padding:12px 0;overflow-wrap:anywhere}.status{font-weight:800}.code{font-size:22px;letter-spacing:2px;font-weight:900}.danger{background:#8b2525}.msg{padding:10px;border-radius:9px;margin:10px 0;background:var(--card2,#222)}a{color:var(--gold,#16a34a)}.order.active-order{border:1px solid var(--border2,#3a3a48);border-radius:17px;padding:16px;margin:12px 0;background:linear-gradient(145deg,rgba(22,163,74,.08),var(--card,#15151d));box-shadow:0 12px 30px #0002}.order-light{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:900;letter-spacing:.08em;margin-bottom:10px;color:#ff4757}.led{width:10px;height:10px;border-radius:50%;background:#ff4757;box-shadow:0 0 0 0 #ff475766;animation:otpPulse 1.2s infinite}.order-light.received{color:#16a34a}.order-light.received .led{background:#16a34a;box-shadow:0 0 14px #16a34a;animation:none}.order-phone{font-size:clamp(22px,5vw,30px);font-weight:900;overflow-wrap:anywhere;margin:8px 0}.order-timer{font-size:28px;font-weight:900;color:#ff4757;font-variant-numeric:tabular-nums}.order-timer.received{color:#16a34a}.order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.order-actions button{width:auto;flex:1;min-width:120px;padding:10px}.order-actions .danger{background:#8b2525;color:white}@keyframes otpPulse{70%{box-shadow:0 0 0 10px #ff475700}100%{box-shadow:0 0 0 0 #ff475700}}</style><link rel="stylesheet" href="/css/marvel-select-sheet.css?v=1">  <link rel="stylesheet" href="/css/page-transitions.css?v=1">
+
+<link rel="stylesheet" href="/css/responsive-device-fit.css?v=1">
+<style id="bn-redesign">
+/* Buy Number 2 & 3 — same black & green design as Buy Number 1. Layout order is unchanged. */
+html,body{background:#000!important}
+body{color:#eafff1!important}
+.wrap{max-width:640px!important;margin:0 auto!important;padding:6px 0 44px!important}
+.wrap>a:first-child{display:inline-block;padding:8px 14px;border:1px solid rgba(34,197,94,.35);border-radius:999px;color:#4ade80!important;background:rgba(34,197,94,.08);font-weight:800;font-size:13px;text-decoration:none}
+.wrap h1{color:#eafff1;font-size:26px;font-weight:900;margin:16px 0 6px}
+.wrap h2{color:#eafff1;font-size:17px;font-weight:800;margin-top:0}
+.muted{color:#86a894!important;opacity:1!important}
+.panel{background:linear-gradient(180deg,#0e1511,#070a08)!important;border:1px solid rgba(34,197,94,.24)!important;border-radius:20px!important;padding:18px!important;margin:0 0 14px!important;box-shadow:0 12px 32px rgba(0,0,0,.55)}
+label{display:block;color:#22c55e!important;font-size:11.5px!important;letter-spacing:.09em;text-transform:uppercase;font-weight:900!important;margin:16px 0 6px!important}
+select,input{background:#0a0f0c!important;border:1px solid rgba(34,197,94,.3)!important;border-radius:14px!important;color:#eafff1!important;padding:14px!important}
+select:focus,input:focus{border-color:#22c55e!important;outline:none;box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+button{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#03140a!important;font-weight:900!important;border:0!important;border-radius:14px!important;padding:14px 16px;box-shadow:0 8px 22px rgba(34,197,94,.22)}
+button[disabled]{opacity:.4;box-shadow:none}
+button.danger,.danger{background:#5c1a22!important;color:#fff!important;border:1px solid rgba(255,98,108,.4)!important;box-shadow:none!important}
+.notice,.msg{background:rgba(34,197,94,.08)!important;border:1px solid rgba(34,197,94,.25)!important;border-radius:12px!important;color:#cfe9da!important}
+.price{color:#4ade80!important;font-weight:900}
+.open-link{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#03140a!important;border-radius:12px!important;font-weight:900!important}
+.active-card,.order.active-order{background:linear-gradient(145deg,#0d3a20,#070a08 65%)!important;border:1px solid rgba(34,197,94,.45)!important;border-radius:20px!important;box-shadow:0 14px 36px rgba(0,0,0,.6)!important}
+.order{border-top:1px solid rgba(34,197,94,.15)!important}
+.code{color:#4ade80}
+.panel a:not(.open-link){color:#4ade80}
+@media(max-width:480px){body{padding:12px!important}.panel{padding:15px!important}}
+
+.sub-label{color:#22c55e;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:900;margin:16px 0 8px}
+.guide-list{margin:0;padding-left:20px;font-size:13.5px;line-height:1.75;color:#cfe9da}
+.guide-list li::marker{color:#22c55e}
+.how-sum{cursor:pointer;color:#4ade80;font-weight:900;font-size:14px;list-style:none;display:flex;align-items:center;justify-content:space-between}
+.how-sum::-webkit-details-marker{display:none}
+.how-sum::after{content:'+';font-size:20px;line-height:1;color:#22c55e}
+details[open]>.how-sum::after{content:'–'}
+</style>
+<style id="svc-extra">
+.tabs{display:flex;gap:8px;margin:0 0 14px}.tabs button{flex:1;background:#0a0f0c!important;color:#86a894!important;border:1px solid rgba(34,197,94,.3)!important;box-shadow:none!important;padding:12px}.tabs button.on{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#03140a!important}
+.hide{display:none!important}.mini{width:auto!important;padding:9px 14px!important;flex:1;min-width:110px}
+.codebox{margin-top:12px;padding:12px;border:1px solid #16a34a;background:#16a34a12;border-radius:12px}
+.msgs{margin-top:10px}.msgs div{padding:8px 10px;margin:6px 0;border-radius:10px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);overflow-wrap:anywhere}
+</style><link rel="stylesheet" href="/css/marvel-theme.css?v=3"/>
+<link rel="stylesheet" href="/css/marvel-final.css?v=1">
+<link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
+</head><body><main class="wrap"><a href="/buy-number">← All number services</a><h1>Temp Email</h1><p class="muted">Get a temporary email, use it on a website, and receive the verification code here. Paid from your NGN wallet.</p>
+<div class="panel">
+<label for="type">Step 1 — Email type</label><select id="type"><option value="1">Server 1 — Gmail (pick the service)</option><option value="2">Server 2 — Outlook &amp; more (pick the website)</option></select>
+<div id="t1"><label for="d1">Step 2 — Mail domain</label><select id="d1"></select><label for="svc1">Step 3 — Service</label><select id="svc1" disabled><option value="">Loading…</option></select></div>
+<div id="t2" class="hide"><label for="site">Step 2 — Website that will send the code</label><select id="site"></select><input id="siteOther" class="hide" placeholder="example.com" maxlength="60" style="margin-top:8px"><label for="svc2">Step 3 — Mail domain</label><select id="svc2" disabled><option value="">Loading…</option></select></div>
+<div id="price" class="muted" style="margin:12px 0"></div><button id="buy" disabled>Buy Email</button><div id="notice" role="status" class="msg" style="display:none"></div></div>
+<div class="panel"><h2>My Emails</h2><p class="muted">Your code appears here automatically — no refresh needed.</p><div id="orders">Loading…</div></div>
+<div class="panel"><h2>How It Works &amp; Refund Rules</h2><ul class="guide-list"><li>Your wallet is charged when you buy, and the email address is reserved for you</li><li>Use the address on the website, then wait here for the code (checked every few seconds)</li><li>No code yet? Tap <b>Cancel &amp; Refund</b> — you are refunded right away</li><li>If no code arrives and the email expires, you are refunded automatically</li><li>Once a code has been delivered, the email can no longer be cancelled or refunded</li></ul></div></main>
+<script>
+const token=()=>localStorage.getItem('mvn_token')||localStorage.getItem('token')||'';
+const $=id=>document.getElementById(id);
+function money(n){return '₦'+Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function api(url,opts={}){const r=await fetch(url,{...opts,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token(),...(opts.headers||{})}});let d={};try{d=await r.json()}catch{}if(r.status===401){location.href='/login?next='+encodeURIComponent(location.pathname);throw Error('Please log in again.')}if(!r.ok)throw Error(d.error||'Request failed.');return d}
+function notice(t){$('notice').style.display='block';$('notice').textContent=t}
+function copyLiteral(t){navigator.clipboard?.writeText(String(t||'')).then(()=>notice('Copied to clipboard.')).catch(()=>notice('Could not copy automatically.'))}
+function copyValue(id){copyLiteral($(id)?.textContent||'')}
+let opt={domains1:[],sites:[]},items=[],orders=[],timer=null;
+const type=()=>$('type').value;
+function setType(){const t=type();$('t1').classList.toggle('hide',t!=='1');$('t2').classList.toggle('hide',t!=='2');items=[];$('buy').disabled=true;updatePrice();t==='1'?loadItems1():loadItems2()}
+function fillItems(sel,list,empty){kset(sel,list.length?'<option value="">Choose…</option>'+list.map(i=>`<option value="${esc(i.id)}" ${i.count>0?'':'disabled'}>${esc(i.name)} — ${money(i.price)}${i.count>0?' · '+i.count+' in stock':' · out of stock'}</option>`).join(''):`<option value="">${empty}</option>`);sel.disabled=!list.length}
+let optReady=false;async function loadOptions(){await kswr('/api/temp-email/options',api,d=>{opt=d;kset($('d1'),opt.domains1.map(d=>`<option>${esc(d)}</option>`).join(''));kset($('site'),opt.sites.map(d=>`<option>${esc(d)}</option>`).join('')+'<option value="__other">Other website…</option>');if(!optReady){optReady=true;setType()}},e=>notice(e.message))}
+async function loadItems1(){const d=$('d1').value;$('svc1').disabled=true;const u='/api/temp-email/services?server=1&domain='+encodeURIComponent(d);if(!kpeek(u))$('svc1').innerHTML='<option value="">Loading…</option>';await kswr(u,api,l=>{if($('d1').value!==d)return;items=l;fillItems($('svc1'),items,'Nothing available');updatePrice()},e=>{$('svc1').innerHTML='<option value="">Could not load</option>';notice(e.message)});updatePrice()}
+function siteVal(){return $('site').value==='__other'?$('siteOther').value.trim().toLowerCase():$('site').value}
+async function loadItems2(){const s=siteVal();$('svc2').disabled=true;if(!/^[a-z0-9]([a-z0-9.-]{1,58})[a-z0-9]$/.test(s)){$('svc2').innerHTML='<option value="">Enter the website first</option>';items=[];updatePrice();return}const u='/api/temp-email/services?server=2&site='+encodeURIComponent(s);if(!kpeek(u))$('svc2').innerHTML='<option value="">Loading…</option>';await kswr(u,api,l=>{if(siteVal()!==s)return;items=l;fillItems($('svc2'),items,'Nothing available');updatePrice()},e=>{$('svc2').innerHTML='<option value="">Could not load</option>';notice(e.message)});updatePrice()}
+function cur(){const sel=type()==='1'?$('svc1'):$('svc2');return items.find(x=>x.id===sel.value)}
+function updatePrice(){const i=cur();$('price').textContent=i?'Price: '+money(i.price)+' (NGN).':'Choose an option to see its price.';$('buy').disabled=!i||!(i.count>0)}
+$('type').addEventListener('change',setType);$('d1').addEventListener('change',loadItems1);$('svc1').addEventListener('change',updatePrice);$('svc2').addEventListener('change',updatePrice);
+$('site').addEventListener('change',()=>{$('siteOther').classList.toggle('hide',$('site').value!=='__other');loadItems2()});$('siteOther').addEventListener('change',loadItems2);
+$('buy').addEventListener('click',async()=>{const i=cur();if(!i)return;const btn=$('buy');if(!(await MarvelUI.confirm('Buy this email for '+money(i.price)+'?\nThe amount will be taken from your wallet.',{title:'Confirm purchase',okText:'Buy'})))return;btn.disabled=true;btn.textContent='Purchasing…';MarvelUI.loading(true,'Getting your email…');
+try{const t=type();const body=t==='1'?{server:1,serviceId:i.id,domain:$('d1').value}:{server:2,domain:i.id,site:siteVal()};body.clientRef=crypto.randomUUID();const d=await api('/api/temp-email/buy',{method:'POST',body:JSON.stringify(body)});notice(d.pending?d.message:'Email ready. Use it now — your code will appear below.');MarvelUI.banner(d.pending?d.message:'Email purchased successfully.',d.pending?'info':'success');await loadOrders();const id=d.order?.id;if(id)setTimeout(()=>document.getElementById('order-'+id)?.scrollIntoView({behavior:'smooth',block:'center'}),150)}
+catch(e){notice(e.message);MarvelUI.banner(e.message,'err')}finally{MarvelUI.loading(false);btn.textContent='Buy Email';updatePrice()}});
+const isOpen=o=>['active','pending'].includes(o.status)&&!o.code;
+function renderOrders(){if(!orders.length){$('orders').innerHTML='<p class="muted">No emails yet.</p>';return}
+$('orders').innerHTML=orders.map(o=>{const got=!!o.code||o.status==='received';const closed=got||['cancelled','refunded','failed'].includes(o.status);
+return `<div class="order active-order" id="order-${esc(o.id)}"><div class="order-light ${closed?'received':''}"><span class="led"></span><span>${got?'CODE RECEIVED':closed?esc(o.status).toUpperCase():'WAITING FOR CODE'}</span></div><div><b>${esc(o.service)}${o.site?' · '+esc(o.site):''}</b></div><div class="order-phone" id="em-${esc(o.id)}">${esc(o.email||'Preparing…')}</div><div>Price: <b>${money(o.price)}</b> · Status: <span class="status">${esc(o.status)}</span></div>
+${got?`<div class="codebox"><div class="muted">Your verification code</div><div class="code" id="cd-${esc(o.id)}">${esc(o.code)}</div><button type="button" class="mini" onclick="copyValue('cd-${esc(o.id)}')">Copy code</button></div>`:''}
+<div class="order-actions"><button type="button" onclick="copyValue('em-${esc(o.id)}')" ${o.email?'':'disabled'}>Copy email</button>${closed?'':`<button type="button" onclick="checkOne('${esc(o.id)}')">Check code</button>`}${!closed&&o.canCancel?`<button class="danger" type="button" onclick="cancelOne('${esc(o.id)}')">Cancel &amp; Refund</button>`:''}</div><div class="muted" style="margin-top:10px">${new Date(o.createdAt).toLocaleString('en-NG')}</div></div>`}).join('')}
+async function loadOrders(){try{orders=await api('/api/temp-email/orders');renderOrders();if(timer)clearInterval(timer);if(orders.some(isOpen))timer=setInterval(()=>orders.filter(isOpen).forEach(o=>checkOne(o.id,true)),4000)}catch(e){$('orders').textContent=e.message}}
+async function checkOne(id,silent){try{const d=await api('/api/temp-email/code/'+encodeURIComponent(id));const i=orders.findIndex(o=>o.id===id);if(i>=0){const was=orders[i];orders[i]=d.order;if(JSON.stringify(was)!==JSON.stringify(d.order)){renderOrders();if(d.order.code&&!was.code)MarvelUI.banner('Your code has arrived!','success');if(d.order.status==='cancelled'&&was.status!=='cancelled')MarvelUI.banner('Email expired — you were refunded.','info')}}}catch(e){if(!silent)notice(e.message)}}
+async function cancelOne(id){if(!(await MarvelUI.confirm('Cancel this email and get a refund?',{title:'Cancel & refund',okText:'Cancel email'})))return;try{const d=await api('/api/temp-email/cancel/'+encodeURIComponent(id),{method:'POST',body:'{}'});const i=orders.findIndex(o=>o.id===id);if(i>=0)orders[i]=d.order;renderOrders();notice('Cancelled — your refund was added to your wallet.')}catch(e){notice(e.message)}}
+if(!token())location.href='/login?next=/temp-email';else{loadOptions();loadOrders()}
+</script>
+<script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/app-shell.js?v=3" defer></script>
+<script src="/js/section-tabs.js?v=1" defer></script>
+<script src="/js/page-transitions.js?v=1" defer></script>
+<script src="/js/loader-failsafe.js?v=1" defer></script>
+<script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/app-shell.js?v=3" defer></script>
+<script src="/js/section-tabs.js?v=1" defer></script>
+<script src="/js/page-transitions.js?v=1" defer></script>
+<script src="/js/loader-failsafe.js?v=1" defer></script>
+<script src="/js/marvel-smooth.js?v=1" defer></script>
+<script src="/js/marvel-pro.js?v=1" defer></script>
+</body></html>

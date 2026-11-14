@@ -26,17 +26,7 @@ let mktSearch = '';
 let mktSort = 'default';
 
 async function initMarketplacePage() {
-  // Check market status before attempting to load or render anything
-  try {
-    const s = await req('/api/market/status', 'GET', null, false);
-    if (s && s.market1Enabled === false) {
-      if (typeof showMarket1Maintenance === 'function') {
-        showMarket1Maintenance(s.maintenanceMessage);
-      }
-      return;
-    }
-  } catch (e) {}
-
+  // loadMarket() checks market status itself (in parallel with the listings).
   const wanted = wantedCategoryFromUrl();
   const ok = await loadMarket('all');
   if (!ok) return; // If disabled / maintenance or failed, stop here so maintenance screen is preserved

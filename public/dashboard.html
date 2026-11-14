@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="/js/mvn-fast.js?v=1"></script>
 <script src="/js/marvel-loader.js?v=1"></script>
 <script src="/js/auth-keeper.js?v=1"></script>
   <meta charset="UTF-8"/>
@@ -201,7 +202,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#ffffff"/>
-<link rel="stylesheet" href="/css/marvel-final.css?v=1"></head>
+<link rel="stylesheet" href="/css/marvel-final.css?v=1"><link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
+</head>
 <body>
 <!-- SVG SPRITES -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -263,6 +265,7 @@
         <div class="dropdown-divider"></div>
         <a class="dd-item" href="/deposit"><span><svg class="icon i-credit-card" aria-hidden="true"><use href="#i-credit-card"/></svg></span> Deposit Funds</a>
         <a class="dd-item" href="/referrals"><span><svg class="icon i-link" aria-hidden="true"><use href="#i-link"/></svg></span> Referrals</a>
+        <a class="dd-item" href="/vtu"><span><svg class="icon i-link" aria-hidden="true"><use href="#i-link"/></svg></span> Airtime &amp; Data</a>
         <a class="dd-item" href="/purchases"><span><svg class="icon i-package" aria-hidden="true"><use href="#i-package"/></svg></span> My Purchases</a>
         <a class="dd-item" href="/transactions"><span><svg class="icon i-clipboard" aria-hidden="true"><use href="#i-clipboard"/></svg></span> Transactions</a>
         <a class="dd-item" href="/settings"><span><svg class="icon i-settings" aria-hidden="true"><use href="#i-settings"/></svg></span> Settings</a>
@@ -309,6 +312,7 @@
     <div class="kw-dock">
       <a class="kw-primary" href="/deposit"><span class="kw-plus">+</span><span>Add Money</span></a>
       <a href="/transactions"><svg><use href="#i-history"/></svg><span>History</span></a>
+      <a href="/vtu"><svg><use href="#i-link"/></svg><span>Airtime &amp; Data</span></a>
       <a href="/referrals"><svg><use href="#i-link"/></svg><span>Referrals</span><b id="dshRef">₦0.00</b></a>
     </div>
   </section>
@@ -771,12 +775,17 @@
 (function(){
   var F=[
     ['/buy-number','svc-indigo','<svg><use href="#i-smartphone"/></svg>','Buy Numbers',''],
+    ['/temp-email','svc-sky','<span style="font-size:24px">&#9993;&#65039;</span>','Temp Mail','NEW'],
+    ['/rental','svc-teal','<span style="font-size:24px">&#128197;</span>','Rentals','NEW'],
     ['/boost','svc-violet','<svg><use href="#i-rocket"/></svg>','Boost','NEW'],
     ['/marketplace','svc-emerald','<span style="font-size:24px">&#128717;</span>','Marketplace',''],
     ['/tools','svc-cyan','<svg><use href="#i-wrench"/></svg>','Tools &amp; FMT',''],
     ['/tutorials','svc-orange','<span style="font-size:24px">&#128218;</span>','Tutorials',''],
     ['/purchases','svc-teal','<svg><use href="#i-clipboard"/></svg>','My Orders',''],
     ['/transactions','svc-sky','<svg><use href="#i-history"/></svg>','Transactions',''],
+    ['/vtu','svc-orange','<svg><use href="#i-gift"/></svg>','Airtime &amp; Data','NEW'],
+    ['/websites','svc-indigo','<span style="font-size:24px">&#127760;</span>','Website','NEW'],
+    ['/telegram-tick','svc-sky','<svg viewBox="0 0 24 24" width="26" height="26"><path fill="#229ED9" d="M12 1.5l2.3 1.6 2.8-.2 1.2 2.5 2.5 1.3-.2 2.8L22 12l-1.4 2.1.2 2.8-2.5 1.3-1.2 2.5-2.8-.2L12 22.5l-2.3-1.6-2.8.2-1.2-2.5-2.5-1.3.2-2.8L2 12l1.4-2.1-.2-2.8 2.5-1.3 1.2-2.5 2.8.2z"/><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7.8 12.3l3 3 5.4-6"/></svg>','Telegram Tick','NEW'],
     ['/referrals','svc-orange','<svg><use href="#i-gift"/></svg>','Referrals','']
   ];
   var a=document.querySelector('.dsh-svc-item');
@@ -814,6 +823,87 @@
   },true);
 })();
 </script>
+<!-- LIVE-PURCHASES: real purchases, buyer names masked, refreshes by itself -->
+<style>
+  .lp-card .lp-head{display:flex;align-items:center;gap:8px;padding:14px 16px 10px}
+  .lp-dot{width:9px;height:9px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 0 rgba(22,163,74,.6);animation:lpPulse 1.8s infinite}
+  @keyframes lpPulse{70%{box-shadow:0 0 0 8px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+  .lp-title{font-size:15px;font-weight:800;color:var(--text)}
+  .lp-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:11px 16px;border-top:1px solid var(--border);font-size:13px;line-height:1.45;color:var(--text2)}
+  .lp-row b{color:var(--text);font-weight:700}
+  .lp-main{min-width:0;flex:1;word-break:break-word}
+  .lp-side{text-align:right;flex-shrink:0;display:flex;flex-direction:column;gap:2px}
+  .lp-amt{font-weight:800;color:var(--blue);font-size:12.5px}
+  .lp-time{font-size:11.5px;color:var(--text3)}
+  .lp-new{animation:lpIn .6s ease}
+  @keyframes lpIn{from{opacity:0;transform:translateY(-10px);background:rgba(22,163,74,.14)}to{opacity:1;transform:none;background:transparent}}
+  .lp-empty{padding:14px 16px 16px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text2)}
+</style>
+<script>
+(function(){
+  var token=null;try{token=localStorage.getItem('mvn_token');}catch(e){}
+  if(!token)return;
+  var POLL_MS=12000;
+  var seen={},rows=[];
+
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function ago(iso){
+    var s=Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/1000));
+    if(s<45)return 'just now';
+    var m=Math.floor(s/60);if(m<60)return (m||1)+' min ago';
+    var h=Math.floor(m/60);if(h<24)return h+' hour'+(h>1?'s':'')+' ago';
+    var d=Math.floor(h/24);return d+' day'+(d>1?'s':'')+' ago';
+  }
+
+  // Build the card and place it after the last dashboard card (below the marketplace lists)
+  var card=document.createElement('section');
+  card.className='dsh-card lp-card';
+  card.innerHTML='<div class="lp-head"><span class="lp-dot"></span><span class="lp-title">Live purchases</span></div><div id="lpBody"><div class="lp-empty">Loading&hellip;</div></div>';
+  var cards=document.querySelectorAll('.dsh-card');
+  var last=cards.length?cards[cards.length-1]:null;
+  if(last&&last.parentNode)last.parentNode.insertBefore(card,last.nextSibling);
+  else{var sh=document.querySelector('.dsh-shell')||document.body;sh.appendChild(card);}
+  var body=card.querySelector('#lpBody');
+
+  function rowHtml(r,fresh){
+    return '<div class="lp-row'+(fresh?' lp-new':'')+'" data-id="'+esc(r.id)+'">'+
+      '<div class="lp-main"><b>'+esc(r.name)+'</b> just bought '+esc(r.item)+'</div>'+
+      '<div class="lp-side"><span class="lp-amt">&#8358;'+Number(r.amount).toLocaleString('en-NG')+'</span><span class="lp-time" data-at="'+esc(r.at)+'">'+ago(r.at)+'</span></div></div>';
+  }
+  function render(items,firstLoad){
+    if(!items.length){body.innerHTML='<div class="lp-empty">No purchases yet. Be the first!</div>';return;}
+    var html='';
+    items.slice(0,12).forEach(function(r){
+      var fresh=!firstLoad&&!seen[r.id];
+      html+=rowHtml(r,fresh);
+    });
+    body.innerHTML=html;
+    items.forEach(function(r){seen[r.id]=1;});
+  }
+  var first=true;
+  function load(){
+    if(document.hidden)return;
+    fetch('/api/live-purchases',{headers:{Authorization:'Bearer '+token},cache:'no-store'})
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(d){
+        if(!d||!Array.isArray(d.items))return;
+        // only redraw when something changed (keeps the list calm and avoids flicker)
+        var sig=d.items.map(function(x){return x.id;}).join(',');
+        if(sig!==load.sig){render(d.items,first);load.sig=sig;}
+        first=false;
+      }).catch(function(){ if(first){body.innerHTML='<div class="lp-empty">Could not load live purchases.</div>';} });
+  }
+  load();
+  setInterval(load,POLL_MS);
+  // keep the "x min ago" labels moving between refreshes
+  setInterval(function(){
+    document.querySelectorAll('.lp-time[data-at]').forEach(function(el){el.textContent=ago(el.getAttribute('data-at'));});
+  },30000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)load();});
+})();
+</script>
 <script src="/js/loader-failsafe.js?v=1" defer></script>
+<script src="/js/marvel-smooth.js?v=1" defer></script>
+<script src="/js/marvel-pro.js?v=1" defer></script>
 </body>
 </html>

@@ -1696,12 +1696,14 @@ async function loadMarket(catFilter) {
   grid.innerHTML = skeletons(6);
   if (!marketCategoriesLoaded) loadMarketCategories();
   try {
+    // status + listings are requested together (was one after the other)
+    const logsP = req('/api/logs?type=log','GET',null,true); logsP.catch(() => {});
     const s = await req('/api/market/status', 'GET', null, false).catch(() => null);
     if (s && s.market1Enabled === false) {
       showMarket1Maintenance(s.maintenanceMessage);
       return false;
     }
-    allMarketLogs = await req('/api/logs?type=log','GET',null,true);
+    allMarketLogs = await logsP;
     const filtered = catFilter==='all' ? allMarketLogs : allMarketLogs.filter(l=>l.category===catFilter);
     grid.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '<div class="no-items">No listings in this category</div>';
     return true;
