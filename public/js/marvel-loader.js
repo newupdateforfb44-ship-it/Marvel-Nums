@@ -1,26 +1,22 @@
-/* Marvel Nums: the ONE page loader.
-   Runs from <head>, so it is on screen from the very first paint, stays up (never restarts)
-   until the page is ready, then fades out once. Other scripts can hold it with MVNLoader.show('key'). */
+/* Marvel Nums: page loader (fast version).
+   The page now paints immediately. The branded loader appears ONLY if something is still loading after
+   SHOW_AFTER ms (slow network), and disappears the moment the page is ready. No forced minimum time.
+   Other scripts can still hold it with MVNLoader.show('key') / hide('key'). */
 (function () {
   'use strict';
   if (window.MVNLoader) return;
-  var holds = {}, el = null, t0 = Date.now(), MIN_MS = 350, MAX_MS = 4000, hideTimer = null, forceTimer = null;
+  var holds = {}, el = null, showTimer = null, SHOW_AFTER = 650, MAX_MS = 6000, forceTimer = null;
 
   var css =
     '.dbfl-overlay,#dbfl-overlay,#mvn-page-transition{display:none!important}' +
-    '#mvn-loader{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;' +
-    'background:radial-gradient(ellipse at 50% 36%,rgba(26,109,255,.30),rgba(255,26,69,.07) 46%,#040a24 74%),#040a24;' +
-    'opacity:1;visibility:visible;transition:opacity .28s ease,visibility .28s ease}' +
-    '#mvn-loader.mvn-hide{opacity:0;visibility:hidden;pointer-events:none}' +
-    '#mvn-loader .mvn-logo{position:relative;width:96px;height:96px;border-radius:24px;background:#040a24 url(/img/marvel-icon-192.png) center/cover no-repeat;' +
-    'box-shadow:0 0 44px rgba(26,109,255,.55),0 0 90px rgba(255,26,69,.16)}' +
-    '#mvn-loader .mvn-logo:after{content:"";position:absolute;inset:-11px;border-radius:33px;border:3px solid rgba(26,109,255,.16);' +
-    'border-top-color:#00b4ff;border-right-color:#ff1a45;animation:mvnspin 1s linear infinite}' +
-    '#mvn-loader .mvn-name{font:800 14px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#eaf3ff}' +
+    '#mvn-loader{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;' +
+    'background:radial-gradient(ellipse at 50% 36%,rgba(26,109,255,.30),#040a24 72%),#040a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,visibility .16s ease}' +
+    '#mvn-loader.mvn-on{opacity:1;visibility:visible;pointer-events:auto}' +
+    '#mvn-loader .mvn-logo{position:relative;width:84px;height:84px;border-radius:22px;background:#040a24 url(/img/marvel-icon-192.png) center/cover no-repeat;box-shadow:0 0 40px rgba(26,109,255,.5)}' +
+    '#mvn-loader .mvn-logo:after{content:"";position:absolute;inset:-10px;border-radius:30px;border:3px solid rgba(26,109,255,.16);border-top-color:#00b4ff;border-right-color:#ff1a45;animation:mvnspin 1s linear infinite}' +
+    '#mvn-loader .mvn-name{font:800 13px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#eaf3ff}' +
     '#mvn-loader .mvn-name b{color:#ff1a45;font-weight:800}' +
-    '#mvn-loader .mvn-sub{font:600 11px/1 system-ui,-apple-system,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6f8fd8;margin-top:-8px}' +
-    '@keyframes mvnspin{to{transform:rotate(360deg)}}' +
-    '@media (prefers-reduced-motion:reduce){#mvn-loader .mvn-logo:after{animation-duration:2.4s}}';
+    '@keyframes mvnspin{to{transform:rotate(360deg)}}';
 
   function build() {
     if (el) return el;
@@ -28,52 +24,27 @@
     (document.head || document.documentElement).appendChild(st);
     el = document.createElement('div');
     el.id = 'mvn-loader'; el.setAttribute('role', 'status'); el.setAttribute('aria-label', 'Loading');
-    el.innerHTML = '<div class="mvn-logo"></div><div class="mvn-name">Marvel <b>Nums</b></div><div class="mvn-sub">Your digital growth hub</div>';
+    el.innerHTML = '<div class="mvn-logo"></div><div class="mvn-name">Marvel <b>Nums</b></div>';
     document.documentElement.appendChild(el);
     return el;
   }
   function count() { var n = 0; for (var k in holds) if (holds[k]) n++; return n; }
-  function display() {
-    var e = build(); clearTimeout(hideTimer);
-    e.classList.remove('mvn-hide');
-    clearTimeout(forceTimer);
-    forceTimer = setTimeout(function () { holds = {}; fade(); }, MAX_MS);   // never trap the visitor
-  }
-  function fade() {
-    var e = build();
-    var wait = Math.max(0, MIN_MS - (Date.now() - t0));
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(function () { if (count() === 0) e.classList.add('mvn-hide'); }, wait);
-  }
-  function show(key) { holds[key || 'x'] = 1; display(); }
-  function hide(key) { delete holds[key || 'x']; if (count() === 0) fade(); }
-  function reset() { holds = {}; fade(); }
+  function on() { var e = build(); e.classList.add('mvn-on'); clearTimeout(forceTimer); forceTimer = setTimeout(reset, MAX_MS); }
+  function off() { clearTimeout(showTimer); showTimer = null; clearTimeout(forceTimer); if (el) el.classList.remove('mvn-on'); }
+  function arm() { if (showTimer || (el && el.classList.contains('mvn-on'))) return; showTimer = setTimeout(function () { showTimer = null; if (count() > 0) on(); }, SHOW_AFTER); }
+  function show(key) { holds[key || 'x'] = 1; arm(); }
+  function hide(key) { delete holds[key || 'x']; if (count() === 0) off(); }
+  function reset() { holds = {}; off(); }
 
-  holds.page = 1; display();                                       // up immediately for every new page
-  var domReady = function () { setTimeout(function () { hide('page'); }, 700); };   // slow images can't hold it
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', domReady); else domReady();
-  if (document.readyState === 'complete') hide('page'); else window.addEventListener('load', function () { hide('page'); });
-  window.addEventListener('pageshow', function () { reset(); });
-  window.addEventListener('pagehide', function () { setTimeout(reset, 1500); });
+  /* page itself: only a hold until the document is interactive */
+  holds.page = 1; arm();
+  function ready() { hide('page'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
+  window.addEventListener('load', ready);
+  window.addEventListener('pageshow', reset);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) reset(); });
-  window.addEventListener('error', function () { setTimeout(reset, 1200); });
-  window.addEventListener('unhandledrejection', function () { setTimeout(reset, 1200); });
-  setTimeout(reset, MAX_MS + 500);   // absolute last resort
-
-  // Leaving the page: keep the same loader up so there is no second, different animation.
-  function leaving() { show('nav'); setTimeout(function () { hide('nav'); }, 2500); }
-  window.addEventListener('beforeunload', leaving);
-  document.addEventListener('click', function (ev) {
-    var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
-    if (!a || ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
-    if ((a.target && a.target.toLowerCase() === '_blank') || a.hasAttribute('download')) return;
-    var h = a.getAttribute('href');
-    if (!h || h.charAt(0) === '#' || /^(mailto:|tel:|sms:|javascript:|blob:|data:)/i.test(h)) return;
-    try {
-      var u = new URL(a.href, location.href);
-      if (u.origin === location.origin && (u.pathname !== location.pathname || u.search !== location.search)) leaving();
-    } catch (e) {}
-  }, true);
+  window.addEventListener('error', function () { setTimeout(reset, 800); });
+  window.addEventListener('unhandledrejection', function () { setTimeout(reset, 800); });
 
   window.MVNLoader = { show: show, hide: hide, reset: reset };
 })();

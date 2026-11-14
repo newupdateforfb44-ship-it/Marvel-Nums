@@ -87,9 +87,10 @@
       '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnMarketplaceSub">🛍️ <span>Marketplace</span><span class="mvn-chevron">⌄</span></button>' +
       '<div class="mvn-submenu" id="mvnMarketplaceSub"><a class="mvn-sub-link" href="/marketplace">Marketplace 1</a><a class="mvn-sub-link" href="/marketplace2">Marketplace 2</a><a class="mvn-sub-link" href="/marketplace3">Marketplace 3</a><a class="mvn-sub-link" href="/marketplace4">Marketplace 4</a></div>' +
       '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnNumbersSub">📱 <span>Buy Number</span><span class="mvn-chevron">⌄</span></button>' +
-      '<div class="mvn-submenu" id="mvnNumbersSub"><a class="mvn-sub-link" href="/buy-number-1">Buy Number 1</a><a class="mvn-sub-link" href="/buy-number-2">Buy Number 2</a><a class="mvn-sub-link" href="/buy-number-3">Buy Number 3</a></div>' +
+      '<div class="mvn-submenu" id="mvnNumbersSub"><a class="mvn-sub-link" href="/buy-number-1">Buy Number 1</a><a class="mvn-sub-link" href="/buy-number-2">Buy Number 2</a><a class="mvn-sub-link" href="/buy-number-3">Buy Number 3</a><a class="mvn-sub-link" href="/temp-email">Temp Email</a><a class="mvn-sub-link" href="/rental">Rentals</a></div>' +
       '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnBoostSub">🚀 <span>Boost</span><span class="mvn-chevron">⌄</span></button>' +
       '<div class="mvn-submenu" id="mvnBoostSub"><a class="mvn-sub-link" href="/boost1">Boost 1</a><a class="mvn-sub-link" href="/boost2">Boost 2</a></div>' +
+      '<div class="mvn-drawer-label">Services</div><a class="mvn-drawer-link" href="/vtu">📲 <span>Airtime & Data</span></a><a class="mvn-drawer-link" href="/websites">🌐 <span>Websites</span></a><a class="mvn-drawer-link" href="/telegram-tick">✅ <span>Telegram Tick</span></a>' +
       '<div class="mvn-drawer-label">Learn</div><a class="mvn-drawer-link" href="/tutorials">📚 <span>Tutorials</span></a>' +
       '<div class="mvn-drawer-label">Account</div><a class="mvn-drawer-link" href="/purchases">📦 <span>My Orders</span></a><a class="mvn-drawer-link" href="/deposit">💰 <span>Wallet / Add Money</span></a>' +
       '<a class="mvn-drawer-link" href="/transactions">📊 <span>Transactions</span></a><a class="mvn-drawer-link" href="/referrals">🎁 <span>Referrals & Cashback</span></a>' +
@@ -112,8 +113,8 @@
     { href: '/dashboard', label: 'Home', icon: 'i-home', match: ['/', '/index.html', '/dashboard'] },
     { href: '/marketplace', label: 'Logs', icon: 'i-grid', match: ['/marketplace', '/purchases'] },
     { href: '/boost', label: 'Boost', icon: 'i-zap', match: ['/boost', '/boost-services', '/boost-history'] },
-    { href: '/buy-number', label: 'Numbers', icon: 'i-smartphone', match: ['/buy-number', '/number-history', '/order-status'] },
-    { href: '/settings', label: 'Me', icon: 'i-user', match: ['/settings', '/transactions', '/wallet', '/referrals', '/notifications'] }
+    { href: '/buy-number', label: 'Numbers', icon: 'i-smartphone', match: ['/buy-number', '/temp-email', '/rental', '/number-history', '/order-status'] },
+    { href: '/settings', label: 'Me', icon: 'i-user', match: ['/settings', '/transactions', '/wallet', '/referrals', '/vtu', '/websites', '/telegram-tick', '/notifications'] }
   ];
   function currentPath() {
     var p = location.pathname.replace(/\.html$/, '');
@@ -264,6 +265,7 @@
           '<a href="/marketplace"><span class="hm-g-ico">' + ico('i-cart') + '</span>Logs</a>' +
           '<a href="/buy-number"><span class="hm-g-ico">' + ico('i-smartphone') + '</span>Numbers</a>' +
           '<a href="/boost"><span class="hm-g-ico">' + ico('i-zap') + '</span>Boost</a>' +
+          '<a href="/vtu"><span class="hm-g-ico">' + ico('i-link') + '</span>Airtime &amp; Data</a>' +
           '<a href="/tools"><span class="hm-g-ico">' + ico('i-wrench') + '</span>Tools &amp; FMT</a>' +
           '<a href="/games"><span class="hm-g-ico">' + ico('i-gamepad') + '</span>Games</a>' +
           '<a href="/giveaways"><span class="hm-g-ico">' + ico('i-gift') + '</span>Giveaways</a>' +
