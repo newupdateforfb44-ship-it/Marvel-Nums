@@ -1,0 +1,98 @@
+/* ═══ MARVEL NUMS — SMOOTH MOTION LAYER ═══════════════════════════════════
+   One file that makes the whole site feel fluid: page entry, drawer, burger,
+   buttons, cards, banners, back bar, sheets. Loaded last on every page.
+   Everything respects "reduce motion" at the bottom.                       */
+:root{--mv-ease:cubic-bezier(.22,1,.36,1);--mv-ease-io:cubic-bezier(.65,0,.35,1);--mv-fast:.18s;--mv-med:.32s;--mv-slow:.5s}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* page enter / leave */
+@keyframes mvIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
+/* pages paint instantly: no entry animation, no leave fade */
+
+/* scroll reveal + staggered cards (class added by marvel-smooth.js) */
+.mv-reveal,.mv-reveal.mv-in{opacity:1;transform:none}
+
+/* cards & tiles */
+.card,.panel,.choice,.dsh-card,.dsh-svc-item,.tool-card,.prod-card,.product-card,.market-card,.service-card,.order-card,.mkt-card,.stat-card,.wal-card,.lp-row,
+.dsh-svc-icon{transition:transform var(--mv-med) var(--mv-ease),box-shadow var(--mv-med) var(--mv-ease),border-color var(--mv-med) ease,background-color var(--mv-med) ease,opacity var(--mv-med) ease}
+@media (hover:hover){
+  .choice:hover,.dsh-svc-item:hover,.tool-card:hover,.prod-card:hover,.product-card:hover,.market-card:hover,.service-card:hover,.mkt-card:hover{transform:translate3d(0,-4px,0);box-shadow:0 14px 34px -14px rgba(26,109,255,.55)}
+  .dsh-svc-item:hover .dsh-svc-icon{transform:scale(1.1) rotate(-3deg)}
+}
+.choice:active,.dsh-svc-item:active,.tool-card:active,.prod-card:active,.product-card:active,.market-card:active,.service-card:active,.mkt-card:active{transform:scale(.965);transition-duration:.08s}
+.dsh-svc-badge{animation:mvPulse 2.2s ease-in-out infinite}
+@keyframes mvPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* buttons, links, inputs */
+button,.btn,a.btn,[role=button],.chip,.tab{transition:transform var(--mv-fast) var(--mv-ease),box-shadow var(--mv-med) var(--mv-ease),background-color var(--mv-med) ease,border-color var(--mv-med) ease,opacity var(--mv-med) ease,filter var(--mv-med) ease;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+@media (hover:hover){button:not(:disabled):hover,.btn:hover{filter:brightness(1.1);transform:translate3d(0,-1px,0)}}
+button:not(:disabled):active,.btn:active,.chip:active,.tab:active{transform:scale(.96);transition-duration:.07s}
+button:disabled{cursor:not-allowed}
+input,select,textarea{transition:border-color var(--mv-med) ease,box-shadow var(--mv-med) ease,background-color var(--mv-med) ease}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(26,109,255,.28);border-color:#1a6dff}
+:focus-visible{outline:2px solid #19c3ff;outline-offset:2px;border-radius:8px}
+.tab.on,.chip.on{animation:mvPop .28s var(--mv-ease)}
+@keyframes mvPop{from{transform:scale(.92)}to{transform:scale(1)}}
+
+/* tap ripple (span added by JS) */
+.mv-ripple{position:absolute;border-radius:50%;pointer-events:none;background:rgba(255,255,255,.35);transform:scale(0);animation:mvRip .6s ease-out forwards}
+@keyframes mvRip{to{transform:scale(1);opacity:0}}
+
+/* hamburger → X */
+.mvn-burger i{transition:transform .35s var(--mv-ease),opacity .2s ease,width .3s var(--mv-ease)}
+.mvn-menu-trigger[aria-expanded="true"] .mvn-burger i:nth-child(1),.mvn-menu-open .mvn-burger i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.mvn-menu-trigger[aria-expanded="true"] .mvn-burger i:nth-child(2),.mvn-menu-open .mvn-burger i:nth-child(2){opacity:0;transform:scaleX(0)}
+.mvn-menu-trigger[aria-expanded="true"] .mvn-burger i:nth-child(3),.mvn-menu-open .mvn-burger i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* drawer: smooth slide, soft backdrop, staggered links, animated sub-menus */
+.mvn-drawer:not(.open){transition:transform .38s var(--mv-ease-io),visibility 0s linear .38s !important}
+.mvn-drawer.open{transition:transform .46s var(--mv-ease),visibility 0s !important;box-shadow:12px 0 48px rgba(0,0,0,.55)}
+.mvn-menu-backdrop{transition:opacity .35s ease,visibility 0s linear .35s !important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.mvn-menu-backdrop.open{transition:opacity .35s ease,visibility 0s !important}
+@keyframes mvSlideLink{from{opacity:0;transform:translate3d(-18px,0,0)}to{opacity:1;transform:none}}
+.mvn-drawer.open>a,.mvn-drawer.open>button,.mvn-drawer.open>.mvn-drawer-label{animation:mvSlideLink .5s var(--mv-ease) both}
+.mvn-drawer.open>:nth-child(2){animation-delay:.04s}.mvn-drawer.open>:nth-child(3){animation-delay:.08s}.mvn-drawer.open>:nth-child(4){animation-delay:.12s}
+.mvn-drawer.open>:nth-child(5){animation-delay:.16s}.mvn-drawer.open>:nth-child(6){animation-delay:.2s}.mvn-drawer.open>:nth-child(7){animation-delay:.24s}
+.mvn-drawer.open>:nth-child(8){animation-delay:.28s}.mvn-drawer.open>:nth-child(9){animation-delay:.32s}.mvn-drawer.open>:nth-child(n+10){animation-delay:.36s}
+.mvn-drawer-link,.mvn-sub-link,.mvn-menu-toggle{transition:background-color .2s ease,padding-left .25s var(--mv-ease),color .2s ease}
+.mvn-drawer-link:hover,.mvn-sub-link:hover,.mvn-menu-toggle:hover{padding-left:20px}
+.mvn-chevron{display:inline-block;transition:transform .3s var(--mv-ease)}
+.mvn-menu-toggle[aria-expanded="true"] .mvn-chevron{transform:rotate(180deg)}
+@keyframes mvSub{from{opacity:0;transform:translate3d(0,-8px,0)}to{opacity:1;transform:none}}
+.mvn-menu-toggle[aria-expanded="true"]+.mvn-submenu{animation:mvSub .32s var(--mv-ease) both}
+
+/* back bar: glass, matches the navy theme, slides in */
+#mvnBackBar{background:rgba(5,11,34,.82) !important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(90,150,255,.2) !important;animation:mvBar .5s var(--mv-ease) both}
+@keyframes mvBar{from{opacity:0;transform:translate3d(0,-100%,0)}to{opacity:1;transform:none}}
+#mvnBackBar button{color:#7fd0ff !important;border-color:rgba(90,150,255,.45) !important;border-radius:999px !important;background:rgba(26,109,255,.1) !important;box-shadow:none !important}
+@media (hover:hover){#mvnBackBar button:hover{background:rgba(26,109,255,.28) !important;transform:translate3d(-3px,0,0)}}
+
+/* banners / announcements / notices slide down, toasts slide up */
+[class*="banner"],[class*="announce"],[class*="notif-bar"],.nn-box,#mvnNumNotice{animation:mvDown .55s var(--mv-ease) both}
+@keyframes mvDown{from{opacity:0;transform:translate3d(0,-16px,0)}to{opacity:1;transform:none}}
+[class*="toast"]{animation:mvUp .45s var(--mv-ease) both}
+@keyframes mvUp{from{opacity:0;transform:translate3d(0,22px,0) scale(.98)}to{opacity:1;transform:none}}
+
+/* sheets & dialogs (confirm, selectors) */
+.ov.show,.sheet,.modal,.modal-content,.ks-sheet-overlay,[role=dialog]{animation:mvFade .28s ease both}
+.sheet,.modal-content,[role=dialog]{animation:mvSheet .42s var(--mv-ease) both}
+@keyframes mvFade{from{opacity:0}to{opacity:1}}
+@keyframes mvSheet{from{opacity:0;transform:translate3d(0,34px,0) scale(.98)}to{opacity:1;transform:none}}
+
+/* live purchases + order rows: new items glide in */
+.lp-new,.ord{animation:mvDown .6s var(--mv-ease) both}
+
+/* loading skeleton shimmer for "Loading…" blocks */
+.mv-skel{position:relative;overflow:hidden;background:rgba(90,150,255,.08);border-radius:12px;min-height:44px}
+.mv-skel::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 20%,rgba(127,208,255,.16) 50%,transparent 80%);transform:translateX(-100%);animation:mvShim 1.3s infinite}
+@keyframes mvShim{to{transform:translateX(100%)}}
+
+/* smooth scrollbars */
+*{scrollbar-width:thin;scrollbar-color:rgba(90,150,255,.4) transparent}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:rgba(90,150,255,.4);border-radius:8px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+  .mv-reveal{opacity:1;transform:none}
+}

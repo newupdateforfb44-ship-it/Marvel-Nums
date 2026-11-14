@@ -202,7 +202,8 @@ body::before{background-image:none!important;background:#ffffff!important}
 #kb-drift{display:none!important}
 
 /* MVN-UPDATE-2 */
-html body .app-tabbar,html body .dsh-bottom-nav,html body .bottom-tabbar{display:none!important}
+html body .app-tabbar{display:none!important}
+@media(min-width:901px){html body .dsh-bottom-nav,html body .bottom-tabbar{display:none!important}}
 :root{--app-nav-h:0px}
 body.app-shell{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)!important}
 .dashboard-body{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)!important}
