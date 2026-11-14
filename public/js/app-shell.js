@@ -13,7 +13,7 @@
      5. Add a "Back to menu" control on inner pages.
    Pure add-on: nothing in the original scripts is modified.
    ──────────────────────────────────────────────────────────────────────── */
-(function(){if(document.getElementById('mvn-extras-js'))return;var s=document.createElement('script');s.id='mvn-extras-js';s.src='/js/extras-customer.js?v=1';s.defer=true;(document.head||document.documentElement).appendChild(s);})();
+(function(){if(document.getElementById('mvn-extras-js'))return;var s=document.createElement('script');s.id='mvn-extras-js';s.src='/js/extras-customer.js?v=2';s.defer=true;(document.head||document.documentElement).appendChild(s);})();
 (function(){if(window.MarvelUI||document.getElementById('marvel-ui-js'))return;var s=document.createElement('script');s.id='marvel-ui-js';s.src='/js/marvel-ui.js?v=1';(document.head||document.documentElement).appendChild(s);})(); // MARVEL-UPGRADE
 (function () {
   'use strict';

@@ -26,7 +26,7 @@
   /* ── styles ─────────────────────────────────────────────── */
   var css = document.createElement('style');
   css.textContent =
-    '.mx-fab{position:fixed;right:14px;z-index:9990;width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;font-size:20px;line-height:46px;text-align:center;' +
+    '.mx-fab{position:fixed;right:14px;z-index:9990;width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;font-size:18px;line-height:42px;opacity:.88;text-align:center;' +
     'background:#0b1b33;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.35);padding:0}' +
     '.mx-badge{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;line-height:18px;padding:0 4px}' +
     '.mx-ov{position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}' +
@@ -117,7 +117,7 @@
   }
 
   /* ── 3. notification bell ───────────────────────────────── */
-  var bell = fab('\uD83D\uDD14<span class="mx-badge" style="display:none"></span>', 218, 'Notifications');
+  var bell = fab('\uD83D\uDD14<span class="mx-badge" style="display:none"></span>', 76, 'Notifications');
   var badge = bell.querySelector('.mx-badge');
   var items = [];
   function unreadCount() { var seen = get('mvn_notif_seen', 0); return items.filter(function (i) { return new Date(i.at).getTime() > seen; }).length; }
@@ -136,7 +136,7 @@
   setInterval(function () { if (!document.hidden) loadNotifs(); }, 60000);
 
   /* ── 4. quick panel: search, favourites, recent ─────────── */
-  var quick = fab('\uD83D\uDD0D', 160, 'Search and favourites');
+  var quick = fab('\uD83D\uDD0D', 126, 'Search and favourites');
   quick.addEventListener('click', function () {
     var favs = get('mvn_favpages', []), rec = get('mvn_recent', []);
     var here = favs.some(function (f) { return f.p === location.pathname; });
