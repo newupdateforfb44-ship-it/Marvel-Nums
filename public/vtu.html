@@ -18,7 +18,12 @@
 <style>
 body{background:#050b22;color:#eef3ff;padding:18px}.wrap{max-width:640px;margin:20px auto}.muted{color:#a3b5dc}.back{color:#7fd0ff;text-decoration:none;font-weight:700}
 .panel{background:#0f1b44;border:1px solid rgba(90,150,255,.22);border-radius:16px;padding:16px;margin:14px 0}
-.tabs{display:flex;gap:8px}.tab{flex:1;text-align:center;padding:12px 6px;border-radius:12px;background:#0f1b44;border:1px solid rgba(90,150,255,.22);color:#d6e2ff;font-weight:800;cursor:pointer}.tab.on{border-color:#1a6dff;color:#19c3ff}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;padding:14px 4px 12px;border-radius:16px;background:#0f1b44;border:1.5px solid rgba(90,150,255,.22);color:#d6e2ff;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+.tab .ti{font-size:26px;line-height:1;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#13235a;margin-bottom:4px}
+.tab b{font-size:15px;font-weight:800}.tab small{font-size:11px;color:#8fa4d4;line-height:1.25}
+.tab.on{border-color:#1a6dff;background:linear-gradient(180deg,#14307a,#0f1b44);box-shadow:0 0 0 3px rgba(26,109,255,.18)}.tab.on b{color:#19c3ff}.tab.on .ti{background:#1a6dff}
+.retry{margin-top:8px;width:100%;padding:11px;border-radius:10px;border:1px solid rgba(90,150,255,.4);background:#0a1433;color:#7fd0ff;font-weight:800;font-size:15px;cursor:pointer;display:none}
 label{display:block;margin-top:12px;color:#a3b5dc;font-size:14px}
 input,select{width:100%;padding:13px;border-radius:10px;background:#0a1433;color:#fff;border:1px solid rgba(90,150,255,.32);margin:6px 0;box-sizing:border-box;font-size:16px}
 .btn{border:0;border-radius:10px;background:#1a6dff;color:#ffffff;font-weight:800;padding:13px 16px;cursor:pointer;width:100%;font-size:16px;margin-top:14px}.btn:disabled{opacity:.5}
@@ -42,11 +47,15 @@ input,select{width:100%;padding:13px;border-radius:10px;background:#0a1433;color
 <link rel="stylesheet" href="/css/marvel-final.css?v=1">
 <link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
 </head><body>
-<main class="wrap"><a class="back" href="/dashboard">← Back</a>
+<main class="wrap">
 <h1>Airtime &amp; Data</h1><p class="muted">Airtime, data bundles and cable TV — delivered instantly from your wallet.</p>
-<div class="tabs"><div class="tab on" data-t="airtime">Airtime</div><div class="tab" data-t="data">Data</div><div class="tab" data-t="tv">Cable TV</div></div>
+<div class="tabs">
+ <div class="tab on" data-t="airtime"><span class="ti">📞</span><b>Airtime</b><small>Top up any network</small></div>
+ <div class="tab" data-t="data"><span class="ti">📶</span><b>Data</b><small>Data bundles</small></div>
+ <div class="tab" data-t="tv"><span class="ti">📺</span><b>Cable TV</b><small>DStv, GOtv, Startimes</small></div>
+</div>
 <div class="panel">
- <label>Network / Provider</label><select id="svc"><option>Loading…</option></select>
+ <label id="svcLabel">Network / Provider</label><select id="svc"><option>Loading…</option></select><button type="button" class="retry" id="retry">↻ Try again</button>
  <div id="fAirtime"><label>Phone number</label><input id="aPhone" inputmode="numeric" maxlength="11" placeholder="08012345678">
   <label>Amount (₦50 – ₦5,000)</label><input id="aAmt" inputmode="numeric" placeholder="500"><div class="chips" id="quick"></div></div>
  <div id="fData" style="display:none"><label>Phone number</label><input id="dPhone" inputmode="numeric" maxlength="11" placeholder="08012345678">
@@ -86,8 +95,8 @@ function show(kind,text){const m=$('msg');m.className='msg '+kind;m.textContent=
 async function loadServices(){
  $('svc').innerHTML='<option>Loading…</option>';
  const r=await api('/api/vtu/services?type='+tab);
- if(!r.ok){$('svc').innerHTML='<option value="">Unavailable</option>';show('err',r.j.error||'Unavailable');return;}
- $('msg').className='msg';
+ if(!r.ok){$('svc').innerHTML='<option value="">Unavailable</option>';$('retry').style.display='block';show('err',r.j.error||'Could not load providers. Please try again.');return;}
+ $('retry').style.display='none';$('msg').className='msg';
  $('svc').innerHTML=(r.j.services||[]).map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
  loadPlans();
 }
@@ -105,7 +114,7 @@ function upd(){
  const p=plans[Number((tab==='data'?$('dPlan'):$('cPlan')).value)];$('total').textContent=p?'You pay: '+money(p.price):'';
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
- document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');tab=t.dataset.t;
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');tab=t.dataset.t;$('svcLabel').textContent=tab==='tv'?'Cable provider':'Network / Provider';
  $('fAirtime').style.display=tab==='airtime'?'':'none';$('fData').style.display=tab==='data'?'':'none';$('fTv').style.display=tab==='tv'?'':'none';
  $('msg').className='msg';loadServices();});
 $('svc').onchange=loadPlans;$('dPlan').onchange=upd;$('cPlan').onchange=upd;$('aAmt').oninput=upd;
@@ -135,7 +144,8 @@ $('go').onclick=async()=>{
 };
 async function loadOrders(){const r=await api('/api/vtu/orders');const rows=r.ok?r.j:[];
  $('orders').innerHTML=rows.length?rows.map(o=>`<div class="ord"><span>${esc(o.label)}<br><small class="muted">${new Date(o.createdAt).toLocaleString()}</small></span><span style="text-align:right">${money(o.amount)}<br><small class="muted">${esc(o.status)}</small></span></div>`).join(''):'No orders yet.';}
-loadServices();loadOrders();
+$('retry').onclick=loadServices;
+(function(){var q=new URLSearchParams(location.search).get('t');if(q==='data'||q==='tv'){var t=document.querySelector('.tab[data-t="'+q+'"]');if(t){t.click();loadOrders();return;}}loadServices();loadOrders();})();
 </script><script src="/js/marvel-select-sheet.js?v=1" defer></script>
 <script src="/js/app-shell.js?v=3" defer></script>
 <script src="/js/section-tabs.js?v=1" defer></script>
