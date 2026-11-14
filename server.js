@@ -57,6 +57,27 @@ const { OAuth2Client } = require('google-auth-library');
 const googleClient = process.env.GOOGLE_CLIENT_ID ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID) : null;
 if (!googleClient) console.warn(' GOOGLE_CLIENT_ID not set in .env — Google Sign-In will be disabled until configured.');
 const app = express();
+
+// ── SPEED: gzip text responses (HTML, CSS, JS, JSON, SVG). Built-in zlib, no extra package. ──
+const __zlib = require('zlib');
+app.use((req, res, next) => {
+  if (req.method === 'HEAD' || !/\bgzip\b/i.test(req.headers['accept-encoding'] || '')) return next();
+  const _write = res.write, _end = res.end;
+  let gz = null, decided = false;
+  const decide = () => {
+    if (decided) return; decided = true;
+    const type = String(res.getHeader('Content-Type') || ''), len = Number(res.getHeader('Content-Length') || 0);
+    if (res.getHeader('Content-Encoding') || res.statusCode === 204 || res.statusCode === 304) return;
+    if (!/(text\/(html|css|plain|javascript)|json|javascript|xml|svg)/i.test(type) || /event-stream/i.test(type)) return;
+    if (len && len < 1024) return;
+    gz = __zlib.createGzip({ level: 5 });
+    res.setHeader('Content-Encoding', 'gzip'); res.setHeader('Vary', 'Accept-Encoding'); res.removeHeader('Content-Length');
+    gz.on('data', c => _write.call(res, c)); gz.on('end', () => _end.call(res)); gz.on('error', () => _end.call(res));
+  };
+  res.write = function (c, e, cb) { decide(); return gz ? gz.write(c, e, cb) : _write.call(res, c, e, cb); };
+  res.end = function (c, e, cb) { decide(); if (gz) { if (c) gz.write(c, typeof e === 'string' ? e : undefined); gz.end(); return res; } return _end.call(res, c, e, cb); };
+  next();
+});
 // Render's lightweight readiness probe; intentionally registered before all middleware/auth.
 app.get('/healthz', (req, res) => res.status(200).json({ ok: true }));
 // Shows whether each database is connected. No secrets are returned.
@@ -69,7 +90,7 @@ app.get('/healthz/db', async (req, res) => {
 });
 const rateLimit = require('express-rate-limit');
 // MVN-UPDATE-20 landing page for visitors
-app.get('/', (req, res) => { res.set('Cache-Control', 'no-store, must-revalidate'); res.sendFile(path.join(__dirname, 'public', 'home.html')); });
+app.get('/', (req, res) => { res.set('Cache-Control', 'no-cache, must-revalidate'); res.sendFile(path.join(__dirname, 'public', 'home.html')); });
 app.use(cors({ origin: '*', methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'], allowedHeaders: ['Content-Type','Authorization','x-admin-passcode','x-subadmin-token'] }));
 app.options('*', cors()); // handle pre-flight OPTIONS requests
 app.set('trust proxy', 2);
@@ -243,9 +264,12 @@ app.use(express.static('public', {
       if (!/\.(jpe?g|png|gif|webp|mp4|mov|webm|mp3|m4a|ogg|wav)$/i.test(filePath)) res.set('Content-Disposition', 'attachment');
     }
     if (/\.html?$/i.test(filePath)) {
-      res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-      res.set('Pragma', 'no-cache');
-      res.set('Expires', '0');
+      // always re-checked, but a 304 (no body) when nothing changed: pages open much faster
+      res.set('Cache-Control', 'no-cache, must-revalidate');
+    } else if (/\.(?:css|js|json)$/i.test(filePath)) {
+      res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');
+    } else if (/\.(?:png|jpe?g|gif|webp|svg|ico|woff2?|ttf)$/i.test(filePath) && !/[\\/]public[\\/](uploads|receipts|files)[\\/]/i.test(filePath)) {
+      res.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
     }
   }
 }));
@@ -1666,7 +1690,21 @@ const { brandLogoFor } = require('./lib/brand-logos').register({
 require('./lib/market2').register(app, { mongoose, User, Transaction, auth, anyAdminAuth, sendAdminEmail, brandLogoFor });
 // Marketplace 3 (Sujan Department reseller API) - see lib/market3.js
 require('./lib/market3').register(app, { mongoose, User, Transaction, auth, anyAdminAuth, sendAdminEmail, brandLogoFor });
+// Price Adjustments (admin add / minus money per provider) - see lib/price-adjust.js
+require('./lib/price-adjust').register(app, { mongoose, anyAdminAuth });
+// Buy Number 2 + Temp Email + Rentals (SMS-COOL) - see lib/otp-suite.js
 require('./lib/otp-suite')(app, { mongoose, User, Transaction, auth, anyAdminAuth });
+// Airtime / Data / Cable TV (VTUGATE) - see lib/vtu.js
+require('./lib/vtu')({ app, mongoose, User, Transaction, auth, anyAdminAuth });
+// Live purchases feed + Buy Number notice banner
+require('./lib/live-purchases').register(app, { User, Transaction, auth });
+require('./lib/number-notice').register(app, { mongoose, adminAuth });
+// Websites for sale - see lib/websites.js
+require('./lib/websites').register(app, { mongoose, anyAdminAuth });
+// Telegram Tick orders paid from the wallet - see lib/telegram-tick.js
+try {
+  require('./lib/telegram-tick').register(app, { mongoose, User, Transaction, auth, anyAdminAuth, sendAdminEmail });
+} catch (ttErr) { console.error('[telegram-tick] failed to load:', ttErr.message); }
 // Tutorial library (admin adds videos/pictures/descriptions, customers watch free) - see lib/tutorials.js
 require('./lib/tutorials').register(app, { mongoose, anyAdminAuth, uploadMw: depositTutorialUpload, fileUrl });
 
@@ -8639,6 +8677,10 @@ app.get('/buy-number-otp', (req, res) => res.redirect(301, '/buy-number-2'));
 app.get('/buy-number-3', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'buy-number-nova.html'))));
 app.get('/buy-number-nova', (req, res) => res.redirect(301, '/buy-number-3'));
 app.get('/virtual-account', (req, res) => res.redirect(301, '/deposit'));
+app.get('/vtu', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'vtu.html'))));
+app.get(['/airtime', '/data', '/cable'], (req, res) => res.redirect(301, '/vtu'));
+app.get('/websites', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'websites.html'))));
+app.get('/telegram-tick', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'telegram-tick.html'))));
 app.get('/active-number', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'active-number.html'))));
 app.get('/number-history', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'number-history.html'))));
 app.get('/order-status', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'order-status.html'))));
