@@ -17,3 +17,11 @@
 .kui-spin{width:54px;height:54px;border-radius:50%;border:5px solid #dbe6f6;border-top-color:#00b4ff;animation:kuispin .8s linear infinite}
 @keyframes kuispin{to{transform:rotate(360deg)}}
 .kui-logo{width:36px;height:36px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;flex:0 0 36px}
+
+/* Banner / confirm fixes: a page-level `button{width:100%}` must never squash the message into a thin column */
+.kui-banner{flex-direction:row!important;align-items:center!important}
+.kui-banner .kui-txt{flex:1 1 auto!important;min-width:0!important;word-break:normal!important;overflow-wrap:anywhere}
+.kui-banner button.kui-x{width:auto!important;min-width:0!important;height:auto!important;flex:0 0 auto!important;margin:0!important;padding:0 6px!important;background:none!important;border:0!important;box-shadow:none!important;color:#a3b5dc!important;font-size:22px!important;line-height:1!important;border-radius:0!important}
+.kui-banner .kui-ico{flex:0 0 24px!important;width:24px!important;min-width:24px!important}
+.kui-confirm button.kui-btn{width:auto!important;flex:1 1 0!important;min-width:0!important;padding:12px!important;margin:0!important}
+.kui-confirm .kui-cb{display:flex!important;flex-direction:row!important;gap:10px}
