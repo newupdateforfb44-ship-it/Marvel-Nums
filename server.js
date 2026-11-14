@@ -247,7 +247,7 @@ app.use(express.static('public', {
       // always re-checked, but a 304 (no body) when nothing changed: pages open much faster
       res.set('Cache-Control', 'no-cache, must-revalidate');
     } else if (/\.(?:css|js|json)$/i.test(filePath)) {
-      res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');
+      res.set('Cache-Control', 'no-cache, must-revalidate'); // always re-checked (304 if unchanged) so updates show at once
     } else if (/\.(?:png|jpe?g|gif|webp|svg|ico|woff2?|ttf)$/i.test(filePath) && !/[\\/]public[\\/](uploads|receipts|files)[\\/]/i.test(filePath)) {
       res.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
     }
