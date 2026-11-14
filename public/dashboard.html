@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="/js/mvn-fast.js?v=1"></script>
+<script src="/js/mvn-fast.js?v=2"></script>
 <script src="/js/marvel-loader.js?v=1"></script>
 <script src="/js/auth-keeper.js?v=1"></script>
   <meta charset="UTF-8"/>
@@ -313,7 +313,6 @@
       <a class="kw-primary" href="/deposit"><span class="kw-plus">+</span><span>Add Money</span></a>
       <a href="/transactions"><svg><use href="#i-history"/></svg><span>History</span></a>
       <a href="/vtu"><svg><use href="#i-link"/></svg><span>Airtime &amp; Data</span></a>
-      <a href="/referrals"><svg><use href="#i-link"/></svg><span>Referrals</span><b id="dshRef">₦0.00</b></a>
     </div>
   </section>
 
@@ -357,10 +356,6 @@
       <a class="dsh-svc-item" href="/messages">
         <div class="dsh-svc-icon svc-blue"><svg><use href="#i-message-circle"/></svg></div>
         <span class="dsh-svc-label">Messages</span>
-      </a>
-      <a class="dsh-svc-item" href="/referrals">
-        <div class="dsh-svc-icon svc-amber"><svg><use href="#i-link"/></svg></div>
-        <span class="dsh-svc-label">Referrals</span>
       </a>
       <a class="dsh-svc-item" href="/support">
         <div class="dsh-svc-icon svc-teal"><svg><use href="#i-headset"/></svg></div>
@@ -583,9 +578,6 @@
       // Sub line
       const sub=document.getElementById('dshBalSub');
       if(sub) sub.textContent='Marvel Nums Member';
-      // Referral
-      const refEl=document.getElementById('dshRef');
-      if(refEl&&typeof me.referralEarnings==='number') refEl.textContent='₦'+fmt(me.referralEarnings);
       // Notif badge
       loadNotifCount();
     } catch(e){ console.error('[dsh] user load fail',e.message); }
@@ -783,12 +775,9 @@
     ['/tutorials','svc-orange','<span style="font-size:24px">&#128218;</span>','Tutorials',''],
     ['/purchases','svc-teal','<svg><use href="#i-clipboard"/></svg>','My Orders',''],
     ['/transactions','svc-sky','<svg><use href="#i-history"/></svg>','Transactions',''],
-    ['/vtu?t=airtime','svc-orange','<span style="font-size:24px">&#128222;</span>','Airtime','NEW'],
-    ['/vtu?t=data','svc-sky','<span style="font-size:24px">&#128246;</span>','Data','NEW'],
-    ['/vtu?t=tv','svc-violet','<span style="font-size:24px">&#128250;</span>','Cable TV','NEW'],
+    ['/vtu','svc-orange','<svg><use href="#i-gift"/></svg>','Airtime &amp; Data','NEW'],
     ['/websites','svc-indigo','<span style="font-size:24px">&#127760;</span>','Website','NEW'],
     ['/telegram-tick','svc-sky','<svg viewBox="0 0 24 24" width="26" height="26"><path fill="#229ED9" d="M12 1.5l2.3 1.6 2.8-.2 1.2 2.5 2.5 1.3-.2 2.8L22 12l-1.4 2.1.2 2.8-2.5 1.3-1.2 2.5-2.8-.2L12 22.5l-2.3-1.6-2.8.2-1.2-2.5-2.5-1.3.2-2.8L2 12l1.4-2.1-.2-2.8 2.5-1.3 1.2-2.5 2.8.2z"/><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7.8 12.3l3 3 5.4-6"/></svg>','Telegram Tick','NEW'],
-    ['/referrals','svc-orange','<svg><use href="#i-gift"/></svg>','Referrals','']
   ];
   var a=document.querySelector('.dsh-svc-item');
   if(a&&a.parentElement){
@@ -828,8 +817,8 @@
 <!-- LIVE-PURCHASES: real purchases, buyer names masked, refreshes by itself -->
 <style>
   .lp-card .lp-head{display:flex;align-items:center;gap:8px;padding:14px 16px 10px}
-  .lp-dot{width:9px;height:9px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 0 rgba(22,163,74,.6);animation:lpPulse 1.8s infinite}
-  @keyframes lpPulse{70%{box-shadow:0 0 0 8px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+  .lp-dot{width:9px;height:9px;border-radius:50%;background:#19c3ff;box-shadow:0 0 0 0 rgba(25,195,255,.6);animation:lpPulse 1.8s infinite}
+  @keyframes lpPulse{70%{box-shadow:0 0 0 8px rgba(25,195,255,0)}100%{box-shadow:0 0 0 0 rgba(25,195,255,0)}}
   .lp-title{font-size:15px;font-weight:800;color:var(--text)}
   .lp-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:11px 16px;border-top:1px solid var(--border);font-size:13px;line-height:1.45;color:var(--text2)}
   .lp-row b{color:var(--text);font-weight:700}
@@ -838,7 +827,7 @@
   .lp-amt{font-weight:800;color:var(--blue);font-size:12.5px}
   .lp-time{font-size:11.5px;color:var(--text3)}
   .lp-new{animation:lpIn .6s ease}
-  @keyframes lpIn{from{opacity:0;transform:translateY(-10px);background:rgba(22,163,74,.14)}to{opacity:1;transform:none;background:transparent}}
+  @keyframes lpIn{from{opacity:0;transform:translateY(-10px);background:rgba(25,195,255,.14)}to{opacity:1;transform:none;background:transparent}}
   .lp-empty{padding:14px 16px 16px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text2)}
 </style>
 <script>
