@@ -12,6 +12,7 @@
     if (sel.innerHTML !== html) sel.innerHTML = html;
     try { if (v && Array.prototype.some.call(sel.options, function (o) { return o.value === v; })) sel.value = v; } catch (e) {}
   };
+  window.kpeek = function (url) { try { return sessionStorage.getItem(P + url) !== null; } catch (e) { return false; } };
   window.kswr = async function (url, apiFn, onData, onError) {
     var key = P + url, cached = null, last = null;
     try { cached = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
