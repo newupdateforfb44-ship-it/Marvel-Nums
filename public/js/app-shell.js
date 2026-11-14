@@ -82,22 +82,22 @@
 
     var backdrop = document.createElement('div'); backdrop.className = 'mvn-menu-backdrop'; backdrop.id = 'mvnMenuBackdrop';
     var drawer = document.createElement('aside'); drawer.className = 'mvn-drawer'; drawer.id = 'mvnDrawer'; drawer.setAttribute('aria-label','Marvel Nums navigation');
-    drawer.innerHTML = '<div class="mvn-drawer-head"><div class="mvn-drawer-brand"><b>Marvel Nums</b><small>Your digital services hub</small></div><button class="mvn-drawer-close" type="button" aria-label="Close menu">×</button></div>' +
-      '<a class="mvn-drawer-link" href="/dashboard"><i class="mvn-ico">🏠</i><span>Home</span></a>' +
-      '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnMarketplaceSub"><i class="mvn-ico">🛍️</i><span>Marketplace</span><span class="mvn-chevron">⌄</span></button>' +
+    drawer.innerHTML = '<div class="mvn-drawer-head"><div class="mvn-drawer-brand">Marvel Nums</div><button class="mvn-drawer-close" type="button" aria-label="Close menu">×</button></div>' +
+      '<a class="mvn-drawer-link" href="/dashboard">🏠 <span>Home</span></a>' +
+      '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnMarketplaceSub">🛍️ <span>Marketplace</span><span class="mvn-chevron">⌄</span></button>' +
       '<div class="mvn-submenu" id="mvnMarketplaceSub"><a class="mvn-sub-link" href="/marketplace">Marketplace 1</a><a class="mvn-sub-link" href="/marketplace2">Marketplace 2</a><a class="mvn-sub-link" href="/marketplace3">Marketplace 3</a><a class="mvn-sub-link" href="/marketplace4">Marketplace 4</a></div>' +
-      '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnNumbersSub"><i class="mvn-ico">📱</i><span>Buy Number</span><span class="mvn-chevron">⌄</span></button>' +
+      '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnNumbersSub">📱 <span>Buy Number</span><span class="mvn-chevron">⌄</span></button>' +
       '<div class="mvn-submenu" id="mvnNumbersSub"><a class="mvn-sub-link" href="/buy-number-1">Buy Number 1</a><a class="mvn-sub-link" href="/buy-number-2">Buy Number 2</a><a class="mvn-sub-link" href="/buy-number-3">Buy Number 3</a><a class="mvn-sub-link" href="/temp-email">Temp Email</a><a class="mvn-sub-link" href="/rental">Rentals</a></div>' +
-      '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnBoostSub"><i class="mvn-ico">🚀</i><span>Boost</span><span class="mvn-chevron">⌄</span></button>' +
+      '<button class="mvn-menu-toggle" type="button" aria-expanded="false" aria-controls="mvnBoostSub">🚀 <span>Boost</span><span class="mvn-chevron">⌄</span></button>' +
       '<div class="mvn-submenu" id="mvnBoostSub"><a class="mvn-sub-link" href="/boost1">Boost 1</a><a class="mvn-sub-link" href="/boost2">Boost 2</a></div>' +
-      '<div class="mvn-drawer-label">Services</div><a class="mvn-drawer-link" href="/vtu?t=airtime"><i class="mvn-ico">📞</i><span>Airtime</span></a><a class="mvn-drawer-link" href="/vtu?t=data"><i class="mvn-ico">📶</i><span>Data</span></a><a class="mvn-drawer-link" href="/vtu?t=tv"><i class="mvn-ico">📺</i><span>Cable TV</span></a><a class="mvn-drawer-link" href="/websites"><i class="mvn-ico">🌐</i><span>Websites</span></a><a class="mvn-drawer-link" href="/telegram-tick"><i class="mvn-ico">✅</i><span>Telegram Tick</span></a>' +
-      '<div class="mvn-drawer-label">Learn</div><a class="mvn-drawer-link" href="/tutorials"><i class="mvn-ico">📚</i><span>Tutorials</span></a>' +
-      '<div class="mvn-drawer-label">Account</div><a class="mvn-drawer-link" href="/purchases"><i class="mvn-ico">📦</i><span>My Orders</span></a><a class="mvn-drawer-link" href="/deposit"><i class="mvn-ico">💰</i><span>Wallet / Add Money</span></a>' +
-      '<a class="mvn-drawer-link" href="/transactions"><i class="mvn-ico">📊</i><span>Transactions</span></a><a class="mvn-drawer-link" href="/referrals"><i class="mvn-ico">🎁</i><span>Referrals & Cashback</span></a>' +
-      '<a class="mvn-drawer-link" href="/settings"><i class="mvn-ico">👤</i><span>My Profile & Settings</span></a><div class="mvn-drawer-label">Support</div>' +
-      '<a class="mvn-drawer-link" href="/support"><i class="mvn-ico">💬</i><span>Contact Support</span></a><a class="mvn-drawer-link" href="/help"><i class="mvn-ico">❓</i><span>Help Center</span></a><a class="mvn-drawer-link" href="/about"><i class="mvn-ico">ℹ️</i><span>About</span></a>' +
-      '<button class="mvn-drawer-link" id="mvnLogout" type="button"><i class="mvn-ico">🚪</i><span>Log Out</span></button>';
-    document.body.appendChild(backdrop); document.body.appendChild(drawer); (function(){ try { var here=location.pathname.replace(/\.html$/,'').replace(/\/$/,'')||'/'; drawer.querySelectorAll('a[href]').forEach(function(a){ var h=a.getAttribute('href').split('?')[0]; if(h===here){ a.classList.add('active'); var sub=a.closest('.mvn-submenu'); if(sub){ sub.classList.add('open'); var tg=document.querySelector('[aria-controls="'+sub.id+'"]'); if(tg){ tg.setAttribute('aria-expanded','true'); tg.classList.add('active'); } } } }); } catch(e){} })();
+      '<div class="mvn-drawer-label">Services</div><a class="mvn-drawer-link" href="/vtu">📲 <span>Airtime & Data</span></a><a class="mvn-drawer-link" href="/websites">🌐 <span>Websites</span></a><a class="mvn-drawer-link" href="/telegram-tick">✅ <span>Telegram Tick</span></a>' +
+      '<div class="mvn-drawer-label">Learn</div><a class="mvn-drawer-link" href="/tutorials">📚 <span>Tutorials</span></a>' +
+      '<div class="mvn-drawer-label">Account</div><a class="mvn-drawer-link" href="/purchases">📦 <span>My Orders</span></a><a class="mvn-drawer-link" href="/deposit">💰 <span>Wallet / Add Money</span></a>' +
+      '<a class="mvn-drawer-link" href="/transactions">📊 <span>Transactions</span></a><a class="mvn-drawer-link" href="/referrals">🎁 <span>Referrals & Cashback</span></a>' +
+      '<a class="mvn-drawer-link" href="/settings">👤 <span>My Profile & Settings</span></a><div class="mvn-drawer-label">Support</div>' +
+      '<a class="mvn-drawer-link" href="/support">💬 <span>Contact Support</span></a><a class="mvn-drawer-link" href="/help">❓ <span>Help Center</span></a><a class="mvn-drawer-link" href="/about">ℹ️ <span>About</span></a>' +
+      '<button class="mvn-drawer-link" id="mvnLogout" type="button">🚪 <span>Log Out</span></button>';
+    document.body.appendChild(backdrop); document.body.appendChild(drawer);
     var mvnY=0,mvnLocked=false; function mvnLock(){ if(mvnLocked)return; mvnLocked=true; mvnY=window.pageYOffset||0; var s=document.body.style; s.position='fixed'; s.top=(-mvnY)+'px'; s.left='0'; s.right='0'; s.width='100%'; document.documentElement.classList.add('mvn-locked'); } function mvnUnlock(){ if(!mvnLocked)return; mvnLocked=false; var s=document.body.style; s.position=''; s.top=''; s.left=''; s.right=''; s.width=''; document.documentElement.classList.remove('mvn-locked'); var de=document.documentElement,sb=de.style.scrollBehavior; de.style.scrollBehavior='auto'; window.scrollTo(0,mvnY); de.style.scrollBehavior=sb; } function closeMenu(){ mvnUnlock(); drawer.classList.remove('open'); backdrop.classList.remove('open'); document.body.classList.remove('mvn-menu-open'); trigger.setAttribute('aria-expanded','false'); }
     function openMenu(){ mvnLock(); drawer.classList.add('open'); backdrop.classList.add('open'); document.body.classList.add('mvn-menu-open'); trigger.setAttribute('aria-expanded','true'); }
     trigger.addEventListener('click',function(){ drawer.classList.contains('open') ? closeMenu() : openMenu(); });
@@ -247,9 +247,6 @@
             '<a class="hm-add" href="/deposit">+ Add Money</a>' +
           '</div>' +
         '</div>' +
-        '<a class="hm-sub" href="/referrals">' + ico('i-link') +
-          '<span>Referral earnings — <b id="hmRef">₦0.00</b></span>' +
-          '<span class="hm-sub-go">' + ico('i-arrow-right') + '</span></a>' +
       '</div>' +
       '<div class="hm-card" id="hmRecentCard">' +
         '<div id="hmRecent"><div class="hm-empty">Loading your activity…</div></div>' +
@@ -301,11 +298,6 @@
       if (!w) return;
       window.__mvnBalance = Number(w.balance != null ? w.balance : (w.wallet || 0));
       applyBalanceUi();
-    });
-    get('/api/referrals/summary').then(function (s) {
-      if (!s) return;
-      var el = document.getElementById('hmRef');
-      if (el) el.textContent = money(s.totalEarned || s.earnings || 0);
     });
     get('/api/user/notifications').then(function (n) {
       var items = Array.isArray(n) ? n : (n && n.items) || [];

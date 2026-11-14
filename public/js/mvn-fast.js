@@ -23,10 +23,11 @@
     '/api/market2/products', '/api/market3/products', '/api/market4/products', '/api/websites', '/api/brand-logos',
     '/api/number-notice', '/api/public/site-links', '/api/site-links', '/api/tutorials',
     '/api/deposit-tutorials', '/api/market/status', '/api/n3/status', '/api/public/stats',
-    '/api/intl/rates', '/api/welcome-popup'
+    '/api/intl/rates', '/api/welcome-popup', '/api/rentals/countries', '/api/temp-email/options'
   ];
   var WARM = ['/api/categories', '/api/logs?type=log', '/api/boost/services', '/api/numbers/live-countries',
-              '/api/public/site-links', '/api/number-notice', '/api/market/status'];
+              '/api/public/site-links', '/api/number-notice', '/api/market/status',
+              '/api/numbers/n2/servers', '/api/rentals/countries', '/api/temp-email/options'];
 
   function pathOf(u) { try { return new URL(u, location.href).pathname; } catch (e) { return ''; } }
   function isCatalog(u) { var p = pathOf(u); for (var i = 0; i < CATALOG.length; i++) if (CATALOG[i] === p) return true; return false; }
@@ -89,6 +90,9 @@
     [/^\/marketplace3/i, ['/api/market3/products']],
     [/^\/marketplace4/i, ['/api/market4/products']],
     [/^\/(boost|boost1|boost2|boost-services)(\.html)?$/i, ['/api/boost/services']],
+    [/^\/buy-number-?(2|otp)/i, ['/api/numbers/n2/servers', '/api/number-notice']],
+    [/^\/rental/i, ['/api/rentals/countries']],
+    [/^\/temp-email/i, ['/api/temp-email/options']],
     [/^\/buy-number/i, ['/api/numbers/live-countries', '/api/number-notice']],
     [/^\/websites/i, ['/api/websites']]
   ];
