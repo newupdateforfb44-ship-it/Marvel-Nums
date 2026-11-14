@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <script src="/js/mvn-fast.js?v=2"></script>
-<script src="/js/ks-helpers.js?v=1"></script>
+<script src="/js/ks-helpers.js?v=2"></script>
 <script src="/js/marvel-loader.js?v=1"></script>
 <link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/theme.css">
 <script src="/js/marvel-ui.js?v=1"></script><link rel="stylesheet" href="/brand.css">
@@ -100,7 +100,7 @@ async function checkOne(id,silent){try{const d=await api('/api/temp-email/code/'
 async function cancelOne(id){if(!(await MarvelUI.confirm('Cancel this email and get a refund?',{title:'Cancel & refund',okText:'Cancel email'})))return;try{const d=await api('/api/temp-email/cancel/'+encodeURIComponent(id),{method:'POST',body:'{}'});const i=orders.findIndex(o=>o.id===id);if(i>=0)orders[i]=d.order;renderOrders();notice('Cancelled — your refund was added to your wallet.')}catch(e){notice(e.message)}}
 if(!token())location.href='/login?next=/temp-email';else{loadOptions();loadOrders()}
 </script>
-<script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/marvel-select-sheet.js?v=2" defer></script>
 <script src="/js/app-shell.js?v=3" defer></script>
 <script src="/js/section-tabs.js?v=1" defer></script>
 <script src="/js/page-transitions.js?v=1" defer></script>

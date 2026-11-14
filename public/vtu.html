@@ -136,7 +136,7 @@ $('go').onclick=async()=>{
 async function loadOrders(){const r=await api('/api/vtu/orders');const rows=r.ok?r.j:[];
  $('orders').innerHTML=rows.length?rows.map(o=>`<div class="ord"><span>${esc(o.label)}<br><small class="muted">${new Date(o.createdAt).toLocaleString()}</small></span><span style="text-align:right">${money(o.amount)}<br><small class="muted">${esc(o.status)}</small></span></div>`).join(''):'No orders yet.';}
 loadServices();loadOrders();
-</script><script src="/js/marvel-select-sheet.js?v=1" defer></script>
+</script><script src="/js/marvel-select-sheet.js?v=2" defer></script>
 <script src="/js/app-shell.js?v=3" defer></script>
 <script src="/js/section-tabs.js?v=1" defer></script>
 <script src="/js/page-transitions.js?v=1" defer></script>

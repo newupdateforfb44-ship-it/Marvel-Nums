@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <script src="/js/mvn-fast.js?v=2"></script>
-<script src="/js/ks-helpers.js?v=1"></script>
+<script src="/js/ks-helpers.js?v=2"></script>
 <script src="/js/marvel-loader.js?v=1"></script>
 <link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/theme.css">
 <script src="/js/marvel-ui.js?v=1"></script><link rel="stylesheet" href="/brand.css">
@@ -71,7 +71,7 @@ async function resendOne(id){try{const d=await api('/api/numbers/n2/resend/'+enc
 async function cancelOrder(id){if(!confirm('Cancel this number? A refund is only issued after the provider confirms cancellation.'))return;try{const d=await api('/api/numbers/n2/cancel/'+encodeURIComponent(id),{method:'POST',body:'{}'});const i=orders.findIndex(o=>o.id===id);if(i>=0)orders[i]=d.order;renderOrders();notice('Cancellation confirmed and refund recorded.')}catch(e){notice(e.message)}}
 if(!token())location.href='/login?next=/buy-number-2';else{loadServers();loadOrders()}
 </script>
-<script src="/js/marvel-select-sheet.js?v=1" defer></script>
+<script src="/js/marvel-select-sheet.js?v=2" defer></script>
 <script src="/js/app-shell.js?v=3" defer></script>
 <script src="/js/section-tabs.js?v=1" defer></script>
   <script src="/js/page-transitions.js?v=1" defer></script>
