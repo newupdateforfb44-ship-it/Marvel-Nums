@@ -1595,7 +1595,19 @@ tr:hover td{background:rgba(255,255,255,.035)}
   <div id="vtuAdmRoot">Loading…</div>
 </div>
 <div id="tab-boost2adm" class="tab-panel">
-  <div class="sec-title">Boost 2 services</div>
+  <div class="sec-title">Boost 2 services (Vina SMM)</div>
+  <div id="mvnB2Cfg" style="border:1px solid #dbe6f6;border-radius:12px;padding:12px;margin:10px 0;max-width:780px">
+    <label style="font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:10px"><input type="checkbox" id="mvnB2On" onchange="mvnB2Toggle(this)"> <span id="mvnB2OnLbl">Boost 2 is ON for customers</span></label>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
+      <div><label style="font-size:12px;opacity:.8">Vina API key (owner only)</label><input id="mvnB2Key" type="password" autocomplete="off" placeholder="Paste key to save / replace" style="width:100%;padding:8px;border-radius:8px"><small id="mvnB2KeyHint" style="opacity:.8"></small></div>
+      <div><label style="font-size:12px;opacity:.8">Dollar rate: &#8358; per $1 (0 = automatic)</label><input id="mvnB2Usd" type="number" min="0" step="0.01" style="width:100%;padding:8px;border-radius:8px"><small id="mvnB2UsdHint" style="opacity:.8"></small></div>
+      <div><label style="font-size:12px;opacity:.8">Default markup % (services with no specific price)</label><input id="mvnB2Pct" type="number" min="0" step="0.1" style="width:100%;padding:8px;border-radius:8px"></div>
+      <div><label style="font-size:12px;opacity:.8">Add / minus &#8358; per 1,000 (all services)</label><input id="mvnB2Adj" type="number" step="0.01" style="width:100%;padding:8px;border-radius:8px"></div>
+    </div>
+    <div style="margin-top:10px"><button class="btn-primary" type="button" onclick="mvnB2CfgSave()">Save settings</button> <button class="btn-primary" type="button" onclick="mvnB2Balance()">Check Vina balance</button> <button class="btn-primary" type="button" onclick="mvnB2OrdersSync()">Check order status now</button></div>
+    <div id="mvnB2CfgMsg" style="margin:6px 0"></div>
+    <small style="opacity:.8">Prices from Vina are in dollars. Customer price = provider cost in &#8358; + default markup % + the service's own markup &#8358;, unless you give that service a <b>Specific price</b> (&#8358; per 1,000). Untick <b>Enabled</b> on a service to switch it off.</small>
+  </div>
   <div style="margin:10px 0"><button class="btn-primary" type="button" onclick="mvnB2Sync()">Sync from provider</button> <button class="btn-primary" type="button" onclick="mvnB2Load()">Refresh list</button></div>
   <div id="mvnB2Msg" style="margin:6px 0"></div>
   <input id="mvnB2Q" placeholder="Search services..." oninput="mvnB2Render()" style="padding:8px;border-radius:8px;width:100%;max-width:360px;margin-bottom:8px">
@@ -1756,6 +1768,7 @@ tr:hover td{background:rgba(255,255,255,.035)}
   var b2=[];
   window.mvnB2Load=async function(){
     var el=document.getElementById('mvnB2List');
+    mvnB2CfgLoad();
     try{var d=await aFetch('/api/admin/boost2/services');b2=Array.isArray(d)?d:(d&&(d.services||d.list))||[];mvnB2Render();}
     catch(e){el.textContent='Error: '+e.message;}
     mvnB2ReviewLoad();
@@ -1765,7 +1778,7 @@ tr:hover td{background:rgba(255,255,255,.035)}
     var rows=b2.filter(function(s){return !q||JSON.stringify(s).toLowerCase().indexOf(q)>-1;}).slice(0,200);
     el.innerHTML=rows.length?'<table style="width:100%;min-width:920px;font-size:13px;border-collapse:collapse"><tr><th align=left>ID</th><th align=left>Name</th><th align=left>Provider rate</th><th align=left>Price mode</th><th align=left>Sell price (NGN)</th><th align=left>Markup (NGN)</th><th>Enabled</th><th>Visible</th><th></th></tr>'+rows.map(function(s){
       var id=Number(s.id),unit=Number(s.rateUnit)||1000;
-      return '<tr data-b2-id="'+id+'" style="border-top:1px solid #dbe6f6"><td>'+id+'</td><td>'+esc(s.name||'')+'</td><td>'+esc(s.cost)+' / '+unit.toLocaleString()+'</td><td><select data-field="mode"><option value="markup"'+(s.mode==='markup'?' selected':'')+'>Provider + markup</option><option value="specific"'+(s.mode==='specific'?' selected':'')+'>Specific price</option></select></td><td><input data-field="sellPrice" type="number" min="0" step="0.01" value="'+esc(s.sellPrice)+'" style="width:110px"></td><td><input data-field="markup" type="number" min="0" step="0.01" value="'+esc(s.markup)+'" style="width:110px"></td><td><input data-field="enabled" type="checkbox"'+(s.enabled!==false?' checked':'')+' aria-label="Enable service"></td><td><input data-field="visible" type="checkbox"'+(s.visible!==false?' checked':'')+' aria-label="Show service to customers"></td><td><button type="button" onclick="mvnB2Save('+id+',this)">Save</button></td></tr>';
+      return '<tr data-b2-id="'+id+'" style="border-top:1px solid #dbe6f6"><td>'+id+'</td><td>'+esc(s.name||'')+(s.supported===false?'<br><small style="color:#b45309">Not sold on site ('+esc(s.type||'needs extra fields')+')</small>':'')+'</td><td>'+(s.rateUsd!=null?'$'+esc(s.rateUsd)+' &asymp; ':'')+'&#8358;'+esc(s.cost)+' / '+unit.toLocaleString()+'</td><td><select data-field="mode"><option value="markup"'+(s.mode==='markup'?' selected':'')+'>Provider + markup</option><option value="specific"'+(s.mode==='specific'?' selected':'')+'>Specific price</option></select></td><td><input data-field="sellPrice" type="number" min="0" step="0.01" value="'+esc(s.sellPrice)+'" style="width:110px"></td><td><input data-field="markup" type="number" min="0" step="0.01" value="'+esc(s.markup)+'" style="width:110px"></td><td><input data-field="enabled" type="checkbox"'+(s.enabled!==false?' checked':'')+' aria-label="Enable service"></td><td><input data-field="visible" type="checkbox"'+(s.visible!==false?' checked':'')+' aria-label="Show service to customers"></td><td><button type="button" onclick="mvnB2Save('+id+',this)">Save</button></td></tr>';
     }).join('')+'</table>':'No matching services. Tap Sync to load the provider catalogue.';
   };
   window.mvnB2Save=async function(id,button){
@@ -1777,6 +1790,42 @@ tr:hover td{background:rgba(255,255,255,.035)}
     button.disabled=true;document.getElementById('mvnB2Msg').textContent='Saving service settings...';
     try{await aFetch('/api/admin/boost2/services/'+Number(id),'PUT',body);document.getElementById('mvnB2Msg').textContent='Service settings saved.';await mvnB2Load();}
     catch(e){document.getElementById('mvnB2Msg').textContent='Could not save service: '+e.message;button.disabled=false;}
+  };
+  window.mvnB2CfgLoad=async function(){
+    var m=document.getElementById('mvnB2CfgMsg');
+    try{
+      var c=await aFetch('/api/admin/boost2/config');
+      document.getElementById('mvnB2On').checked=c.enabled!==false;
+      document.getElementById('mvnB2OnLbl').textContent=c.enabled!==false?'Boost 2 is ON for customers':'Boost 2 is OFF (customers cannot see or order it)';
+      document.getElementById('mvnB2Usd').value=c.usdRate||0;
+      document.getElementById('mvnB2Pct').value=c.defaultMarkupPercent;
+      document.getElementById('mvnB2Adj').value=c.adjustNgn||0;
+      document.getElementById('mvnB2UsdHint').textContent='Live rate now: \u20A6'+Number(c.liveUsdRate||0).toLocaleString('en-NG')+' per $1';
+      document.getElementById('mvnB2KeyHint').textContent=c.keySet?('Key saved '+c.keyHint+(c.keySource==='env'?' (from Render environment)':' (saved here)')):'No API key yet \u2014 paste your Vina key and Save.';
+    }catch(e){if(m)m.textContent='Could not load settings: '+e.message;}
+  };
+  window.mvnB2CfgSave=async function(){
+    var m=document.getElementById('mvnB2CfgMsg'),k=document.getElementById('mvnB2Key').value.trim();
+    var body={enabled:document.getElementById('mvnB2On').checked,usdRate:Number(document.getElementById('mvnB2Usd').value||0),defaultMarkupPercent:Number(document.getElementById('mvnB2Pct').value||0),adjustNgn:Number(document.getElementById('mvnB2Adj').value||0)};
+    if(k)body.apiKey=k;
+    m.textContent='Saving...';
+    try{await aFetch('/api/admin/boost2/config','PUT',body);document.getElementById('mvnB2Key').value='';m.textContent=k?'Settings and API key saved. Tap Sync from provider to load the services.':'Settings saved.';await mvnB2CfgLoad();await mvnB2Load();}
+    catch(e){m.textContent='Could not save: '+e.message;}
+  };
+  window.mvnB2Toggle=async function(box){
+    var m=document.getElementById('mvnB2CfgMsg');
+    try{await aFetch('/api/admin/boost2/config','PUT',{enabled:box.checked});m.textContent=box.checked?'Boost 2 is now ON.':'Boost 2 is now OFF.';await mvnB2CfgLoad();}
+    catch(e){box.checked=!box.checked;m.textContent='Could not change: '+e.message;}
+  };
+  window.mvnB2Balance=async function(){
+    var m=document.getElementById('mvnB2CfgMsg');m.textContent='Checking Vina balance...';
+    try{var b=await aFetch('/api/admin/boost2/balance');m.textContent='Vina balance: '+b.balance+' '+(b.currency||'USD')+(b.balanceNgn!=null?' (about \u20A6'+Number(b.balanceNgn).toLocaleString('en-NG')+')':'');}
+    catch(e){m.textContent='Could not reach Vina: '+e.message;}
+  };
+  window.mvnB2OrdersSync=async function(){
+    var m=document.getElementById('mvnB2CfgMsg');m.textContent='Checking open orders with Vina...';
+    try{var r=await aFetch('/api/admin/boost2/orders/sync','POST',{});m.textContent=r.message||'Done.';}
+    catch(e){m.textContent='Could not check: '+e.message;}
   };
   window.mvnB2Sync=async function(){
     var m=document.getElementById('mvnB2Msg');m.textContent='Syncing...';
@@ -3025,7 +3074,7 @@ const ADMIN_NAV = [
     { tab:'vtuadm', icon:'i-smartphone', label:'Airtime & Data (VTU)', owner:true, keywords:'vtu airtime data cable tv dstv gotv startimes markup price percentage vtugate profit' },
     { tab:'websitesadm', icon:'i-zap', label:'Websites for sale', owner:true, keywords:'website websites sell sale demo customer panel admin panel link price' },
     { tab:'ticksadm', icon:'i-zap', label:'Telegram Tick', owner:true, keywords:'telegram tick verification verify blue orders packages months username' },
-    { tab:'boost2adm', icon:'i-rocket', label:'Boost 2 services', owner:true, keywords:'boost 2 nova services sync' },
+    { tab:'boost2adm', icon:'i-rocket', label:'Boost 2 services', owner:true, keywords:'boost 2 vina services sync price markup on off' },
     { tab:'tutlib', icon:'i-video', label:'Tutorial library', owner:true, keywords:'tutorial tutorials video images login how to facebook tiktok customers watch' },
     { tab:'tutorialsadm', icon:'i-video', label:'Tutorials', owner:true, keywords:'tutorial tutorials video images login how to' },
   ]},
@@ -7989,7 +8038,7 @@ async function novaBoostSync() {
   catch (e) { if (m) m.textContent = ' ' + e.message; }
 }
 let novaBoostList=[];
-async function novaBoostLoad(){const el=document.getElementById('novaBoostRows');if(!el)return;el.innerHTML='<tr><td colspan="7">Loading Nova Solution catalogue…</td></tr>';try{novaBoostList=await aFetch('/api/admin/boost2/services');novaBoostRender()}catch(e){el.innerHTML='<tr><td colspan="7">'+esc(e.message)+'</td></tr>'}}
+async function novaBoostLoad(){const el=document.getElementById('novaBoostRows');if(!el)return;el.innerHTML='<tr><td colspan="7">Loading Boost 2 catalogue…</td></tr>';try{novaBoostList=await aFetch('/api/admin/boost2/services');novaBoostRender()}catch(e){el.innerHTML='<tr><td colspan="7">'+esc(e.message)+'</td></tr>'}}
 function novaBoostRender(){const el=document.getElementById('novaBoostRows');if(!el)return;const q=(document.getElementById('novaBoostSearch')?.value||'').toLowerCase();const rows=novaBoostList.filter(s=>s.name.toLowerCase().includes(q)||s.category.toLowerCase().includes(q));el.innerHTML=rows.map(s=>`<tr><td>${esc(s.name)}<br><small>${esc(s.category)} · ID ${s.id}</small></td><td>${m2N(s.cost)}</td><td><select id="nbm${s.id}"><option value="markup" ${s.price===s.cost?'selected':''}>Markup</option><option value="specific">Specific price</option></select></td><td><input id="nbs${s.id}" type="number" min="0" step="0.01" value="${s.price}" style="width:110px"></td><td><input id="nbk${s.id}" type="number" min="0" step="0.01" value="${Math.max(0,s.price-s.cost)}" style="width:100px"></td><td><input id="nbe${s.id}" type="checkbox" ${s.enabled?'checked':''}></td><td><button class="btn-sm" onclick="novaBoostSave(${s.id})">Save</button></td></tr>`).join('')||'<tr><td colspan="7">No matching services.</td></tr>'}
 async function novaBoostSave(id){try{const mode=document.getElementById('nbm'+id).value;await aFetch('/api/admin/boost2/services/'+id,'PUT',{mode,sellPrice:Number(document.getElementById('nbs'+id).value||0),markup:Number(document.getElementById('nbk'+id).value||0),enabled:document.getElementById('nbe'+id).checked});alert('Boost 2 price saved');await novaBoostLoad()}catch(e){alert(e.message)}}
 
