@@ -1697,12 +1697,13 @@ app.get('/api/admin/providers/status', anyAdminAuth, async (req, res) => {
       const M = mongoose.models[name];
       return M ? await M.findOne(query).lean().catch(() => null) : null;
     };
-    const [numberCfg, otpCfg, market2Cfg, market3Cfg, boostCfg] = await Promise.all([
+    const [numberCfg, otpCfg, market2Cfg, market3Cfg, boostCfg, vinaCfg] = await Promise.all([
       getNumberServerConfig().catch(() => null),
       getDoc('OtpSuiteConfig', { key: 'main' }),
       getDoc('Market2Config', { key: 'main' }),
       getDoc('Market3Config', { key: 'main' }),
-      getDoc('BoostSettings', { _id: 'singleton' })
+      getDoc('BoostSettings', { _id: 'singleton' }),
+      getDoc('VinaBoost2Config', { key: 'main' })
     ]);
     const rows = [
       { id: 'grizzly', name: 'Grizzly SMS — Buy Number 1', configured: !!String(process.env.GRIZZLY_API_KEY || '').trim(), enabled: numberCfg?.server2Enabled !== false, credentialSource: 'Render environment: GRIZZLY_API_KEY' },
@@ -1710,7 +1711,8 @@ app.get('/api/admin/providers/status', anyAdminAuth, async (req, res) => {
       { id: 'rakib', name: 'RakibSocials — Marketplace 2', configured: !!(market2Cfg?.apiKeyCipher || process.env.RAKIB_API_KEY), enabled: market2Cfg?.market2Enabled !== false, credentialSource: 'Admin Marketplace 2 settings or Render environment' },
       { id: 'sujan', name: 'Sujan Department — Marketplace 3', configured: !!(market3Cfg?.sujanKeyCipher || process.env.SUJAN_API_KEY), enabled: market3Cfg?.market3Enabled !== false, credentialSource: 'Admin Marketplace 3 settings or Render environment' },
       { id: 'reallySimpleSocial', name: 'Really Simple Social — Boosting 1', configured: !!(boostCfg?.apiKey || process.env.BOOST_API_KEY), enabled: !!boostCfg?.enabled, credentialSource: 'Admin Boosting settings or Render environment' },
-      { id: 'nova', name: 'NovaSolution — Buy Number 3 / Boosting 2', configured: !!String(process.env.NOVA_API_KEY || '').trim(), enabled: !!String(process.env.NOVA_API_KEY || '').trim(), credentialSource: 'Render environment: NOVA_API_KEY' }
+      { id: 'vina', name: 'Vina SMM — Boosting 2', configured: !!(String(process.env.VINASMM_API_KEY || '').trim() || vinaCfg?.apiKeyCipher), enabled: vinaCfg?.enabled !== false, credentialSource: 'Render environment: VINASMM_API_KEY or Admin → Boost 2' },
+      { id: 'nova', name: 'NovaSolution — Buy Number 3 / Marketplace 4', configured: !!String(process.env.NOVA_API_KEY || '').trim(), enabled: !!String(process.env.NOVA_API_KEY || '').trim(), credentialSource: 'Render environment: NOVA_API_KEY' }
     ].map(x => ({ ...x, ready: !!x.configured && !!x.enabled, state: !x.configured ? 'missing_credentials' : (!x.enabled ? 'disabled' : 'ready') }));
     res.set('Cache-Control', 'no-store');
     res.json({ providers: rows, readyCount: rows.filter(x => x.ready).length, checkedAt: new Date().toISOString() });
@@ -1718,7 +1720,7 @@ app.get('/api/admin/providers/status', anyAdminAuth, async (req, res) => {
 });
 // Welcome popup (WhatsApp channel promo) - settings editable in Admin -> Welcome Popup
 require('./lib/welcomepopup').register(app, { mongoose, adminAuth });
-// Boosting 2 is active through NovaSolution; see lib/boost2.js.
+// Boosting 2 is active through Vina SMM; see lib/boost2.js.
 function sanitizeUser(u) {
  return {
  id: u._id, name: u.name, email: u.email, balance: u.balance || 0,
@@ -9122,10 +9124,10 @@ try {
 } catch (boostErr) {
   console.error('[boost] module failed to load:', boostErr.message);
 }
-// NovaSolution SMM Boosting 2. Uses the same server-side NOVA_API_KEY as the
-// number integration; the key is never sent to the browser.
+// Vina SMM — Boosting 2. Uses the server-side VINASMM_API_KEY (or the key saved in Admin → Boost 2);
+// the key is never sent to the browser.
 try {
-  require('./lib/boost2')({ app, mongoose, User, Transaction, auth, anyAdminAuth, novaGate });
+  require('./lib/boost2')({ app, mongoose, User, Transaction, auth, anyAdminAuth });
 } catch (boost2Err) {
   console.error('[boost2] module failed to load:', boost2Err.message);
 }
