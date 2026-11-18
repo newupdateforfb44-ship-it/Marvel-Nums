@@ -1,4 +1,6 @@
 /* Marvel Nums searchable bottom-sheet selectors */
+/* Stop the invisible native <select> on a .select-tile from catching taps, so only the blue sheet opens (no white Android list). */
+.select-tile select{pointer-events:none!important}
 .ks-sheet-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important;white-space:nowrap!important}
 .ks-sheet-trigger{display:flex!important;align-items:center;gap:12px;text-align:left!important;width:100%!important;min-height:54px;padding:12px 14px!important;margin-top:6px!important;border:1px solid #2a4a9a!important;border-radius:14px!important;background:linear-gradient(135deg,#0f1b44,#0a1433)!important;color:#eef3ff!important;box-shadow:inset 0 1px #ffffff08;cursor:pointer;transition:border-color .18s,transform .18s}
 .ks-sheet-trigger:hover,.ks-sheet-trigger:focus-visible{border-color:#19c3ff!important;outline:none;transform:translateY(-1px)}
