@@ -212,6 +212,8 @@
       var tile = e.target.closest && e.target.closest('.select-tile');
       if (!tile) return;
       var sel = tile.querySelector('select'); if (!sel) return;
+      // If the blue searchable sheet (marvel-select-sheet.js) manages this tile, let it open instead of this white picker.
+      if (sel.dataset.ksSheetReady) return;
       e.preventDefault();
       if (sel.disabled) { var hint = ((tile.querySelector('.st-value') || {}).textContent || '').trim(); if (hint) banner(hint, 'info', { title: 'One step at a time', ms: 2600 }); return; }
       openPick(sel, tile);
@@ -233,3 +235,4 @@
   window.addEventListener('load', hookToast);
   setTimeout(hookToast, 1500);
 })();
+    
