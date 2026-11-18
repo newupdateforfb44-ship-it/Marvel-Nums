@@ -112,6 +112,9 @@
     /* ── SERVICES GRID (OPay-style) ────────── */
     .dsh-services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
     .dsh-svc-item{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 8px;cursor:pointer;transition:background .15s;border-radius:var(--radius-sm)}
+    /* 4-column tile grid defined here so the first paint is already a grid (not one long column while the big stylesheets load) */
+    .dsh-features-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    @media (max-width:340px){.dsh-features-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     .dsh-svc-item:hover{background:var(--blue-light)}
     .dsh-svc-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center}
     .dsh-svc-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
