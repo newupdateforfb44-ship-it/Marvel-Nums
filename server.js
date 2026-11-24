@@ -3224,10 +3224,7 @@ async function handleFlutterwaveWebhook(req, res) {
  console.log(' tx.amount :', tx.amount);
  console.log(' tx.status :', txStatus);
  console.log(' tx.currency :', tx.currency);
- console.log(' tx.customer :', JSON.stringify(tx.customer || {}));
  console.log(' tx.va_number :', tx.virtual_account_number || '(none)');
- console.log(' tx.narration :', tx.narration || tx.meta?.narration || '(none)');
- console.log(' tx.meta :', JSON.stringify(tx.meta || {}).slice(0, 300));
  // Record every delivery so the admin desk can prove what arrived and when.
  const whLog = mvnPlatform ? await mvnPlatform.logWebhook({
  channel: 'charge', event: eventType || 'unknown', reference: txRefAny,
@@ -8608,15 +8605,6 @@ app.get('/api/admin/staff/dashboard', subAdminAuth, async (req, res) => {
  });
  } catch (e) { res.status(500).json({ error: e.message }); }
 });
-app.get('/api/admin/system-errors', adminAuth, async (req, res) => {
- const errors = await SystemError.find({ resolved: false }).sort({ createdAt: -1 }).limit(100);
- res.json(errors);
-});
-app.put('/api/admin/system-errors/:id/resolve', adminAuth, async (req, res) => {
- const err = await SystemError.findByIdAndUpdate(req.params.id, { resolved: true }, { new: true });
- if (!err) return res.status(404).json({ error: 'Not found' });
- res.json(err);
-});
 app.get('/api/admin/support', anyAdminAuth, async (req, res) => res.json(await Support.find().sort({ createdAt: -1 })));
 app.put('/api/admin/support/:id', anyAdminAuth, async (req, res) => { const t = await Support.findByIdAndUpdate(req.params.id, { adminReply: req.body.reply, status: 'resolved', seenByUser: false }, { new: true }); res.json(t); });
 app.get('/api/admin/transactions', adminAuth, async (req, res) => res.json(await Transaction.find().populate('userId', 'name email').sort({ createdAt: -1 }).limit(200)));
@@ -8694,6 +8682,8 @@ app.get(['/services', '/airtime', '/data', '/cable', '/electricity', '/betting',
 app.get('/settings', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'settings.html'))));
 app.get('/api-docs', (req, res) => res.redirect(302, '/dashboard'));
 app.get('/apidocs', (req, res) => res.redirect(302, '/dashboard'));
+app.get('/terms', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'terms.html'))));
+app.get('/notifications', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'notifications.html'))));
 app.get('/groups', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'groups.html'))));
 app.get('/messages', (req, res) => (res.set('Cache-Control', 'no-store, must-revalidate'), res.sendFile(path.join(__dirname, 'public', 'messages.html'))));
 app.get('/chat', (req, res) => res.redirect(301, '/groups'));
@@ -9198,5 +9188,6 @@ app.get('*', (req, res) => {
   res.type('html').send(renderIndexWithSeo(req.path));
 });
 
+if (!process.env.ADMIN_SECRET_PATH) console.warn('SECURITY WARNING: ADMIN_SECRET_PATH is not set - the admin page is at the guessable default /mvn-admin-secret. Set ADMIN_SECRET_PATH to a long random value.');
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(` MVN on :${PORT}`));

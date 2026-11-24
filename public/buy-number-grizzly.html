@@ -262,8 +262,8 @@ if (typeof window.mvnConfirm !== 'function') {
 }
 </script>
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="icon" type="image/png" href="/favicon.png">
+
+
   <link rel="stylesheet" href="/css/marvel-brand.css?v=20261022">
   <script defer src="/js/marvel-brand.js?v=20261022"></script>
   <link rel="stylesheet" href="/css/marvel-mobile-polish.css?v=1">
@@ -333,8 +333,9 @@ details[open]>.how-sum{margin-bottom:6px}
 <meta name="theme-color" content="#ffffff"/>
 <link rel="stylesheet" href="/css/marvel-final.css?v=1"><link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
 <link rel="stylesheet" href="/css/marvel-select-sheet.css?v=4">
-  <link rel="stylesheet" href="/css/mvn-shell.css?v=1">
+  <link rel="stylesheet" href="/css/mvn-shell.css?v=2">
 <link rel="stylesheet" href="/css/mvn-standard.css?v=1">
+<link rel="stylesheet" href="/css/mvn-professional-polish.css?v=1">
 </head>
 <body class="mvn-std">
 <!-- Shared UI icon sprite (replaces emoji site-wide) — referenced via <svg class="icon i-NAME"><use href="#i-NAME"/></svg> -->
@@ -2333,6 +2334,8 @@ function dismissAnnouncement() {
   paint();
 })();
 </script>
+
+
 <script src="/js/announcements.js?v=3"></script>
 <script src="/welcome-popup.js?v=1" defer></script>
 <script id="site-links-lite">fetch('/api/public/site-links').then(r=>r.ok?r.json():{}).then(l=>{const wa=String(l.whatsappNumber||'').replace(/\D/g,'');const admin=String(l.adminPhone||wa).replace(/\D/g,'');const tgL=l.telegramLink||(l.telegramUsername?'https://t.me/'+l.telegramUsername:'#');const waOn=l.whatsappEnabled!==false;document.querySelectorAll('a[data-link="contact"]').forEach(a=>{if(waOn)a.href=wa?'https://wa.me/'+wa:'#';else a.href=tgL;});document.querySelectorAll('a[data-link="adminphone"]').forEach(a=>{if(waOn)a.href=admin?'https://wa.me/'+admin:'#';else a.href=tgL;});document.querySelectorAll('a[data-link="group"]').forEach(a=>a.href=l.telegramCommunityLink||l.whatsappGroupLink||'#');document.querySelectorAll('a[data-link="channel"]').forEach(a=>a.href=l.telegramChannelLink||l.whatsappChannelLink||'#');document.querySelectorAll('a[data-link="telegram"]').forEach(a=>a.href=l.telegramLink||(l.telegramUsername?'https://t.me/'+l.telegramUsername:'#'));}).catch(()=>{});</script>
@@ -2345,7 +2348,7 @@ function dismissAnnouncement() {
 <script src="/js/marvel-smooth.js?v=1" defer></script>
 <script src="/js/marvel-select-sheet.js?v=4" defer></script>
 <script src="/js/marvel-pro.js?v=1" defer></script>
-<script src="/js/mvn-shell.js?v=1" defer></script>
+<script src="/js/mvn-shell.js?v=2" defer></script>
 <script src="/js/mvn-standard.js?v=1" defer></script>
 </body>
 </html>

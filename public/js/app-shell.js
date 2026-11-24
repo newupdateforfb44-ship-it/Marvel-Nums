@@ -98,6 +98,19 @@
       '<a class="mvn-drawer-link" href="/support">💬 <span>Contact Support</span></a><a class="mvn-drawer-link" href="/help">❓ <span>Help Center</span></a><a class="mvn-drawer-link" href="/about">ℹ️ <span>About</span></a>' +
       '<button class="mvn-drawer-link" id="mvnLogout" type="button">🚪 <span>Log Out</span></button>';
     document.body.appendChild(backdrop); document.body.appendChild(drawer);
+    var current = location.pathname.replace(/\/$/, '') || '/';
+    drawer.querySelectorAll('a[href]').forEach(function (link) {
+      var targetPath; try { targetPath = new URL(link.href, location.href).pathname.replace(/\/$/, '') || '/'; } catch (e) { return; }
+      var matches = current === targetPath || (targetPath === '/marketplace' && current.indexOf('/marketplace/') === 0);
+      if (!matches) return;
+      link.classList.add('active');
+      var group = link.closest('.mvn-submenu');
+      if (group) {
+        group.classList.add('open');
+        var toggle = group.previousElementSibling;
+        if (toggle && toggle.classList.contains('mvn-menu-toggle')) toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
     var mvnY=0,mvnLocked=false; function mvnLock(){ if(mvnLocked)return; mvnLocked=true; mvnY=window.pageYOffset||0; var s=document.body.style; s.position='fixed'; s.top=(-mvnY)+'px'; s.left='0'; s.right='0'; s.width='100%'; document.documentElement.classList.add('mvn-locked'); } function mvnUnlock(){ if(!mvnLocked)return; mvnLocked=false; var s=document.body.style; s.position=''; s.top=''; s.left=''; s.right=''; s.width=''; document.documentElement.classList.remove('mvn-locked'); var de=document.documentElement,sb=de.style.scrollBehavior; de.style.scrollBehavior='auto'; window.scrollTo(0,mvnY); de.style.scrollBehavior=sb; } function closeMenu(){ mvnUnlock(); drawer.classList.remove('open'); backdrop.classList.remove('open'); document.body.classList.remove('mvn-menu-open'); trigger.setAttribute('aria-expanded','false'); }
     function openMenu(){ mvnLock(); drawer.classList.add('open'); backdrop.classList.add('open'); document.body.classList.add('mvn-menu-open'); trigger.setAttribute('aria-expanded','true'); }
     trigger.addEventListener('click',function(){ drawer.classList.contains('open') ? closeMenu() : openMenu(); });

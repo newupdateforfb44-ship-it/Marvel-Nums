@@ -3,16 +3,23 @@
   if (window.__mvSmooth) return; window.__mvSmooth = true;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* 1. fade out before navigating to another page on this site */
+  /* 1. Smooth, safe same-site page changes.
+     Keep normal document navigation (each marketplace has its own page and scripts),
+     but briefly fade the current page before following ordinary links. Never hijack
+     forms, buttons, API calls, custom onclick links, new tabs, or modified clicks. */
   document.addEventListener('click', function (e) {
-    if (reduce || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     var a = e.target.closest && e.target.closest('a[href]');
-    if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+    if (!a || a.hasAttribute('onclick') || a.target === '_blank' || a.hasAttribute('download') || a.getAttribute('rel') === 'external') return;
     var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
-    if (u.origin !== location.origin || (u.pathname === location.pathname && u.search === location.search) || /^\/api\//.test(u.pathname)) return;
-    /* no leave fade: next page paints instantly */ return;
-    setTimeout(function () { document.documentElement.classList.remove('mv-leaving'); }, 1500); /* safety if navigation is cancelled */
-  }, true);
+    if (u.origin !== location.origin || /^(mailto:|tel:|javascript:)/i.test(u.protocol) || /^\/api\//.test(u.pathname)) return;
+    if (u.pathname === location.pathname && u.search === location.search) return;
+    if (u.hash && u.pathname === location.pathname && u.search === location.search) return;
+    e.preventDefault();
+    var destination = u.href;
+    document.documentElement.classList.add('mv-leaving');
+    window.setTimeout(function () { window.location.assign(destination); }, reduce ? 0 : 115);
+  });
   window.addEventListener('pageshow', function () { document.documentElement.classList.remove('mv-leaving'); });
 
   /* 2. scroll reveal with a gentle stagger for cards, tiles and rows */

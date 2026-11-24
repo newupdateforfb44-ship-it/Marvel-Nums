@@ -6,9 +6,10 @@
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
 body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
-/* page enter / leave */
+/* page enter / leave: quick exit fade, then the destination renders normally */
 @keyframes mvIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
-/* pages paint instantly: no entry animation, no leave fade */
+html.mv-leaving body{opacity:0;transform:translate3d(0,4px,0);transition:opacity .115s ease,transform .115s ease;pointer-events:none}
+@media(prefers-reduced-motion:reduce){html.mv-leaving body{opacity:1;transform:none;transition:none}}
 
 /* scroll reveal + staggered cards (class added by marvel-smooth.js) */
 .mv-reveal,.mv-reveal.mv-in{opacity:1;transform:none}

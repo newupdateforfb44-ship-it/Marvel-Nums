@@ -11,7 +11,6 @@
   --mvs-blue: #2a7bff;
   --mvs-red: #e5283b;
   --mvs-header-h: 56px;
-  --mvs-back-h: 48px;
 }
 
 /* Hide every old top bar, drawer and bottom bar the patches added. */
@@ -41,9 +40,6 @@ body.mvn-std {
   --mp-nav-h: 0px !important;
   margin: 0;
 }
-body.mvn-std.mvn-has-back {
-  padding-top: calc(var(--mvs-header-h) + var(--mvs-back-h));
-}
 
 /* ── Top header ── */
 #mvnStdHeader {
@@ -53,7 +49,8 @@ body.mvn-std.mvn-has-back {
   height: var(--mvs-header-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 8px;
   padding: 0 16px;
   background: var(--mvs-panel);
   border-bottom: 1px solid var(--mvs-line);
@@ -68,6 +65,8 @@ body.mvn-std.mvn-has-back {
   font-weight: 700;
   font-size: 16px;
   min-width: 0;
+  flex: 0 1 auto;
+  max-width: calc(100% - 120px);
 }
 #mvnStdHeader .mvs-brand img {
   width: 32px; height: 32px;
@@ -101,35 +100,17 @@ body.mvn-std.mvn-has-back {
   background: var(--mvs-text);
 }
 
-/* ── Back row (inner pages only, same spot everywhere) ── */
-#mvnStdBackRow {
-  position: fixed;
-  top: var(--mvs-header-h);
-  left: 0; right: 0;
-  z-index: 9990;
-  height: var(--mvs-back-h);
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  background: var(--mvs-bg);
-  border-bottom: 1px solid var(--mvs-line);
-  box-sizing: border-box;
+/* ── Header Back link beside the Marvel Nums logo ── */
+#mvnStdHeader .mvs-back-btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:5px;
+  flex:0 0 auto; min-height:36px; padding:0 10px; margin-left:2px;
+  border:1px solid var(--mvs-blue); border-radius:999px;
+  background:transparent; color:#8ec5ff; text-decoration:none;
+  font:inherit; font-size:13px; font-weight:650; white-space:nowrap;
 }
-#mvnStdBackRow button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 34px;
-  padding: 0 14px;
-  border: 1px solid var(--mvs-blue);
-  border-radius: 999px;
-  background: transparent;
-  color: #8ec5ff;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
+#mvnStdHeader .mvs-back-btn:hover { background:rgba(42,123,255,.12); color:#fff; }
+#mvnStdHeader .mvs-menu-btn { margin-left:auto; }
+body.mvn-std .wrap > header.brand { display:none !important; }
 
 /* ── Menu sheet ── */
 #mvnStdSheet {
@@ -208,3 +189,109 @@ body.mvn-std video { max-width: 100%; }
 
 /* Some older patches hide every a[href="/support"]; keep the shell links visible. */
 body.mvn-std #mvnStdSheet .mvs-panel a[href="/support"] { display: block !important; }
+
+
+/* Robust mobile/desktop menu sheet */
+#mvnStdSheet { z-index: 10050; overscroll-behavior: contain; }
+#mvnStdSheet .mvs-panel { display:block; max-height:100dvh; padding-bottom:calc(24px + env(safe-area-inset-bottom,0px)); overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+#mvnStdSheet .mvs-section-label { margin:18px 8px 6px; color:var(--mvs-muted); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+#mvnStdSheet .mvs-panel a { min-height:44px; display:flex; align-items:center; box-sizing:border-box; }
+#mvnStdSheet .mvs-panel a[aria-current="page"] { background:rgba(42,123,255,.18); color:#fff; }
+#mvnStdSheet .mvs-logout { display:block; width:100%; margin-top:18px; padding:13px 10px; border:1px solid rgba(229,40,59,.35); border-radius:10px; background:rgba(229,40,59,.12); color:#ff9ba5; font:inherit; font-weight:700; text-align:left; }
+body.mvs-menu-open { overflow:hidden; }
+#mvnStdHeader .mvs-menu-btn { position:relative; z-index:1; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+#mvnStdHeader .mvs-menu-btn:focus-visible, #mvnStdSheet button:focus-visible, #mvnStdSheet a:focus-visible { outline:2px solid var(--mvs-blue); outline-offset:2px; }
+
+/* pages with an old inline top bar use the standard header/back link instead */
+body.mvn-std > .top { display:none !important; }
+
+/* Refined Marvel Nums navigation drawer — navy, royal blue and cyan brand */
+#mvnStdSheet {
+  background: rgba(2, 7, 22, .72);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+}
+#mvnStdSheet .mvs-panel {
+  width: min(370px, 90vw);
+  padding: 18px 16px calc(26px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(165deg, #0b1b3c 0%, #07132d 52%, #050d20 100%);
+  border-left: 1px solid rgba(69, 143, 255, .38);
+  box-shadow: -22px 0 60px rgba(0, 0, 0, .38);
+}
+#mvnStdSheet .mvs-panel-head {
+  position: sticky;
+  top: -18px;
+  z-index: 2;
+  margin: -18px -16px 15px;
+  padding: 17px 16px 14px;
+  background: linear-gradient(120deg, #102b5c, #0a1a3c 75%);
+  border-bottom: 1px solid rgba(82, 157, 255, .25);
+}
+#mvnStdSheet .mvs-menu-brand { display:flex; align-items:center; gap:11px; min-width:0; }
+#mvnStdSheet .mvs-menu-brand img { width:39px; height:39px; object-fit:contain; border-radius:11px; background:rgba(255,255,255,.08); padding:3px; }
+#mvnStdSheet .mvs-menu-brand span { display:flex; flex-direction:column; gap:2px; }
+#mvnStdSheet .mvs-menu-brand b { color:#f5f9ff; font-size:15px; letter-spacing:.01em; }
+#mvnStdSheet .mvs-menu-brand small { color:#9db9e8; font-size:11px; font-weight:500; }
+#mvnStdSheet .mvs-close {
+  flex:0 0 40px; color:#dcecff; border-color:rgba(104,169,255,.35);
+  background:rgba(3,13,34,.72); transition:background .18s ease, transform .18s ease;
+}
+#mvnStdSheet .mvs-close:hover { background:rgba(42,123,255,.2); transform:rotate(90deg); }
+#mvnStdSheet .mvs-section-label {
+  display:flex; align-items:center; gap:9px;
+  margin:19px 8px 7px; color:#75baff; font-size:10px;
+  letter-spacing:.14em; font-weight:850;
+}
+#mvnStdSheet .mvs-section-label:after { content:""; height:1px; flex:1; background:linear-gradient(90deg,rgba(67,145,255,.35),transparent); }
+#mvnStdSheet .mvs-panel a {
+  position:relative; min-height:43px; margin:3px 0; padding:10px 12px 10px 14px;
+  border:1px solid transparent; border-radius:11px; color:#dce8ff;
+  font-size:13px; font-weight:650; letter-spacing:.005em;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease;
+}
+#mvnStdSheet .mvs-panel a:before {
+  content:""; width:6px; height:6px; margin-right:3px; flex:0 0 6px;
+  border-radius:50%; background:#397fe8; box-shadow:0 0 0 3px rgba(57,127,232,.12);
+}
+#mvnStdSheet .mvs-panel a:hover,
+#mvnStdSheet .mvs-panel a:focus-visible {
+  background:rgba(40,119,255,.13); border-color:rgba(76,153,255,.22);
+  color:#fff; transform:translateX(2px);
+}
+#mvnStdSheet .mvs-panel a[aria-current="page"] {
+  background:linear-gradient(100deg,rgba(35,111,255,.28),rgba(0,180,255,.09));
+  border-color:rgba(70,155,255,.42); color:#fff;
+  box-shadow:inset 3px 0 0 #27a9ff, 0 5px 18px rgba(0,0,0,.12);
+}
+#mvnStdSheet .mvs-panel a[aria-current="page"]:before { background:#32c5ff; box-shadow:0 0 0 4px rgba(50,197,255,.15); }
+#mvnStdSheet .mvs-logout {
+  min-height:45px; margin-top:22px; padding:12px 14px;
+  border:1px solid rgba(255,92,111,.32); border-radius:12px;
+  background:linear-gradient(100deg,rgba(174,35,58,.18),rgba(110,22,42,.12));
+  color:#ffb4bd; font-size:13px; cursor:pointer;
+  transition:background .16s ease,border-color .16s ease;
+}
+#mvnStdSheet .mvs-logout:hover { background:rgba(205,43,67,.24); border-color:rgba(255,115,132,.55); }
+#mvnStdHeader .mvs-menu-btn {
+  border:1px solid rgba(76,151,255,.36);
+  background:linear-gradient(145deg,#102b5c,#081832);
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+#mvnStdHeader .mvs-menu-btn:hover { border-color:#39bfff; background:#12336b; }
+#mvnStdHeader .mvs-menu-btn:active { transform:scale(.96); }
+#mvnStdHeader .mvs-menu-btn i { height:2.5px; border-radius:4px; transition:transform .2s ease,opacity .2s ease; }
+#mvnStdHeader .mvs-menu-btn[aria-expanded="true"] i:first-child { transform:translateY(7.5px) rotate(45deg); }
+#mvnStdHeader .mvs-menu-btn[aria-expanded="true"] i:nth-child(2) { opacity:0; }
+#mvnStdHeader .mvs-menu-btn[aria-expanded="true"] i:last-child { transform:translateY(-7.5px) rotate(-45deg); }
+@media(max-width:420px) {
+  #mvnStdSheet .mvs-panel { width:min(350px,92vw); }
+  #mvnStdSheet .mvs-panel a { min-height:44px; }
+}
+
+/* Fallback guard: the header Back link is the only page-level back control. */
+body.mvn-std a.back,
+body.mvn-std a.hub-back,
+body.mvn-std a.page-back,
+body.mvn-std a.back-link { display:none !important; }
+body.mvn-telegram-page .shell > .top { display:none !important; }

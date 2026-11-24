@@ -30,7 +30,7 @@ async function kLogoSave() {
   if (!label) return kMsg('kLogoMsg', 'Enter a name, for example Facebook.', true);
   if (!kLogoData) return kMsg('kLogoMsg', 'Choose an image first.', true);
   try {
-    await aFetch('/api/admin/brand-logos', 'POST', { label, keywords: kw || label, image: kLogoData });
+    await aFetch('/api/admin/marvel-logos', 'POST', { label, keywords: kw || label, image: kLogoData });
     document.getElementById('kLogoName').value = ''; document.getElementById('kLogoKw').value = ''; document.getElementById('kLogoFile').value = ''; document.getElementById('kLogoPreview').innerHTML = ''; kLogoData = '';
     kMsg('kLogoMsg', 'Logo saved. Every matching product now uses it.'); kLogosLoad();
   } catch (e) { kMsg('kLogoMsg', e.message, true); }
@@ -38,7 +38,7 @@ async function kLogoSave() {
 async function kLogosLoad() {
   const box = document.getElementById('kLogoList'); if (!box) return;
   try {
-    const rows = await aFetch('/api/admin/brand-logos');
+    const rows = await aFetch('/api/admin/marvel-logos');
     box.innerHTML = rows.length ? rows.map(r => `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--border,#dbe6f6)">
       <img src="${kEsc(r.url)}" style="width:48px;height:48px;object-fit:contain;background:#fff;border-radius:10px;padding:3px">
       <div style="flex:1;min-width:180px"><b>${kEsc(r.label)}</b>${r.enabled ? '' : ' <span style="color:var(--red,#ef4444)">(off)</span>'}
@@ -49,14 +49,14 @@ async function kLogosLoad() {
       <button class="btn-sm" type="button" style="color:var(--red,#ef4444)" onclick="kLogoDelete('${r.id}')">Delete</button></div>`).join('') : '<div class="info-box">No logos yet. Add one above.</div>';
   } catch (e) { box.textContent = e.message; }
 }
-async function kLogoUpdate(id) { try { await aFetch('/api/admin/brand-logos/' + id, 'PUT', { keywords: document.getElementById('kLk_' + id).value }); kMsg('kLogoMsg', 'Keywords saved.'); kLogosLoad(); } catch (e) { kMsg('kLogoMsg', e.message, true); } }
-async function kLogoToggle(id, on) { try { await aFetch('/api/admin/brand-logos/' + id, 'PUT', { enabled: on }); kLogosLoad(); } catch (e) { kMsg('kLogoMsg', e.message, true); } }
-async function kLogoDelete(id) { if (!confirm('Delete this logo? Products go back to their default picture.')) return; try { await aFetch('/api/admin/brand-logos/' + id, 'DELETE'); kLogosLoad(); } catch (e) { kMsg('kLogoMsg', e.message, true); } }
+async function kLogoUpdate(id) { try { await aFetch('/api/admin/marvel-logos/' + id, 'PUT', { keywords: document.getElementById('kLk_' + id).value }); kMsg('kLogoMsg', 'Keywords saved.'); kLogosLoad(); } catch (e) { kMsg('kLogoMsg', e.message, true); } }
+async function kLogoToggle(id, on) { try { await aFetch('/api/admin/marvel-logos/' + id, 'PUT', { enabled: on }); kLogosLoad(); } catch (e) { kMsg('kLogoMsg', e.message, true); } }
+async function kLogoDelete(id) { if (!confirm('Delete this logo? Products go back to their default picture.')) return; try { await aFetch('/api/admin/marvel-logos/' + id, 'DELETE'); kLogosLoad(); } catch (e) { kMsg('kLogoMsg', e.message, true); } }
 function kLogoReplace(id, input) {
   const f = input.files && input.files[0]; if (!f) return;
   const rd = new FileReader();
   rd.onload = () => {
-    const send = data => aFetch('/api/admin/brand-logos/' + id, 'PUT', { image: data }).then(() => { kMsg('kLogoMsg', 'Image updated.'); kLogosLoad(); }).catch(e => kMsg('kLogoMsg', e.message, true));
+    const send = data => aFetch('/api/admin/marvel-logos/' + id, 'PUT', { image: data }).then(() => { kMsg('kLogoMsg', 'Image updated.'); kLogosLoad(); }).catch(e => kMsg('kLogoMsg', e.message, true));
     if (f.type === 'image/svg+xml' || f.type === 'image/gif') return send(rd.result);
     const im = new Image(); im.onload = () => { const sc = Math.min(1, 256 / Math.max(im.width, im.height)); const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * sc)); c.height = Math.max(1, Math.round(im.height * sc)); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); send(c.toDataURL('image/png')); }; im.src = rd.result;
   };
