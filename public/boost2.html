@@ -102,7 +102,7 @@ async function load(){
   finally{requestAnimationFrame(()=>requestAnimationFrame(()=>{try{MvnBoostLoader.hide()}catch(e){}}))}
 }
 function pickSvc(a){try{const k=a.getAttribute('data-k');const r=(window.__b2rows||[]).find(x=>x.serviceKey===k);if(r)sessionStorage.setItem('b2svc',JSON.stringify(r));}catch(e){}}
-async function loadOrders(){try{const rows=await api('/api/boost2/orders');if(!rows.length)return;$('ordersBox').style.display='block';$('orders').innerHTML=rows.map(o=>'<div class="ord"><b>'+esc(o.service)+'</b><br><span class="muted">'+Number(o.quantity).toLocaleString()+' · '+money(o.total)+' · '+esc(o.status)+' · '+new Date(o.createdAt).toLocaleString()+'</span></div>').join('')}catch(e){}}
+async function loadOrders(){try{const data=await api('/api/boost2/orders');const rows=Array.isArray(data)?data:((data&&data.orders)||[]);if(!rows.length)return;$('ordersBox').style.display='block';$('orders').innerHTML=rows.map(o=>'<div class="ord"><b>'+esc(o.service||o.itemName||'Boost 2 order')+'</b><br><span class="muted">'+Number(o.quantity).toLocaleString()+' · '+money(o.total!=null?o.total:o.amountPaid)+' · '+esc(o.status==='review'?'being checked':o.status)+' · '+new Date(o.createdAt).toLocaleString()+'</span></div>').join('')}catch(e){}}
 load();loadOrders();
 </script>
 <script src="/js/app-shell.js?v=3" defer></script><script src="/js/section-tabs.js?v=1" defer></script>

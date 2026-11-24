@@ -234,7 +234,7 @@ app.use((req, res, next) => {
   if (/\.(?:bak|backup|old|orig|swp|tmp)$/i.test(req.path || '')) return res.sendStatus(404);
   next();
 });
-app.use(express.static('public', {
+app.use(express.static(path.join(__dirname, 'public'), {
   index: false,
   setHeaders(res, filePath) {
     // SECURITY: files in user-writable folders can never run as a page or script on our domain.
@@ -9185,6 +9185,11 @@ app.all('/api/*', (req, res) => {
 });
 // MVN-UPDATE-4
 app.get(['/tutorials', '/help', '/about'], (req, res) => res.sendFile(path.join(__dirname, 'public', req.path.replace(/^\//, '') + '.html')));
+app.get('*', (req, res, next) => {
+  // Missing static files must 404, not receive the home page ('Unexpected token <' errors).
+  if (/\.(?:js|mjs|css|map|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|json|txt|mp4|webm)$/i.test(req.path || '')) return res.status(404).send('Not found');
+  next();
+});
 app.get('*', (req, res) => {
   // Always hand back the freshly built HTML — no stale home page from a cache.
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
