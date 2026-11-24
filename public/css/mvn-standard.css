@@ -1,0 +1,78 @@
+/* Marvel Nums – standard clean look (loaded LAST on every customer page)
+   - no tap flash / focus box / underline when a card, tile or link is clicked
+   - cards, tiles and rows behave like plain blocks (no lift, no press-shrink)
+   - text inside cards cannot be selected or dragged by accident */
+
+html, body, a, button, [role="button"], label, summary, select,
+.dsh-svc-item, .dsh-card, .tool-card, .prod-card, .product-card, .market-card,
+.service-card, .mkt-card, .choice, .select-tile, .bw-tile, .bsvc-item,
+.bst-sg-item, .m4-cat, .mvn-what-card, .mvn-mk-item, .kw-dock a, .dd-item,
+.hub-card, .card, .tile, .row-link, tr, td {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* No outline / ring when something is clicked or tapped */
+a:focus, a:focus-visible, a:active,
+button:focus, button:focus-visible,
+[role="button"]:focus, [role="button"]:focus-visible,
+[tabindex]:focus, [tabindex]:focus-visible,
+summary:focus, label:focus,
+.dsh-svc-item:focus, .dsh-svc-item:focus-visible,
+.tool-card:focus-visible, .prod-card a:focus-visible,
+.mvn-what-card:focus-visible, .bsvc-item:focus-visible,
+.bw-tile:focus-visible, .select-tile:focus-visible,
+.bst-sg-item:focus, .bst-sg-item:focus-visible,
+.ks-sheet-trigger:focus-visible, .ks-sheet-option:focus-visible,
+.mkt-chip:focus-visible, .m4-cat:focus-visible, .kw-dock a:focus {
+  outline: none !important;
+  outline-offset: 0 !important;
+  text-decoration: none !important;
+}
+:focus-visible { outline: none !important; }
+
+/* Links never underline (also on hover / press) */
+a, a:hover, a:active, a:visited, a:focus { text-decoration: none; }
+
+/* Cards and tiles are plain blocks: no lift, no shrink, no glow on press */
+.dsh-svc-item, .dsh-svc-item:hover, .dsh-svc-item:active,
+.tool-card:hover, .tool-card:active, .prod-card:hover, .prod-card:active,
+.product-card:hover, .product-card:active, .market-card:hover, .market-card:active,
+.service-card:hover, .service-card:active, .mkt-card:hover, .mkt-card:active,
+.choice:hover, .choice:active, .select-tile:hover, .select-tile:active,
+.bw-tile:hover, .bw-tile:active, .bsvc-item:hover, .bsvc-item:active,
+.m4-cat:active, .mvn-what-card:hover, .mvn-what-card:active,
+.mvn-mk-item:hover, .mvn-mk-item:active, .kw-dock a:active,
+.dd-item:active, .card:active, .tile:active {
+  transform: none !important;
+  box-shadow: none;
+  transition: none !important;
+}
+button:not(:disabled):active, .btn:active, .chip:active, .tab:active,
+a.btn:active, [role="button"]:active { transform: none !important; }
+
+/* Clicking text inside a block does not select it or start a drag */
+a, a *, button, button *, .dsh-svc-item, .dsh-svc-item *, .kw-dock, .kw-dock *,
+.tool-card, .tool-card *, .prod-card, .market-card, .service-card, .mkt-card,
+.choice, .select-tile, .bw-tile, .bsvc-item, .m4-cat, .mvn-what-card,
+.dd-item, .dd-item * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+a img, a svg, a .dsh-svc-icon { -webkit-user-drag: none; pointer-events: none; }
+
+/* Typing fields keep a clean, quiet focus (border only, no ring) */
+input:focus, select:focus, textarea:focus, .form-control:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-user-select: text;
+  user-select: text;
+}
+input, textarea, [contenteditable] { -webkit-user-select: text; user-select: text; }
+
+/* Consistent page rhythm on every customer page */
+html { scroll-behavior: auto; -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+img, svg, video { max-width: 100%; }
