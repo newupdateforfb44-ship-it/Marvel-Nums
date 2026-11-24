@@ -59,6 +59,8 @@ button.copy{width:auto;padding:10px 16px;margin-top:4px}button.danger{background
 </div>
 </main>
 <script>
+function setBack(h){var b=document.getElementById('backLink');if(b)b.href=h}
+
 (function(){
 'use strict';
 var $=function(id){return document.getElementById(id)};
@@ -70,7 +72,7 @@ var BACK={'1':'/buy-number-1','2':'/buy-number-2','3':'/buy-number-3'};
 var RENT_MS=20*60*1000;
 var money=function(n){return '\u20a6'+Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2})};
 var token=function(){return localStorage.getItem('mvn_token')||localStorage.getItem('token')||''};
-$('badge').textContent=NAMES[S];$('backLink').href=BACK[S];
+$('badge').textContent=NAMES[S];setBack(BACK[S]);
 document.title='Active Number \u2022 '+NAMES[S]+' | Marvel Nums';
 
 function api(url,opt){opt=opt||{};
@@ -179,6 +181,6 @@ else{
 <script src="/js/page-transitions.js?v=1" defer></script>
 <script src="/js/marvel-smooth.js?v=1" defer></script>
 <script src="/js/marvel-pro.js?v=1" defer></script>
-<script src="/js/mvn-shell.js?v=3" defer></script>
+<script src="/js/mvn-shell.js?v=4" defer></script>
 <script src="/js/mvn-standard.js?v=1" defer></script>
 </body></html>

@@ -1,6 +1,7 @@
 /* Adds a slim "Back" bar at the top of every inner page. */
 (function () {
   if (window.__mvnBackBar) return; window.__mvnBackBar = true;
+  return; /* top Back bar removed site-wide */
   var path = location.pathname.replace(/\/+$/, '') || '/';
   var skip = ['/', '/dashboard', '/login', '/register', '/welcome', '/terms'];
   if (skip.indexOf(path) !== -1 || /admin/i.test(path)) return;

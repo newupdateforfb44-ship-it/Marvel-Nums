@@ -33,7 +33,6 @@
 
   /* ── Page-switch loader ── */
   var navigating = false;
-  var backControl = null;
   function go(url) {
     if (navigating) return;
     navigating = true;
@@ -68,17 +67,14 @@
     document.body.insertBefore(header, document.body.firstChild);
   }
 
-  /* ── Single Back link, beside the logo in the standard header ── */
+  /* ── Back row (inner pages only; same place on every page) ── */
   function buildBackRow() {
+    return; /* back row removed site-wide (menu is the only top control) */
     if (isHome) return;
-    var header = document.getElementById('mvnStdHeader');
-    backControl = el('a', { id: 'mvnStdBackLink', class: 'mvs-back-btn', href: HOME, 'aria-label': 'Go back' }, '<span aria-hidden="true">&larr;</span><span>Back</span>');
-    backControl.addEventListener('click', function (e) {
-      e.preventDefault();
-      var destination = backControl.getAttribute('data-back-destination');
-      if (destination) go(destination); else goBack();
-    });
-    header.insertBefore(backControl, header.querySelector('.mvs-menu-btn'));
+    document.body.classList.add('mvn-has-back');
+    var row = el('div', { id: 'mvnStdBackRow' }, '<button type="button" aria-label="Go back">&larr; Back</button>');
+    row.querySelector('button').addEventListener('click', goBack);
+    document.getElementById('mvnStdHeader').insertAdjacentElement('afterend', row);
   }
 
   /* ── Accessible navigation drawer ── */
@@ -182,22 +178,19 @@
   }
 
   function cleanLegacyBackLinks() {
-    // Replace actual page-level Back controls with the one beside the logo.
-    // Do not remove ordinary links such as History, Dashboard, or form actions.
-    var selector = 'a.back, a.hub-back, a.page-back, a.back-link';
-    function removeBack(node) {
-      if (node.closest('#mvnStdHeader, #mvnStdSheet, form')) return;
-      var href = node.getAttribute('href');
-      if (backControl && href && href.charAt(0) !== '#' && !/^javascript:/i.test(href) && !backControl.hasAttribute('data-back-destination')) {
-        backControl.setAttribute('href', href);
-        backControl.setAttribute('data-back-destination', href);
-      }
-      node.remove();
-    }
+    // The standard shell owns the single page-level Back control. Remove older
+    // page-specific back buttons so customers never see two competing controls.
+    var selector = 'a.back, a.back-btn, a.hub-back, a.page-back, a.back-link';
     function clean(root) {
-      var scope = root || document;
-      if (scope.nodeType === 1 && scope.matches && scope.matches(selector)) removeBack(scope);
-      scope.querySelectorAll(selector).forEach(removeBack);
+      (root || document).querySelectorAll(selector).forEach(function (node) {
+        if (node.closest('#mvnStdHeader, #mvnStdBackRow, #mvnStdSheet, form')) return;
+        node.remove();
+      });
+      (root || document).querySelectorAll('a').forEach(function (node) {
+        if (node.closest('#mvnStdHeader, #mvnStdBackRow, #mvnStdSheet, form')) return;
+        var label = (node.textContent || '').replace(/\s+/g, ' ').trim();
+        if (/^(?:←|\u2190|&larr;|‹|&lsaquo;)?\s*(?:back(?:\s+to\b|\b)|all number services\b)/i.test(label)) node.remove();
+      });
     }
     clean(document);
     if (window.MutationObserver) {

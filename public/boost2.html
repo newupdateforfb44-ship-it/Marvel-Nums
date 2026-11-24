@@ -47,6 +47,8 @@ label{display:block;margin-top:10px;color:#5a6c8c;font-size:14px}
 <div class="panel" id="ordersBox" style="display:none"><h3 style="margin:0 0 6px">Recent orders</h3><div id="orders"></div></div>
 </main>
 <script>
+function setBack(h){var b=document.getElementById('backLink');if(b)b.href=h}
+
 const $=id=>document.getElementById(id);
 const money=n=>'₦'+Number(n||0).toLocaleString('en-NG',{maximumFractionDigits:2});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -73,18 +75,18 @@ function render(){
   if(!all.length){v.className='panel muted';v.textContent='No services are available right now. Please check back soon.';return}
   v.className='';
   if(!r.p){ /* step 1 — platform */
-    $('ttl').textContent='Boost 2';$('sub').textContent='Step 1 — Choose a category.';$('backLink').href='/boost';
+    $('ttl').textContent='Boost 2';$('sub').textContent='Step 1 — Choose a category.';setBack('/boost');
     const list=PLATS.concat([['Other','','#64748b']]).map(p=>({p,n:all.filter(s=>matchPlat(s,p[0])).length})).filter(x=>x.n>0&&(!q||x.p[0].toLowerCase().includes(q)));
     v.innerHTML=list.length?'<div class="grid">'+list.map(x=>'<a class="tile" href="'+hashFor(x.p[0])+'">'+platIcon(x.p)+'<span>'+esc(x.p[0])+'</span><small>'+x.n.toLocaleString()+' service'+(x.n>1?'s':'')+'</small></a>').join('')+'</div>':'<div class="panel muted">No categories match your search.</div>';
   }else if(!r.t){ /* step 2 — type (followers, views, likes…) */
     const pool=all.filter(s=>matchPlat(s,r.p));
-    $('ttl').textContent=r.p;$('sub').textContent='Step 2 — What do you need?';$('backLink').href='#';
+    $('ttl').textContent=r.p;$('sub').textContent='Step 2 — What do you need?';setBack('#');
     const counts={};pool.forEach(s=>{const t=typeOf(s);counts[t]=(counts[t]||0)+1});
     let keys=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).filter(k=>!q||k.toLowerCase().includes(q));
     const tiles=(!q||'all services'.includes(q)?['*']:[]).concat(keys);
     v.innerHTML=tiles.length?'<div class="grid">'+tiles.map(k=>k==='*'?'<a class="tile" href="'+hashFor(r.p,'*')+'"><span class="ico">✨</span><span>All services</span><small>'+pool.length.toLocaleString()+' services</small></a>':'<a class="tile" href="'+hashFor(r.p,k)+'"><span class="ico">'+esc(k.charAt(0))+'</span><span>'+esc(k)+'</span><small>'+counts[k].toLocaleString()+' service'+(counts[k]>1?'s':'')+'</small></a>').join('')+'</div>':'<div class="panel muted">Nothing matches your search.</div>';
   }else{ /* step 3 — services */
-    $('ttl').textContent=r.p+(r.t==='*'?'':' · '+r.t);$('sub').textContent='Step 3 — Choose a service.';$('backLink').href='#';
+    $('ttl').textContent=r.p+(r.t==='*'?'':' · '+r.t);$('sub').textContent='Step 3 — Choose a service.';setBack('#');
     const rows=all.filter(s=>matchPlat(s,r.p)&&(r.t==='*'||typeOf(s)===r.t)&&(!q||(s.name||'').toLowerCase().includes(q))).sort((a,b)=>per1000(a)-per1000(b));
     v.innerHTML=rows.length?rows.map(s=>'<a class="svc" href="/boost2/order" data-k="'+esc(s.serviceKey)+'" onclick="pickSvc(this)">'+logoHtml(logoOf(s),s.name,'big')+'<div><b>'+esc(s.name)+'</b><span class="m">Min '+Number(s.min||0).toLocaleString()+' · Max '+Number(s.max||0).toLocaleString()+'</span></div><div class="p">'+money(per1000(s))+'<div class="m">per 1,000</div></div></a>').join(''):'<div class="panel muted">No services here yet — go back and try another type.</div>';
   }
@@ -94,7 +96,7 @@ function renderWithLoader(){
   try{MvnBoostLoader.show()}catch(e){}
   setTimeout(()=>{try{render()}finally{requestAnimationFrame(()=>requestAnimationFrame(()=>{try{MvnBoostLoader.hide()}catch(e){}}))}},220);
 }
-$('backLink').addEventListener('click',e=>{const r=route();if(r.t){e.preventDefault();location.hash=hashFor(r.p)}else if(r.p){e.preventDefault();location.hash=''}});
+var _bl=document.getElementById('backLink');if(_bl)_bl.addEventListener('click',e=>{const r=route();if(r.t){e.preventDefault();location.hash=hashFor(r.p)}else if(r.p){e.preventDefault();location.hash=''}});
 $('search').addEventListener('input',render);
 window.addEventListener('hashchange',()=>{$('search').value='';window.scrollTo(0,0);renderWithLoader()});
 async function load(){
@@ -110,6 +112,6 @@ load();loadOrders();
 <script src="/js/page-transitions.js?v=1" defer></script><script src="/js/loader-failsafe.js?v=1" defer></script>
 <script src="/js/marvel-smooth.js?v=1" defer></script>
 <script src="/js/marvel-pro.js?v=1" defer></script>
-<script src="/js/mvn-shell.js?v=3" defer></script>
+<script src="/js/mvn-shell.js?v=4" defer></script>
 <script src="/js/mvn-standard.js?v=1" defer></script>
 </body></html>

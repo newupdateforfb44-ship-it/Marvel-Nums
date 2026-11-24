@@ -1,0 +1,47 @@
+/* Buy Number pages (hub, 1, 2, 3): one header, normal site-size text, no doubled dropdown text. */
+
+/* 1. Only the standard Marvel Nums header — hide the page's own duplicate top bar */
+body.mvn-buynum > nav.navbar,
+body.mvn-buynum .navbar { display: none !important; }
+body.mvn-buynum #mvnBackBar,
+body.mvn-buynum #mvnStdBackRow { display: none !important; }
+
+/* 2. The real <select> stays invisible behind the styled box — never shows through */
+body.mvn-buynum .select-tile select,
+body.mvn-buynum .select-tile select.ks-sheet-native {
+  position: absolute !important;
+  inset: auto !important;
+  left: 0 !important; top: 0 !important;
+  width: 1px !important; height: 1px !important;
+  opacity: 0 !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  appearance: none !important; -webkit-appearance: none !important;
+  color: transparent !important; background: transparent !important; border: 0 !important;
+}
+body.mvn-buynum .select-tile { overflow: hidden; min-height: 62px; }
+body.mvn-buynum .select-tile .st-value { color: #fff; }
+
+/* 3. Normal, professional size — same scale as the rest of the site */
+body.mvn-buynum { font-size: 15px !important; line-height: 1.5; }
+body.mvn-buynum .wrap { max-width: 640px !important; padding-left: 16px !important; padding-right: 16px !important; }
+body.mvn-buynum h1 { font-size: 24px !important; line-height: 1.25; }
+body.mvn-buynum h2 { font-size: 19px !important; line-height: 1.3; }
+body.mvn-buynum .muted, body.mvn-buynum .srv-note, body.mvn-buynum .fb,
+body.mvn-buynum .rules, body.mvn-buynum .order-row { font-size: 14px !important; }
+body.mvn-buynum .step-label { font-size: 14px !important; padding: 10px 14px !important; letter-spacing: .04em; }
+body.mvn-buynum .st-label { font-size: 12px !important; }
+body.mvn-buynum .st-value { font-size: 16px !important; font-weight: 700; }
+body.mvn-buynum .srv-search, body.mvn-buynum input, body.mvn-buynum textarea {
+  font-size: 16px !important; min-height: 50px; box-sizing: border-box;
+}
+body.mvn-buynum .chip, body.mvn-buynum .stock-chip { font-size: 13px !important; padding: 6px 14px !important; }
+body.mvn-buynum .quick-chips button, body.mvn-buynum .chip-btn,
+body.mvn-buynum .btn, body.mvn-buynum button.btn, body.mvn-buynum .panel .btn {
+  font-size: 15px !important; min-height: 46px; padding: 11px 18px !important;
+}
+body.mvn-buynum .choice { padding: 18px !important; }
+body.mvn-buynum .choice h2 { font-size: 19px !important; }
+body.mvn-buynum .choice p { font-size: 14px !important; }
+body.mvn-buynum .choice .emoji { font-size: 30px !important; }
