@@ -160,7 +160,6 @@
     .dsh-promo-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
     /* ── BOTTOM NAV ────────────────────────── */
-    .dsh-bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
     .dsh-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 8px;cursor:pointer;border:none;background:none;color:var(--text2);font-size:10.5px;font-weight:700;gap:4px;transition:color .15s;position:relative}
     .dsh-nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .dsh-nav-item.active{color:var(--blue)}
@@ -206,8 +205,9 @@
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#ffffff"/>
 <link rel="stylesheet" href="/css/marvel-final.css?v=1"><link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
+  <link rel="stylesheet" href="/css/mvn-shell.css?v=1">
 </head>
-<body>
+<body class="mvn-std">
 <!-- SVG SPRITES -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -449,30 +449,6 @@
 </div>
 
 <!-- BOTTOM NAV -->
-<nav class="dsh-bottom-nav">
-  <button class="dsh-nav-item active" onclick="window.location.href='/dashboard'">
-    <svg><use href="#i-home"/></svg>
-    Home
-  </button>
-  <button class="dsh-nav-item" onclick="window.location.href='/marketplace'">
-    <svg><use href="#i-grid"/></svg>
-    Marketplace
-  </button>
-  <button class="dsh-nav-item" onclick="window.location.href='/deposit'">
-    <svg><use href="#i-wallet"/></svg>
-    Wallet
-  </button>
-  <button class="dsh-nav-item" onclick="window.location.href='/support'">
-    <svg><use href="#i-message-circle"/></svg>
-    Support
-    <span class="dsh-nav-dot" id="navChatDot"></span>
-  </button>
-  <button class="dsh-nav-item" onclick="window.location.href='/settings'">
-    <svg><use href="#i-user"/></svg>
-    Profile
-  </button>
-</nav>
-
 <!-- TOAST -->
 <div class="dsh-toast" id="dshToast"></div>
 
@@ -899,5 +875,6 @@
 <script src="/js/loader-failsafe.js?v=1" defer></script>
 <script src="/js/marvel-smooth.js?v=1" defer></script>
 <script src="/js/marvel-pro.js?v=1" defer></script>
+<script src="/js/mvn-shell.js?v=1" defer></script>
 </body>
 </html>

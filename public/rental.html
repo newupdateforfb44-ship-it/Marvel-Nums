@@ -57,7 +57,8 @@ details[open]>.how-sum::after{content:'–'}
 </style><link rel="stylesheet" href="/css/marvel-theme.css?v=3"/>
 <link rel="stylesheet" href="/css/marvel-final.css?v=1">
 <link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
-</head><body><main class="wrap"><a href="/buy-number">← All number services</a><h1>Rent a Number</h1><p class="muted">Keep a number for days or months and receive as many SMS messages as you need. Paid from your NGN wallet.</p>
+  <link rel="stylesheet" href="/css/mvn-shell.css?v=1">
+</head><body class="mvn-std"><main class="wrap"><a href="/buy-number">← All number services</a><h1>Rent a Number</h1><p class="muted">Keep a number for days or months and receive as many SMS messages as you need. Paid from your NGN wallet.</p>
 <div class="panel"><div class="tabs"><button type="button" id="tabA" class="on">Number rental</button><button type="button" id="tabB">Dedicated (one service)</button></div>
 <div id="paneA"><label for="cA">Step 1 — Pick the country</label><select id="cA"><option value="">Loading…</option></select><label for="pA">Step 2 — Pick the period</label><select id="pA" disabled><option value="">Select a country first</option></select><div id="noteA" class="muted" style="margin-top:8px"></div></div>
 <div id="paneB" class="hide"><label for="cB">Step 1 — Pick the country</label><select id="cB"><option value="">Loading…</option></select><label for="pB">Step 2 — Pick the service &amp; period</label><select id="pB" disabled><option value="">Select a country first</option></select><div class="muted" style="margin-top:8px">A dedicated number works for one service only and cannot be cancelled after purchase.</div></div>
@@ -112,4 +113,5 @@ if(!token())location.href='/login?next=/rental';else{loadCountries();loadOrders(
 <script src="/js/loader-failsafe.js?v=1" defer></script>
 <script src="/js/marvel-smooth.js?v=1" defer></script>
 <script src="/js/marvel-pro.js?v=1" defer></script>
+<script src="/js/mvn-shell.js?v=1" defer></script>
 </body></html>

@@ -65,8 +65,9 @@
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#ffffff"/>
 <link rel="stylesheet" href="/css/marvel-final.css?v=1"><link rel="stylesheet" href="/css/marvel-smooth.css?v=1"><link rel="stylesheet" href="/css/marvel-pro.css?v=1">
+  <link rel="stylesheet" href="/css/mvn-shell.css?v=1">
 </head>
-<body>
+<body class="mvn-std">
 
 <!-- Shared WhatsApp logo icon — referenced via <svg class="wa-icon"><use href="#wa-logo"/></svg> -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -308,25 +309,6 @@
 <div id="toast" class="toast"></div>
 
 <!-- APP-STYLE BOTTOM TAB BAR (mobile only) -->
-<nav class="bottom-tabbar" id="bottomTabbar">
-  <button class="bt-item" id="btHome" onclick="window.location.href='/dashboard'">
- <span class="bt-icon"><svg class="icon i-home" aria-hidden="true"><use href="#i-home"/></svg></span><span class="bt-label">Home</span>
-  </button>
-  <button class="bt-item" id="btMarket" onclick="window.location.href='/marketplace'">
- <span class="bt-icon"><svg class="icon i-cart" aria-hidden="true"><use href="#i-cart"/></svg></span><span class="bt-label">Marketplace</span>
-  </button>
-  <button class="bt-item" id="btWallet" onclick="window.location.href='/deposit'">
- <span class="bt-icon"><svg class="icon i-wallet" aria-hidden="true"><use href="#i-wallet"/></svg></span><span class="bt-label">Wallet</span>
-  </button>
-  <button class="bt-item" id="btChat" onclick="window.location.href='/support'">
- <span class="bt-icon"><svg class="icon i-message-circle" aria-hidden="true"><use href="#i-message-circle"/></svg></span><span class="bt-label">Support</span>
-  </button>
-  <button class="bt-item" id="btProfile" onclick="window.location.href='/settings'">
- <span class="bt-icon"><svg class="icon i-user" aria-hidden="true"><use href="#i-user"/></svg></span><span class="bt-label">Profile</span>
-  </button>
-</nav>
-
-
 <script src="js/money.js?v=20260910a"></script>
 <script src="script.js?v=20260910a"></script>
  <script src="/js/announcements.js"></script>
@@ -347,5 +329,6 @@
 <script src="/js/loader-failsafe.js?v=1" defer></script>
 <script src="/js/marvel-smooth.js?v=1" defer></script>
 <script src="/js/marvel-pro.js?v=1" defer></script>
+<script src="/js/mvn-shell.js?v=1" defer></script>
 </body>
 </html>

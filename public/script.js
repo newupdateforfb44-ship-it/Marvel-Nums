@@ -1190,6 +1190,7 @@ function updateUrl(p, replace) {
   history[method]({ page: p }, '', path);
 }
 function updateBottomTabbar(p) {
+  return; // bottom bar removed from the site
   // Matches the new 5-item nav shared with /dashboard: Home, Marketplace, Wallet, Chat, Profile.
   const map = {
     home:'btHome', market:'btMarket', tools:'btMarket', wallet:'btWallet', deposit:'btWallet',
