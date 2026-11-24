@@ -1,0 +1,36 @@
+/* Dashboard critical grid rules: prevent the first paint from showing a single
+   horizontal row before later responsive rules settle. Keep the intended four
+   feature tiles per row on phones and desktop from the very first render. */
+html body .dsh-features-card .dsh-features-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  align-items: start !important;
+  gap: 8px !important;
+  width: 100%;
+  min-width: 0;
+}
+html body .dsh-features-card .dsh-svc-item {
+  display: flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 3px !important;
+  box-sizing: border-box !important;
+}
+html body .dsh-stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  width: 100%;
+  min-width: 0;
+}
+html body .dsh-services-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  width: 100%;
+  min-width: 0;
+}
+@media (max-width: 380px) {
+  html body .dsh-features-card .dsh-svc-icon { width: 40px; height: 40px; }
+  html body .dsh-features-card .dsh-svc-label { font-size: 10.5px; }
+}

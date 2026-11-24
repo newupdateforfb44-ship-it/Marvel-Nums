@@ -11,6 +11,7 @@
   --mvs-blue: #2a7bff;
   --mvs-red: #e5283b;
   --mvs-header-h: 56px;
+  --mvs-back-h: 48px;
 }
 
 /* Hide every old top bar, drawer and bottom bar the patches added. */
@@ -40,6 +41,9 @@ body.mvn-std {
   --mp-nav-h: 0px !important;
   margin: 0;
 }
+body.mvn-std.mvn-has-back {
+  padding-top: calc(var(--mvs-header-h) + var(--mvs-back-h));
+}
 
 /* ── Top header ── */
 #mvnStdHeader {
@@ -49,8 +53,7 @@ body.mvn-std {
   height: var(--mvs-header-h);
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
+  justify-content: space-between;
   padding: 0 16px;
   background: var(--mvs-panel);
   border-bottom: 1px solid var(--mvs-line);
@@ -65,8 +68,6 @@ body.mvn-std {
   font-weight: 700;
   font-size: 16px;
   min-width: 0;
-  flex: 0 1 auto;
-  max-width: calc(100% - 120px);
 }
 #mvnStdHeader .mvs-brand img {
   width: 32px; height: 32px;
@@ -100,17 +101,35 @@ body.mvn-std {
   background: var(--mvs-text);
 }
 
-/* ── Header Back link beside the Marvel Nums logo ── */
-#mvnStdHeader .mvs-back-btn {
-  display:inline-flex; align-items:center; justify-content:center; gap:5px;
-  flex:0 0 auto; min-height:36px; padding:0 10px; margin-left:2px;
-  border:1px solid var(--mvs-blue); border-radius:999px;
-  background:transparent; color:#8ec5ff; text-decoration:none;
-  font:inherit; font-size:13px; font-weight:650; white-space:nowrap;
+/* ── Back row (inner pages only, same spot everywhere) ── */
+#mvnStdBackRow {
+  position: fixed;
+  top: var(--mvs-header-h);
+  left: 0; right: 0;
+  z-index: 9990;
+  height: var(--mvs-back-h);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: var(--mvs-bg);
+  border-bottom: 1px solid var(--mvs-line);
+  box-sizing: border-box;
 }
-#mvnStdHeader .mvs-back-btn:hover { background:rgba(42,123,255,.12); color:#fff; }
-#mvnStdHeader .mvs-menu-btn { margin-left:auto; }
-body.mvn-std .wrap > header.brand { display:none !important; }
+#mvnStdBackRow button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--mvs-blue);
+  border-radius: 999px;
+  background: transparent;
+  color: #8ec5ff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
 /* ── Menu sheet ── */
 #mvnStdSheet {
@@ -202,7 +221,7 @@ body.mvs-menu-open { overflow:hidden; }
 #mvnStdHeader .mvs-menu-btn { position:relative; z-index:1; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 #mvnStdHeader .mvs-menu-btn:focus-visible, #mvnStdSheet button:focus-visible, #mvnStdSheet a:focus-visible { outline:2px solid var(--mvs-blue); outline-offset:2px; }
 
-/* pages with an old inline top bar use the standard header/back link instead */
+/* pages with the old inline "Back" bar: the standard shell already provides the header + Back row */
 body.mvn-std > .top { display:none !important; }
 
 /* Refined Marvel Nums navigation drawer — navy, royal blue and cyan brand */
@@ -289,9 +308,37 @@ body.mvn-std > .top { display:none !important; }
   #mvnStdSheet .mvs-panel a { min-height:44px; }
 }
 
-/* Fallback guard: the header Back link is the only page-level back control. */
+/* Fallback guard: the shell Back row is the only page-level back control. */
 body.mvn-std a.back,
+body.mvn-std a.back-btn,
 body.mvn-std a.hub-back,
 body.mvn-std a.page-back,
 body.mvn-std a.back-link { display:none !important; }
 body.mvn-telegram-page .shell > .top { display:none !important; }
+
+/* MVN menu accessibility update: larger, clearer drawer typography (~130%). */
+#mvnStdSheet .mvs-panel a {
+  min-height: 50px;
+  padding: 12px 14px 12px 16px;
+  font-size: 17px !important;
+  line-height: 1.35;
+  font-weight: 650;
+}
+#mvnStdSheet .mvs-section-label {
+  margin: 21px 8px 9px;
+  font-size: 13px !important;
+  letter-spacing: .11em;
+}
+#mvnStdSheet .mvs-menu-brand b { font-size: 19.5px !important; }
+#mvnStdSheet .mvs-menu-brand small { font-size: 14px !important; }
+#mvnStdSheet .mvs-logout {
+  min-height: 52px;
+  padding: 14px 16px;
+  font-size: 17px !important;
+}
+#mvnStdHeader .mvs-menu-btn { width: 48px; height: 48px; }
+#mvnStdHeader .mvs-menu-btn i { width: 23px; height: 3px; }
+@media (max-width: 360px) {
+  #mvnStdSheet .mvs-panel { width: 94vw; }
+  #mvnStdSheet .mvs-panel a { font-size: 16px !important; }
+}
