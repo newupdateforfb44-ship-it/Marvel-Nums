@@ -203,6 +203,9 @@
   }
 
   function init() {
+    // Landing page (visitors not signed in): no hamburger, no second header.
+    // It keeps only its own logo bar from home.html. Dashboard and all other pages keep the menu.
+    if (path === '/') return;
     document.body.classList.add('mvn-std');
     buildHeader();
     buildBackRow();
